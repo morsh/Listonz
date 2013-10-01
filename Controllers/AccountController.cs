@@ -24,6 +24,10 @@ namespace Listonz.Controllers
         public ActionResult Login(string returnUrl)
         {
             ViewBag.ReturnUrl = returnUrl;
+
+            if (User.Identity.IsAuthenticated)
+                return RedirectToLocal(returnUrl);
+
             return View();
         }
 
@@ -43,6 +47,17 @@ namespace Listonz.Controllers
             // If we got this far, something failed, redisplay form
             ModelState.AddModelError("", "The user name or password provided is incorrect.");
             return View(model);
+        }
+
+        [HttpGet]
+        public ActionResult LoginPartial()
+        {
+            if (Request.IsAjaxRequest())
+            {
+                return View("_LoginPartial");
+            }
+
+            return new EmptyResult();
         }
 
         //
@@ -217,31 +232,63 @@ namespace Listonz.Controllers
         [AllowAnonymous]
         public ActionResult ExternalLoginCallback(string returnUrl)
         {
-            AuthenticationResult result = OAuthWebSecurity.VerifyAuthentication(Url.Action("ExternalLoginCallback", new { ReturnUrl = returnUrl }));
+            var result = OAuthWebSecurity.VerifyAuthentication(Url.Action("ExternalLoginCallback", new { ReturnUrl = returnUrl }));
+
             if (!result.IsSuccessful)
             {
-                return RedirectToAction("ExternalLoginFailure");
+                return View("LoginResult", new LoginResultViewModel(false, Url.Action("ExternalLoginFailure")));
             }
 
             if (OAuthWebSecurity.Login(result.Provider, result.ProviderUserId, createPersistentCookie: false))
             {
-                return RedirectToLocal(returnUrl);
+                return View("LoginResult", new LoginResultViewModel(true, returnUrl));
             }
+            
+            OAuthWebSecurity.CreateOrUpdateAccount(result.Provider, result.ProviderUserId, result.UserName);
 
-            if (User.Identity.IsAuthenticated)
+            foreach (var acc in OAuthWebSecurity.GetAccountsFromUserName(result.UserName))
             {
-                // If the current user is logged in add the new account
-                OAuthWebSecurity.CreateOrUpdateAccount(result.Provider, result.ProviderUserId, User.Identity.Name);
-                return RedirectToLocal(returnUrl);
+                var a = acc;
             }
-            else
-            {
-                // User is new, ask for their desired membership name
-                string loginData = OAuthWebSecurity.SerializeProviderUserId(result.Provider, result.ProviderUserId);
-                ViewBag.ProviderDisplayName = OAuthWebSecurity.GetOAuthClientData(result.Provider).DisplayName;
-                ViewBag.ReturnUrl = returnUrl;
-                return View("ExternalLoginConfirmation", new RegisterExternalLoginModel { UserName = result.UserName, ExternalLoginData = loginData });
-            }
+            
+            return View("LoginResult", new LoginResultViewModel(true, returnUrl));
+
+            //AuthenticationResult result = OAuthWebSecurity.VerifyAuthentication(Url.Action("ExternalLoginCallback", new { ReturnUrl = returnUrl }));
+            //if (!result.IsSuccessful)
+            //{
+            //    return RedirectToAction("ExternalLoginFailure");
+            //}
+
+            //if (OAuthWebSecurity.Login(result.Provider, result.ProviderUserId, createPersistentCookie: false))
+            //{
+            //    return RedirectToLocal(returnUrl);
+            //}
+
+            //if (User.Identity.IsAuthenticated)
+            //{
+            //    // If the current user is logged in add the new account
+            //    OAuthWebSecurity.CreateOrUpdateAccount(result.Provider, result.ProviderUserId, User.Identity.Name);
+            //    return RedirectToLocal(returnUrl);
+            //}
+            //else
+            //{
+            //    // User is new, ask for their desired membership name
+            //    var loginData = OAuthWebSecurity.SerializeProviderUserId(result.Provider, result.ProviderUserId);
+            //    var providerDisplayName = OAuthWebSecurity.GetOAuthClientData(result.Provider).DisplayName;
+
+            //    ViewBag.ProviderDisplayName = providerDisplayName;
+            //    ViewBag.ReturnUrl = returnUrl;
+
+            //    // Ensuring appropriate properties to user according to login information
+            //    var userName = result.UserName;
+            //    if (providerDisplayName.ToLower() == "facebook" && 
+            //        result.ExtraData != null && 
+            //        result.ExtraData.ContainsKey("name") &&
+            //        !string.IsNullOrEmpty(result.ExtraData["name"]))
+            //        userName = result.ExtraData["name"];
+
+            //    return View("ExternalLoginConfirmation", new RegisterExternalLoginModel { UserName = userName, ExternalLoginData = loginData });
+            //}
         }
 
         //

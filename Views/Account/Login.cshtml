@@ -41,11 +41,12 @@
             Press @Html.ActionLink("Register", "Here") if you forgot your password.
         </div>
     </fieldset>
+}
+
     <section class="social" id="socialLoginForm">
         @Html.Action("ExternalLoginsList", new { ReturnUrl = ViewBag.ReturnUrl })
     </section>
 
-}
 </section>
 
 

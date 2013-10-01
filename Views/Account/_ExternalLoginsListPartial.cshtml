@@ -9,16 +9,29 @@
 }
 else
 {
-    using (Html.BeginForm("ExternalLogin", "Account", new { ReturnUrl = ViewBag.ReturnUrl }))
-    {
-    @Html.AntiForgeryToken()
-    <ul id="socialLoginList">
-    @foreach (AuthenticationClientData p in Model)
-    {
-        <li class="@p.AuthenticationClient.ProviderName.ToLower().Replace(" ", "")">
-            <button type="submit" name="provider" value="@p.AuthenticationClient.ProviderName" title="Log in using your @p.DisplayName account">Login with @p.DisplayName</button>
-        </li>
-    }
-    </ul>
-    }
+    <form id="login-launch" action="@Url.Action("ExternalLogin", "Account")" method="POST" target="login-popup" onsubmit="invokeLogin();">
+        @Html.AntiForgeryToken()
+        <input type="hidden" id="provider" name="provider" />
+        <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl"/>
+        <ul id="socialLoginList">
+                @foreach (var p in OAuthWebSecurity.RegisteredClientData)
+                {
+                    <li class="@p.DisplayName.ToLower().Replace(" ", "")">
+                        <button type="submit" class="cancel" onclick="$('#provider').attr('value', '@p.DisplayName'); $('#login-launch').submit();" title="Log in using @p.DisplayName">@p.DisplayName</button>
+                    </li>
+                }
+        </ul>
+    </form>
 }
+
+<script type="text/javascript">
+    function invokeLogin() {
+        var chrome = 100;
+        var width = 500;
+        var height = 500;
+        var left = (screen.width - width) / 2;
+        var top = (screen.height - height - chrome) / 2;
+        var options = "status=0,toolbar=0,location=1,resizable=1,scrollbars=1,left=" + left + ",top=" + top + ",width=" + width + ",height=" + height;
+        window.open("about:blank", "login-popup", options);
+    }
+</script>
