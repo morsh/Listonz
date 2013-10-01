@@ -333,9 +333,11 @@ aside {
 
 /* login page */
 #loginForm {
-    border-right: solid 2px #c8c8c8;
-    float: left;
-    width: 55%;
+    width: 450px;
+    margin-left: auto;
+    margin-right: auto;
+    border:1px dashed #ffea00;
+    padding: 10px;
 }
 
     #loginForm .validation-error {
@@ -355,7 +357,7 @@ aside {
     }
 
     #loginForm input {
-        width: 250px;
+        width: 425px;
     }
 
     #loginForm input[type="checkbox"],
@@ -365,19 +367,17 @@ aside {
         width: auto;
     }
 
-#socialLoginForm {
-    margin-left: 40px;
-    float: left;
-    width: 40%;
-}
+.login-button { float:right; }
+#socialLoginForm { width: 100%; display: inline-block; }
 
-    #socialLoginForm h2 {
-        margin-bottom:  5px;
-    }
+    #socialLoginForm h2 { margin-bottom:  5px; }
 
-#socialLoginList button {
-    margin-bottom: 12px;
-}
+#socialLoginList { width:100%; padding:0; }
+#socialLoginList li { margin-bottom: 12px; float:left; list-style:none; }
+
+#socialLoginList button { border:0 solid #fff; background:transparent; padding-left: 47px; font: normal 13pt Tahoma; color: #fff; height: 37px; width:207px; }
+#socialLoginList li.facebook button { background: transparent url(/Images/fb-login.png); margin-right: 27px; }
+#socialLoginList li.linkedin button { background: transparent url(/Images/li-login.png); }
 
 #logoutForm {
     display: inline;
@@ -732,7 +732,7 @@ tr.pager td {
             display: block;
             margin-left: 15px;
         }
-
+        
     #socialLoginForm {
         margin-left: 0;
         float: none;
