@@ -243,14 +243,17 @@ namespace Listonz.Controllers
             {
                 return View("LoginResult", new LoginResultViewModel(true, returnUrl));
             }
-            
-            OAuthWebSecurity.CreateOrUpdateAccount(result.Provider, result.ProviderUserId, result.UserName);
 
-            foreach (var acc in OAuthWebSecurity.GetAccountsFromUserName(result.UserName))
-            {
-                var a = acc;
-            }
-            
+            // Ensuring appropriate properties to user according to login information
+            var userName = result.UserName;
+            if (result.Provider.ToLower() == "facebook" &&
+                result.ExtraData != null &&
+                result.ExtraData.ContainsKey("name") &&
+                !string.IsNullOrEmpty(result.ExtraData["name"]))
+                userName = result.ExtraData["name"];
+
+
+            OAuthWebSecurity.CreateOrUpdateAccount(result.Provider, result.ProviderUserId, userName);
             return View("LoginResult", new LoginResultViewModel(true, returnUrl));
 
             //AuthenticationResult result = OAuthWebSecurity.VerifyAuthentication(Url.Action("ExternalLoginCallback", new { ReturnUrl = returnUrl }));

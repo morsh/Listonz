@@ -17,7 +17,7 @@ else
                 @foreach (var p in OAuthWebSecurity.RegisteredClientData)
                 {
                     <li class="@p.DisplayName.ToLower().Replace(" ", "")">
-                        <button type="submit" class="cancel" onclick="$('#provider').attr('value', '@p.DisplayName'); $('#login-launch').submit();" title="Log in using @p.DisplayName">@p.DisplayName</button>
+                        <button class="cancel" onclick="$('[name=provider]').val('@p.DisplayName'); $('#login-launch').submit();" title="Log in using @p.DisplayName">@p.DisplayName</button>
                     </li>
                 }
         </ul>
