@@ -94,7 +94,7 @@ namespace Listonz.Controllers
                 // Attempt to register the user
                 try
                 {
-                    WebSecurity.CreateUserAndAccount(model.UserName, model.Password);
+                    WebSecurity.CreateUserAndAccount(model.UserName, model.Password, new { EmailId = model.EmailId, Details = model.Details });
                     WebSecurity.Login(model.UserName, model.Password);
                     return RedirectToAction("Index", "Home");
                 }
@@ -244,14 +244,35 @@ namespace Listonz.Controllers
                 return View("LoginResult", new LoginResultViewModel(true, returnUrl));
             }
 
+            // Get email according 
+            string email = null;
+            if (result.Provider.ToLower() == "google")
+                email = result.ExtraData["email"];
+            else if (result.Provider.ToLower() == "facebook" || result.Provider.ToLower() == "microsoft")
+                email = result.UserName;
+
             // Ensuring appropriate properties to user according to login information
             var userName = result.UserName;
-            if (result.Provider.ToLower() == "facebook" &&
-                result.ExtraData != null &&
-                result.ExtraData.ContainsKey("name") &&
-                !string.IsNullOrEmpty(result.ExtraData["name"]))
-                userName = result.ExtraData["name"];
+            try
+            {
+                if (result.Provider.ToLower() == "facebook")
+                    userName = result.ExtraData["name"];
+            }
+            catch (Exception) { }
 
+            using (var db = new UsersContext())
+            {
+                if (!db.UserProfiles.Any(u => u.UserName == userName))
+                {
+                    if (!db.UserProfiles.Any(u => u.UserName == email))
+                    {
+                        db.UserProfiles.Add(new UserProfile { UserName = userName, EmailId = email });
+                        db.SaveChanges();
+                    }
+                    else
+                        throw new Exception("A user with this email already exists");
+                }
+            }
 
             OAuthWebSecurity.CreateOrUpdateAccount(result.Provider, result.ProviderUserId, userName);
             return View("LoginResult", new LoginResultViewModel(true, returnUrl));
@@ -451,6 +472,112 @@ namespace Listonz.Controllers
                 default:
                     return "An unknown error occurred. Please verify your entry and try again. If the problem persists, please contact your system administrator.";
             }
+        }
+        #endregion
+
+        #region Password Reseting
+        [AllowAnonymous]
+        public ActionResult ForgotPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public ActionResult ForgotPassword(string UserName)
+        {
+            //check user existance
+            var user = Membership.GetUser(UserName);
+            if (user == null)
+            {
+                TempData["Message"] = "User Not exist.";
+            }
+            else
+            {
+                //generate password token
+                var token = WebSecurity.GeneratePasswordResetToken(UserName);
+                //create url with above token
+                var resetLink = "<a href='" + Url.Action("ResetPassword", "Account", new { un = UserName, rt = token }, "http") + "'>Reset Password</a>";
+                //get user emailid
+                UsersContext db = new UsersContext();
+                var emailid = (from i in db.UserProfiles
+                               where i.UserName == UserName
+                               select i.EmailId).FirstOrDefault();
+                //send mail
+                string subject = "Password Reset Token";
+                string body = "<b>Please find the Password Reset Token</b><br/>" + resetLink; //edit it
+                try
+                {
+                    LZ.SendEMail(emailid, subject, body);
+                    TempData["Message"] = "Mail Sent.";
+                }
+                catch (Exception ex)
+                {
+                    TempData["Message"] = "Error occured while sending email." + ex.Message;
+                }
+                //only for testing
+                TempData["Message"] = resetLink;
+            }
+
+            return View();
+        }
+
+        [AllowAnonymous]
+        public ActionResult ResetPassword(string un, string rt)
+        {
+            UsersContext db = new UsersContext();
+            //TODO: Check the un and rt matching and then perform following
+            //get userid of received username
+            var userid = (from i in db.UserProfiles
+                          where i.UserName == un
+                          select i.UserId).FirstOrDefault();
+            //check userid and token matches
+            bool any = (from j in db.webpages_Memberships
+                        where (j.UserId == userid)
+                        && (j.PasswordVerificationToken == rt)
+                        //&& (j.PasswordVerificationTokenExpirationDate < DateTime.Now)
+                        select j).Any();
+
+            if (any == true)
+            {
+                //generate random password
+                string newpassword = LZ.GenerateRandomPassword(6);
+                //reset password
+                bool response = WebSecurity.ResetPassword(rt, newpassword);
+                if (response == true)
+                {
+                    //get user emailid to send password
+                    var emailid = (from i in db.UserProfiles
+                                   where i.UserName == un
+                                   select i.EmailId).FirstOrDefault();
+                    //send email
+                    string subject = "New Password";
+                    string body = "<b>Please find the New Password</b><br/>" + newpassword; //edit it
+                    try
+                    {
+                        LZ.SendEMail(emailid, subject, body);
+                        TempData["Message"] = "Mail Sent.";
+                    }
+                    catch (Exception ex)
+                    {
+                        TempData["Message"] = "Error occured while sending email." + ex.Message;
+                    }
+
+                    //display message
+                    TempData["Message"] = "Success! Check email we sent. Your New Password Is " + newpassword;
+                }
+                else
+                {
+                    TempData["Message"] = "Hey, avoid random request on this page.";
+                }
+            }
+            else
+            {
+                TempData["Message"] = "Username and token not maching.";
+            }
+
+            return View();
         }
         #endregion
     }

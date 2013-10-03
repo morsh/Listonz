@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Listonz.Migrations;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -8,14 +9,24 @@ using System.Web.Security;
 
 namespace Listonz.Models
 {
+    #region Database & Tables
     public class UsersContext : DbContext
     {
         public UsersContext()
-            : base("DefaultConnection")
+            : base("context")
         {
         }
 
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            Database.SetInitializer(new MigrateDatabaseToLatestVersion<Listonz.Models.UsersContext, Configuration>());
+        }
+
         public DbSet<UserProfile> UserProfiles { get; set; }
+
+        #region New Tables
+        public DbSet<webpages_Membership> webpages_Memberships { get; set; }
+        #endregion
     }
 
     [Table("UserProfile")]
@@ -25,7 +36,30 @@ namespace Listonz.Models
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public int UserId { get; set; }
         public string UserName { get; set; }
+
+        #region New Properties
+        public string EmailId { get; set; }
+        public string Details { get; set; }
+        #endregion
     }
+
+    [Table("webpages_Membership")]
+    public class webpages_Membership
+    {
+        [Key]
+        public int UserId { get; set; }
+        public DateTime CreateDate { get; set; }
+        public string ConfirmationToken { get; set; }
+        public bool IsConfirmed { get; set; }
+        public DateTime LastPasswordFailureDate { get; set; }
+        public int PasswordFailuresSinceLastSuccess { get; set; }
+        public string Password { get; set; }
+        public DateTime PasswordChangeDate { get; set; }
+        public string PasswordSalt { get; set; }
+        public string PasswordVerificationToken { get; set; }
+        public DateTime PasswordVerificationTokenExpirationDate { get; set; }
+    }
+    #endregion
 
     public class RegisterExternalLoginModel
     {
@@ -86,6 +120,15 @@ namespace Listonz.Models
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+
+        //new properties
+        [Required]
+        [Display(Name = "Email ID")]
+        public string EmailId { get; set; }
+
+        [Required]
+        [Display(Name = "About Yourself")]
+        public string Details { get; set; }
     }
 
     public class ExternalLogin

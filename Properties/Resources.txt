@@ -1,0 +1,10 @@
+﻿Entity frameword scaffoliding and migrations:
+http://www.asp.net/mvc/tutorials/hands-on-labs/aspnet-mvc-4-entity-framework-scaffolding-and-migrations
+http://blog.appharbor.com/2012/04/24/automatic-migrations-with-entity-framework-4-3
+
+1. Add the changes you want to the data model
+2. Run Add-Migration <Name> <optional: -IgnoreChanges>
+3. Run Update-Database -Verbose <optional: -ConnectionString -ConnectionProviderName>
+
+Password Resetting:
+http://www.itorian.com/2013/03/PasswordResetting.html
