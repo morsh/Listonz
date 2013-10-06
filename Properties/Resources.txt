@@ -9,6 +9,9 @@ http://blog.appharbor.com/2012/04/24/automatic-migrations-with-entity-framework-
 Password Resetting:
 http://www.itorian.com/2013/03/PasswordResetting.html
 
+File storage on the cloud:
+https://cloud.google.com/products/cloud-storage
+
 
 cd ..\Listonz\Listonz\
 git add .
