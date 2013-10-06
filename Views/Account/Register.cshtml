@@ -42,4 +42,11 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Scripts/jquery.passstrength.js"></script>
+    <script>
+        $('input[type=password]').first().password_strength({
+            minLength: 8,
+            specialLength: 0
+        });
+    </script>
 }

@@ -8,3 +8,9 @@ http://blog.appharbor.com/2012/04/24/automatic-migrations-with-entity-framework-
 
 Password Resetting:
 http://www.itorian.com/2013/03/PasswordResetting.html
+
+
+cd ..\Listonz\Listonz\
+git add .
+git commit -m "Comment"
+git push appharbor master
