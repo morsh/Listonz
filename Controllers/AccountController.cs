@@ -497,8 +497,12 @@ namespace Listonz.Controllers
                 }
                 else
                 {
+                    if (!WebSecurity.IsConfirmed(UserName))
+                        TempData["Message"] = "Please make sure your user is confirmed, and that your account has a password.";
+
                     //generate password token
                     var token = WebSecurity.GeneratePasswordResetToken(UserName);
+
                     //create url with above token
                     var resetLink = "<a href='" + Url.Action("ResetPassword", "Account", new { un = UserName, rt = token }, "http") + "'>Reset Password</a>";
                     //get user emailid
