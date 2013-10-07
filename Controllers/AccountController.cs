@@ -487,39 +487,45 @@ namespace Listonz.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult ForgotPassword(string UserName)
         {
-            //check user existance
-            var user = Membership.GetUser(UserName);
-            if (user == null)
+            try
             {
-                TempData["Message"] = "User Not exist.";
+                //check user existance
+                var user = Membership.GetUser(UserName);
+                if (user == null)
+                {
+                    TempData["Message"] = "User Not exist.";
+                }
+                else
+                {
+                    //generate password token
+                    var token = WebSecurity.GeneratePasswordResetToken(UserName);
+                    //create url with above token
+                    var resetLink = "<a href='" + Url.Action("ResetPassword", "Account", new { un = UserName, rt = token }, "http") + "'>Reset Password</a>";
+                    //get user emailid
+                    UsersContext db = new UsersContext();
+                    var emailid = (from i in db.UserProfiles
+                                   where i.UserName == UserName
+                                   select i.EmailId).FirstOrDefault();
+                    //send mail
+                    string subject = "Password Reset Token";
+                    string body = "<b>Please find the Password Reset Token</b><br/>" + resetLink; //edit it
+                    try
+                    {
+                        LZ.SendEMail(emailid, subject, body);
+                        TempData["Message"] = "Mail Sent.";
+                    }
+                    catch (Exception ex)
+                    {
+                        TempData["Message"] = "Error occured while sending email." + ex.Message;
+                    }
+                    //only for testing
+                    TempData["Message"] = resetLink;
+                }
             }
-            else
+            catch (Exception ex)
             {
-                //generate password token
-                var token = WebSecurity.GeneratePasswordResetToken(UserName);
-                //create url with above token
-                var resetLink = "<a href='" + Url.Action("ResetPassword", "Account", new { un = UserName, rt = token }, "http") + "'>Reset Password</a>";
-                //get user emailid
-                UsersContext db = new UsersContext();
-                var emailid = (from i in db.UserProfiles
-                               where i.UserName == UserName
-                               select i.EmailId).FirstOrDefault();
-                //send mail
-                string subject = "Password Reset Token";
-                string body = "<b>Please find the Password Reset Token</b><br/>" + resetLink; //edit it
-                try
-                {
-                    LZ.SendEMail(emailid, subject, body);
-                    TempData["Message"] = "Mail Sent.";
-                }
-                catch (Exception ex)
-                {
-                    TempData["Message"] = "Error occured while sending email." + ex.Message;
-                }
-                //only for testing
-                TempData["Message"] = resetLink;
+                TempData["Message"] = ex.ToString();
             }
-
             return View();
         }
 
