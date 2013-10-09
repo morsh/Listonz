@@ -369,6 +369,7 @@ aside {
     #loginForm .user-found { position: absolute; width: 24px; height: 24px; margin-top: -35px; margin-left: 410px; }
         #loginForm .user-found.false {background: transparent url(/images/greenv.png); }
         #loginForm .user-found.true { background: transparent url(/images/redx.png); }
+        #loginForm .user-found.wait { background: transparent url(/images/wait.gif); }
 
 .login-button { float:right; }
 #socialLoginForm { width: 100%; display: inline-block; }

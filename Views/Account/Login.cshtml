@@ -69,12 +69,17 @@
             $('#viewRegister #UserName').on('keyup blur change', function () {
                 
                 var account = $(this).val();
-                if (account != '')
+                if (account != '') {
+                    $('#viewRegister .user-found').addClass('wait');
                     $.get('/api/account/get?name=' + encodeURIComponent(account), function (data) {
-                        $('#viewRegister .user-found').removeClass('true').removeClass('false').addClass(data.toString());
+                        $('#viewRegister .user-found')
+                            .removeClass('true').removeClass('false').removeClass('wait')
+                            .addClass(data.toString());
                     });
+                }
                 else
-                    $('#viewRegister .user-found').removeClass('true').removeClass('false');
+                    $('#viewRegister .user-found')
+                        .removeClass('true').removeClass('false').removeClass('wait');
             });
 
             $('#viewRegister input[type=password]').first().password_strength({
