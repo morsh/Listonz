@@ -1,5 +1,4 @@
-﻿@model Listonz.Models.LoginPageModel
-
+﻿
 @{
     ViewBag.Title = "Log in";
 }
@@ -16,11 +15,14 @@
             Or <a href="Login#/Register">Register</a> if you don't have an account.
         </div>
         <div>
-            Press @Html.ActionLink("here", "ForgotPassword") if you forgot your password.
+            Press <a href="Login#/ForgotPassword">here</a> if you forgot your password.
         </div>
     </div>
     <div id="viewRegister" class="view">
         @Html.Partial("RegisterPartial")
+    </div>
+    <div id="viewForgotPassword" class="view">
+        @Html.Partial("ForgotPasswordPartial")
     </div>
     <section class="social" id="socialLoginForm">
         @Html.Action("ExternalLoginsList", new { ReturnUrl = ViewBag.ReturnUrl })
@@ -49,6 +51,11 @@
                     $("#viewRegister").show();
                 });
 
+                this.get("#/ForgotPassword", function (context) {
+                    $(".view").hide();
+                    $("#viewForgotPassword").show();
+                });
+
             });
 
             $(function () {
@@ -61,6 +68,4 @@
             specialLength: 0
         });
     </script>
-
-    @Scripts.Render("~/bundles/jqueryval")
 }

@@ -476,15 +476,15 @@ namespace Listonz.Controllers
 
         #region Password Reseting
         [AllowAnonymous]
-        public ActionResult ForgotPassword()
+        public ActionResult ForgotPasswordPartial()
         {
-            return View();
+            return PartialView();
         }
 
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public ActionResult ForgotPassword(string UserName)
+        public ActionResult ForgotPasswordPartial(string UserName)
         {
             try
             {
@@ -504,6 +504,7 @@ namespace Listonz.Controllers
 
                     //create url with above token
                     var resetLink = "<a href='" + Url.Action("ResetPassword", "Account", new { un = UserName, rt = token }, "http") + "'>Reset Password</a>";
+
                     //get user emailid
                     UsersContext db = new UsersContext();
                     var emailid = (from i in db.UserProfiles
@@ -521,15 +522,16 @@ namespace Listonz.Controllers
                     {
                         TempData["Message"] = "Error occured while sending email." + ex.Message;
                     }
+
                     //only for testing
-                    TempData["Message"] = resetLink;
+                    //TempData["Message"] = resetLink;
                 }
             }
             catch (Exception ex)
             {
                 TempData["Message"] = ex.ToString();
             }
-            return View();
+            return PartialView();
         }
 
         [AllowAnonymous]

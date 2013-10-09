@@ -80,6 +80,5 @@ c:\users\mor\documents\visual studio 2012\Projects\Listonz\Listonz\bin\ko\System
 c:\users\mor\documents\visual studio 2012\Projects\Listonz\Listonz\bin\ru\System.Spatial.resources.dll
 c:\users\mor\documents\visual studio 2012\Projects\Listonz\Listonz\bin\zh-Hans\System.Spatial.resources.dll
 c:\users\mor\documents\visual studio 2012\Projects\Listonz\Listonz\bin\zh-Hant\System.Spatial.resources.dll
-c:\users\mor\documents\visual studio 2012\Projects\Listonz\Listonz\obj\Debug\Listonz.csprojResolveAssemblyReference.cache
 c:\users\mor\documents\visual studio 2012\Projects\Listonz\Listonz\obj\Debug\Listonz.dll
 c:\users\mor\documents\visual studio 2012\Projects\Listonz\Listonz\obj\Debug\Listonz.pdb

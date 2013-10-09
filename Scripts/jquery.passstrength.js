@@ -143,35 +143,35 @@
             return password_settings.metRequirement;
         }
 
-        //read password setting from xml file
-        $.ajax({
-            type: "GET",
-            url: "PasswordPolicy.xml", //use absolute link if possible
-            dataType: "xml",
-            success: function (xml) {
+        ////read password setting from xml file
+        //$.ajax({
+        //    type: "GET",
+        //    url: "PasswordPolicy.xml", //use absolute link if possible
+        //    dataType: "xml",
+        //    success: function (xml) {
 
-                $(xml).find('Password').each(function () {
-                    var _minLength = $(this).find('minLength').text(),
-                    _maxLength = $(this).find('maxLength').text(),
-                    _numsLength = $(this).find('numsLength').text(),
-                    _upperLength = $(this).find('upperLength').text(),
-                    _specialLength = $(this).find('specialLength').text(),
-                    _barWidth = $(this).find('barWidth').text(),
-                    _barColor = $(this).find('barColor').text(),
-                    _specialChars = $(this).find('specialChars').text();
+        //        $(xml).find('Password').each(function () {
+        //            var _minLength = $(this).find('minLength').text(),
+        //            _maxLength = $(this).find('maxLength').text(),
+        //            _numsLength = $(this).find('numsLength').text(),
+        //            _upperLength = $(this).find('upperLength').text(),
+        //            _specialLength = $(this).find('specialLength').text(),
+        //            _barWidth = $(this).find('barWidth').text(),
+        //            _barColor = $(this).find('barColor').text(),
+        //            _specialChars = $(this).find('specialChars').text();
 
-                    //set variables
-                    password_settings.minLength = parseInt(_minLength);
-                    password_settings.maxLength = parseInt(_maxLength);
-                    password_settings.specialLength = parseInt(_specialLength);
-                    password_settings.upperLength = parseInt(_upperLength);
-                    password_settings.numberLength = parseInt(_numsLength);
-                    password_settings.barWidth = parseInt(_barWidth);
-                    password_settings.barColor = _barColor;
-                    password_settings.specialChars = _specialChars;
-                });
-            }
-        });
+        //            //set variables
+        //            password_settings.minLength = parseInt(_minLength);
+        //            password_settings.maxLength = parseInt(_maxLength);
+        //            password_settings.specialLength = parseInt(_specialLength);
+        //            password_settings.upperLength = parseInt(_upperLength);
+        //            password_settings.numberLength = parseInt(_numsLength);
+        //            password_settings.barWidth = parseInt(_barWidth);
+        //            password_settings.barColor = _barColor;
+        //            password_settings.specialChars = _specialChars;
+        //        });
+        //    }
+        //});
 
         return this.each(function () {
 
