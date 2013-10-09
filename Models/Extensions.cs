@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Routing;
 
 public static class Extensions
 {
@@ -29,6 +30,30 @@ public static class Extensions
             anchorBuilder.MergeAttribute("href", url.Action(action, controllerName, routeValues));
         anchorBuilder.InnerHtml = imgHtml; // include the <img> tag inside
         string anchorHtml = anchorBuilder.ToString(TagRenderMode.Normal);
+
+        return MvcHtmlString.Create(anchorHtml);
+    }
+
+    public static MvcHtmlString ActionHash(this HtmlHelper html, string text, string action, string hash, dynamic htmlAttributes)
+    {
+        return html.ActionHash(text, action, null, hash, null);
+    }
+    public static MvcHtmlString ActionHash(this HtmlHelper html, string text, string action, string controllerName, string hash, dynamic htmlAttributes)
+    {
+        var url = new UrlHelper(html.ViewContext.RequestContext);
+
+        // build the <a> tag
+        var anchorBuilder = new TagBuilder("a");
+
+        if (controllerName == null)
+            anchorBuilder.MergeAttribute("href", url.Action(action));
+        else
+            anchorBuilder.MergeAttribute("href", url.Action(action, controllerName) + "#/" + hash);
+
+        anchorBuilder.MergeAttributes(new RouteValueDictionary(htmlAttributes));
+        anchorBuilder.SetInnerText(text);
+        
+        var anchorHtml = anchorBuilder.ToString(TagRenderMode.Normal);
 
         return MvcHtmlString.Create(anchorHtml);
     }

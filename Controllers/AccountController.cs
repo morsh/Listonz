@@ -20,6 +20,8 @@ namespace Listonz.Controllers
         //
         // GET: /Account/Login
 
+
+
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
@@ -31,13 +33,21 @@ namespace Listonz.Controllers
             return View();
         }
 
+        [AllowAnonymous]
+        public ActionResult LoginPartial(string returnUrl)
+        {
+            ViewBag.ReturnUrl = returnUrl;
+
+            return PartialView();
+        }
+
         //
         // POST: /Account/Login
 
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public ActionResult Login(LoginModel model, string returnUrl)
+        public ActionResult LoginPartial(LoginModel model, string returnUrl)
         {
             if (ModelState.IsValid && WebSecurity.Login(model.UserName, model.Password, persistCookie: model.RememberMe))
             {
@@ -46,18 +56,7 @@ namespace Listonz.Controllers
 
             // If we got this far, something failed, redisplay form
             ModelState.AddModelError("", "The user name or password provided is incorrect.");
-            return View(model);
-        }
-
-        [HttpGet]
-        public ActionResult LoginPartial()
-        {
-            if (Request.IsAjaxRequest())
-            {
-                return View("_LoginPartial");
-            }
-
-            return new EmptyResult();
+            return PartialView(model);
         }
 
         //
@@ -76,9 +75,9 @@ namespace Listonz.Controllers
         // GET: /Account/Register
 
         [AllowAnonymous]
-        public ActionResult Register()
+        public ActionResult RegisterPartial()
         {
-            return View();
+            return PartialView();
         }
 
         //
@@ -87,7 +86,7 @@ namespace Listonz.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public ActionResult Register(RegisterModel model)
+        public ActionResult RegisterPartial(RegisterModel model)
         {
             if (ModelState.IsValid)
             {
@@ -105,7 +104,7 @@ namespace Listonz.Controllers
             }
 
             // If we got this far, something failed, redisplay form
-            return View(model);
+            return PartialView(model);
         }
 
         //

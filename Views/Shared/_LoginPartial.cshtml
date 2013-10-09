@@ -12,7 +12,7 @@
     </text>
 } else {
     <ul>
-        <li>@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
-        <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+        <li>@Html.ActionHash("Register", "Login", "Account", "Register", htmlAttributes: new { id = "registerLink" })</li>
+        <li>@Html.ActionHash("Log in", "Login", "Account", "Login", htmlAttributes: new { id = "loginLink" })</li>
     </ul>
 }

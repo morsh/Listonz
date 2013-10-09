@@ -13,6 +13,13 @@ File storage on the cloud:
 https://cloud.google.com/products/cloud-storage
 
 
+trip planning:
+http://www.cleartrip.com/api/
+
+
+test automation:
+http://docs.seleniumhq.org/docs/01_introducing_selenium.jsp#test-automation-for-web-applications
+
 cd ..\Listonz\Listonz\
 git add .
 git commit -m "Comment"

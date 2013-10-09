@@ -131,6 +131,12 @@ namespace Listonz.Models
         public string Details { get; set; }
     }
 
+    public class LoginPageModel
+    {
+        public LoginModel Login { get; set; }
+        public RegisterModel Register { get; set; }
+    }
+
     public class ExternalLogin
     {
         public string Provider { get; set; }
