@@ -63,9 +63,24 @@
             });
         })(jQuery);
 
-        $('#viewRegister input[type=password]').first().password_strength({
-            minLength: 8,
-            specialLength: 0
+        // Register Partial Handling
+        // =========================
+        $(function () {
+            $('#viewRegister #UserName').on('keyup blur change', function () {
+                
+                var account = $(this).val();
+                if (account != '')
+                    $.get('/api/account/get?name=' + encodeURIComponent(account), function (data) {
+                        $('#viewRegister .user-found').removeClass('true').removeClass('false').addClass(data.toString());
+                    });
+                else
+                    $('#viewRegister .user-found').removeClass('true').removeClass('false');
+            });
+
+            $('#viewRegister input[type=password]').first().password_strength({
+                minLength: 8,
+                specialLength: 0
+            });
         });
     </script>
 }
