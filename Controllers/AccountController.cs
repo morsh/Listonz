@@ -411,15 +411,32 @@ namespace Listonz.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public ActionResult ForgotPasswordPartial(string UserName)
+        public ActionResult ForgotPasswordPartial(string UserName, string Email)
         {
             try
             {
                 //check user existance
-                var user = Membership.GetUser(UserName);
+                var user = (MembershipUser)null;
+                if (!string.IsNullOrEmpty(UserName))
+                    user = Membership.GetUser(UserName);
+
+                if (!string.IsNullOrEmpty(Email) && user == null)
+                {
+                    using (var db = new UsersContext())
+                    {
+                        UserName = db.UserProfiles
+                            .Where(u => u.EmailId == Email)
+                            .Select(u => u.UserName)
+                            .FirstOrDefault();
+
+                        if (!string.IsNullOrEmpty(UserName))
+                            user = Membership.GetUser(UserName);
+                    }
+                }
+
                 if (user == null)
                 {
-                    TempData["Message"] = "User Not exist.";
+                    TempData["Message"] = "User and Email does not Not exist.";
                 }
                 else
                 {
