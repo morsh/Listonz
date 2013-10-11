@@ -8,7 +8,7 @@ using System.Web.Routing;
 
 public static class Extensions
 {
-    // Extension method
+    #region HtmlHelper Extenssions
     public static MvcHtmlString ActionImage(this HtmlHelper html, string action, object routeValues, string imagePath, string alt)
     {
         return html.ActionImage(action, null, routeValues, imagePath, alt);
@@ -71,4 +71,60 @@ public static class Extensions
 
         return MvcHtmlString.Create(imgHtml);
     }
+
+    public static MvcHtmlString ActionMenuItem(this HtmlHelper html, String text, String action, String controllerName)
+    {
+        var url = new UrlHelper(html.ViewContext.RequestContext);
+        var liBuilder = new TagBuilder("li");
+
+        if (html.ViewContext.RequestContext.IsCurrentRoute(null, controllerName, action))
+            liBuilder.AddCssClass("selected");
+
+        var anchorBuilder = new TagBuilder("a");
+        if (controllerName == null)
+            anchorBuilder.MergeAttribute("href", url.Action(action));
+        else
+            anchorBuilder.MergeAttribute("href", url.Action(action, controllerName));
+
+        anchorBuilder.SetInnerText(text);
+        liBuilder.InnerHtml = anchorBuilder.ToString();
+
+        return MvcHtmlString.Create(liBuilder.ToString());
+    }
+    #endregion
+
+    #region RequestContext Extenssion
+    public static bool IsCurrentRoute(this RequestContext context, String areaName, String controllerName, params String[] actionNames)
+    {
+        var routeData = context.RouteData;
+        var routeArea = routeData.DataTokens["area"] as String;
+        var current = false;
+ 
+        if ( ((String.IsNullOrEmpty(routeArea) && String.IsNullOrEmpty(areaName)) ||
+              (routeArea == areaName)) && 
+
+             ((String.IsNullOrEmpty(controllerName)) ||
+              (routeData.GetRequiredString("controller") == controllerName)) && 
+
+             ((actionNames == null) ||
+               actionNames.Contains(routeData.GetRequiredString("action"))) )
+        {
+            current = true;
+        }
+ 
+        return current;
+    }
+    #endregion
+
+    #region UrlHelper Extenssion
+    public static bool IsCurrent(this UrlHelper urlHelper, String areaName, String controllerName, params String[] actionNames)
+    {
+        return urlHelper.RequestContext.IsCurrentRoute(areaName, controllerName, actionNames);
+    }
+
+    public static string Selected(this UrlHelper urlHelper, String areaName, String controllerName, params String[] actionNames)
+    {
+        return urlHelper.IsCurrent(areaName, controllerName, actionNames) ? "selected" : String.Empty;
+    }
+    #endregion
 }

@@ -1,4 +1,7 @@
-﻿Entity frameword scaffoliding and migrations:
+﻿External login popup:
+
+
+Entity frameword scaffoliding and migrations:
 http://www.asp.net/mvc/tutorials/hands-on-labs/aspnet-mvc-4-entity-framework-scaffolding-and-migrations
 http://blog.appharbor.com/2012/04/24/automatic-migrations-with-entity-framework-4-3
 

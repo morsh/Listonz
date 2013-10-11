@@ -269,7 +269,7 @@
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery-ui-1.8.24.js" />
     <Content Include="Scripts\jquery-ui-1.8.24.min.js" />
-    <Content Include="Scripts\jquery.passstrength.js" />
+    <Content Include="Scripts\jquery.passstrength-1.0.1.js" />
     <Content Include="Scripts\jquery.qtip.min.js" />
     <Content Include="Scripts\jquery.tipTip.js" />
     <Content Include="Scripts\jquery.tipTip.minified.js" />
@@ -282,9 +282,9 @@
     <Content Include="Scripts\knockout-2.2.0.debug.js" />
     <Content Include="Scripts\knockout-2.2.0.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
-    <Content Include="Scripts\Pages\lz.pages.login-1.0.0.js" />
-    <Content Include="Scripts\Pages\lz.pages.validation-1.0.0.js" />
-    <Content Include="Scripts\Pages\lz.pages-1.0.0.js" />
+    <Content Include="Scripts\Pages\lz.pages.login-1.0.1.js" />
+    <Content Include="Scripts\Pages\lz.pages.validation-1.0.1.js" />
+    <Content Include="Scripts\Pages\lz.pages-1.0.1.js" />
     <Content Include="Scripts\sammy-0.7.4.js" />
     <Content Include="Scripts\sammy-0.7.4.min.js" />
     <Content Include="Web.config">
@@ -333,6 +333,12 @@
     <Content Include="Views\Account\LoginPartial.cshtml" />
     <Content Include="Views\Account\RegisterPartial.cshtml" />
     <Content Include="Views\Account\ForgotPasswordPartial.cshtml" />
+    <Content Include="Views\Account\LoginResult.cshtml" />
+    <Content Include="Views\Home\ProductionManager.cshtml" />
+    <Content Include="Views\Home\Artist.cshtml" />
+    <Content Include="Views\Home\TourManager.cshtml" />
+    <Content Include="Views\Home\Pricing.cshtml" />
+    <Content Include="Views\Shared\_HomeNavigationPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

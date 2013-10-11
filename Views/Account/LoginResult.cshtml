@@ -1,0 +1,20 @@
+﻿@model Listonz.Models.LoginResultViewModel
+@{
+    Layout = null;
+
+    var success = Model.Success ? "true" : "false";
+    var returnUrl = Model.ReturnUrl == null ? "null" : string.Format("'{0}'", Model.ReturnUrl);
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <script type="text/javascript">
+        if (window.opener && window.opener.loginCallback) {
+            window.opener.loginCallback(@success, @Html.Raw(returnUrl));
+        }
+
+        window.close();
+    </script>
+</head>
+</html>

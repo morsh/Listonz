@@ -7,23 +7,6 @@
         <meta name="viewport" content="width=device-width" />
         @Styles.Render("~/Content/css")
         @Scripts.Render("~/bundles/modernizr")
-
-        <script type="text/javascript">
-            function loginCallback(success, returnUrl) {
-                if (!returnUrl) {
-                    returnUrl = "/";
-                }
-                window.location.href = returnUrl;
-                @*else {
-                    $.ajax({
-                        url: '@Url.Action("LoginPartial", "Account")',
-                        success: function (result) {
-                            $('#login').html(result);
-                        }
-                    });
-                }*@
-            }
-        </script>
     </head>
     <body>
         <header>
@@ -37,11 +20,7 @@
                         @Html.Partial("_LoginPartial")
                     </section>
                     <nav>
-                        <ul id="menu">
-                            <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                            <li>@Html.ActionLink("About", "About", "Home")</li>
-                            <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                        </ul>
+                        @Html.Partial("_HomeNavigationPartial")
                     </nav>
                 </div>
             </div>
