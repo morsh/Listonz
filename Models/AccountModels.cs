@@ -107,13 +107,13 @@ namespace Listonz.Models
     public class RegisterModel
     {
         [Required]
-        [Display(Name = "User name")]
+        [Display(Name = "User name", Description = "Enter a user name with which you will be able to log in")]
         public string UserName { get; set; }
 
         [Required]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
         [DataType(DataType.Password)]
-        [Display(Name = "Password")]
+        [Display(Name = "Password", Description = "Enter a pretty password")]
         public string Password { get; set; }
 
         [DataType(DataType.Password)]
@@ -129,6 +129,11 @@ namespace Listonz.Models
         [Required]
         [Display(Name = "About Yourself")]
         public string Details { get; set; }
+
+        [IsTrueAttribute(ErrorMessage = "Please confirm Agreement")]
+        [Display(Name = "I agree to the terms.")]
+        public bool Agreement { get; set; }
+
     }
 
     public class LoginPageModel

@@ -3,19 +3,23 @@
 @using (Html.BeginForm("RegisterPartial", "Account"))
 {
     @Html.AntiForgeryToken()
-    @Html.ValidationSummary()
 
     <fieldset>
         <legend>Registration Form</legend>
         <ol>
             <li>
                 @Html.LabelFor(m => m.UserName)
+                @Html.HintFor(m => m.UserName)
                 @Html.TextBoxFor(m => m.UserName)
                 <div class="user-found" />
+                @Html.ValidationMessageFor(m => m.UserName)
             </li>
             <li>
                 @Html.LabelFor(m => m.Password)
-                @Html.PasswordFor(m => m.Password)
+                @Html.HintFor(m => m.Password)
+                <div style="position:relative">
+                    @Html.PasswordFor(m => m.Password)
+                </div>
             </li>
             <li>
                 @Html.LabelFor(m => m.ConfirmPassword)
@@ -29,7 +33,16 @@
                 @Html.LabelFor(m => m.Details)
                 @Html.TextBoxFor(m => m.Details)
             </li>
+            <li>
+                @Html.CheckBoxFor(m => m.Agreement) 
+                @Html.LabelFor(m => m.Agreement, new { @class = "leagal", termslink = "terms" })
+                @Html.ValidationMessageFor(m => m.Agreement)
+                <div id="leagalMessage">
+                    A Bunch of Leagal Stuff
+                </div>
+            </li>
         </ol>
         <input type="submit" value="Register" />
     </fieldset>
+    @Html.ValidationSummary()
 }

@@ -190,11 +190,13 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountModels.cs" />
+    <Compile Include="Models\Attributes\IsTrueAttribute.cs" />
     <Compile Include="Models\Extensions.cs" />
     <Compile Include="Models\LZ.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\qTip\jquery.qtip.min.css" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
@@ -249,12 +251,17 @@
     <Content Include="Content\themes\base\minified\jquery.ui.slider.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.tabs.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
+    <Content Include="Content\tipTip\tipTip.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
     <Content Include="Images\fb-login.png" />
+    <Content Include="Images\greenv.png" />
+    <Content Include="Images\info.png" />
     <Content Include="Images\li-login.png" />
     <Content Include="Images\logo.jpg" />
+    <Content Include="Images\redx.png" />
+    <Content Include="Images\wait.gif" />
     <Content Include="Properties\Resources.txt" />
     <Content Include="Scripts\jquery-1.8.2.js" />
     <Content Include="Scripts\jquery-1.8.2.min.js" />
@@ -262,6 +269,9 @@
     <Content Include="Scripts\jquery-ui-1.8.24.js" />
     <Content Include="Scripts\jquery-ui-1.8.24.min.js" />
     <Content Include="Scripts\jquery.passstrength.js" />
+    <Content Include="Scripts\jquery.qtip.min.js" />
+    <Content Include="Scripts\jquery.tipTip.js" />
+    <Content Include="Scripts\jquery.tipTip.minified.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
@@ -271,6 +281,9 @@
     <Content Include="Scripts\knockout-2.2.0.debug.js" />
     <Content Include="Scripts\knockout-2.2.0.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\Pages\lz.pages.login-1.0.0.js" />
+    <Content Include="Scripts\Pages\lz.pages.validation-1.0.0.js" />
+    <Content Include="Scripts\Pages\lz.pages-1.0.0.js" />
     <Content Include="Scripts\sammy-0.7.4.js" />
     <Content Include="Scripts\sammy-0.7.4.min.js" />
     <Content Include="Web.config">
@@ -306,7 +319,6 @@
     <Content Include="Views\Account\_SetPasswordPartial.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Account\Manage.cshtml" />
-    <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Account\ExternalLoginFailure.cshtml" />
     <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
     <Content Include="Views\Home\About.cshtml" />

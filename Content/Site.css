@@ -349,15 +349,8 @@ aside {
         padding: 0;
     }
 
-    #loginForm .validation-summary-errors li {
-        display: inline;
-        list-style: none;
-        margin: 0;
-    }
-
-    #loginForm input {
-        width: 425px;
-    }
+    #loginForm .validation-summary-errors li {list-style: none;margin: 0;}
+    #loginForm input {width: 425px;}
 
     #loginForm input[type="checkbox"],
     #loginForm input[type="submit"],
@@ -366,10 +359,14 @@ aside {
         width: auto;
     }
 
-    #loginForm .user-found { position: absolute; width: 24px; height: 24px; margin-top: -35px; margin-left: 410px; }
-        #loginForm .user-found.false {background: transparent url(/images/greenv.png); }
-        #loginForm .user-found.true { background: transparent url(/images/redx.png); }
-        #loginForm .user-found.wait { background: transparent url(/images/wait.gif); }
+    #viewRegister .user-found { position: absolute; width: 24px; height: 24px; margin-top: -35px; margin-left: 410px; }
+        #viewRegister .user-found.false {background: transparent url(/images/greenv.png); }
+        #viewRegister .user-found.true { background: transparent url(/images/redx.png); }
+        #viewRegister .user-found.wait { background: transparent url(/images/wait.gif); }
+    #viewRegister .leagal { display:inline; }
+    #viewRegister #leagalMessage { display: none; }
+    #viewRegister #Password,
+    #viewRegister #ConfirmPassword { width:200px; }
 
 .login-button { float:right; }
 #socialLoginForm { width: 100%; display: inline-block; }
@@ -417,9 +414,8 @@ fieldset {
         list-style: none;
     }
 
-        fieldset ol li {
-            padding-bottom: 5px;
-        }
+        fieldset ol li {padding-bottom: 5px;position:relative;}
+        fieldset ol li .info {position:absolute;right:15px;width:15px;height:15px;background:transparent url(/Images/info.png);margin-top:-12px;}
 
 label {
     display: block;

@@ -113,6 +113,8 @@
         numberLength: 1,
         barWidth: 200,
         barColor: 'Red',
+        mediumColor: 'Orange',
+        strongColor: 'Green',
         specialChars: '!@#$', //allowable special characters
         metRequirement: false
     };
@@ -176,12 +178,12 @@
         return this.each(function () {
 
             //bar position
-            var barLeftPos = $("[id$='" + this.id + "']").position().left + $("[id$='" + this.id + "']").width();
-            var barTopPos = $("[id$='" + this.id + "']").position().top + $("[id$='" + this.id + "']").height();
+            var barLeftPos = $("[id$='" + this.id + "']").position().left + $("[id$='" + this.id + "']").width() / 2;
+            var barTopPos = $("[id$='" + this.id + "']").position().top + $("[id$='" + this.id + "']").height() + 6;
 
             //password indicator text container
-            var container = $('<span></span>')
-            .css({ position: 'absolute', top: barTopPos - 6, left: barLeftPos + 15, 'font-size': '75%', display: 'inline-block', width: password_settings.barWidth + 40 });
+            var container = $('<span id="PasswordStrengthText"></span>')
+            .css({ position: 'absolute', top: barTopPos + 34, left: barLeftPos + 15, 'font-size': '75%', display: 'inline-block', width: password_settings.barWidth + 10 });
 
             //add the container next to textbox
             $(this).after(container);
@@ -189,8 +191,8 @@
             //bar border and indicator div
             var passIndi = $('<div id="PasswordStrengthBorder"></div><div id="PasswordStrengthBar" class="BarIndicator"></div>')
             .css({ position: 'absolute', display: 'none' })
-            .eq(0).css({ height: 3, top: barTopPos - 16, left: barLeftPos + 15, 'border-style': 'solid', 'border-width': 1, padding: 2 }).end()
-            .eq(1).css({ height: 5, top: barTopPos - 14, left: barLeftPos + 17 }).end()
+            .eq(0).css({ height: 3, top: barTopPos + 24, left: barLeftPos + 15, 'border-style': 'solid', 'border-width': 1, padding: 2 }).end()
+            .eq(1).css({ height: 5, top: barTopPos + 26, left: barLeftPos + 17 }).end()
 
             //set max length of textbox
             //$("[id$='" + this.id + "']").attr('maxLength', password_settings.maxLength);
@@ -217,8 +219,12 @@
                         strengthPercent = (msgNstrength_array[1] / password_settings.minLength) * barWidth;
                     }
 
+                    if (strengthPercent == barWidth) {
+                        password_settings.metRequirement = true;
+                    }
+
                     $("[id$='PasswordStrengthBorder']").css({ display: 'inline', width: barWidth });
-                    $("[id$='PasswordStrengthBar']").css({ display: 'inline', width: strengthPercent, 'background-color': password_settings.barColor });
+                    $("[id$='PasswordStrengthBar']").css({ display: 'inline', width: strengthPercent, 'background-color': password_settings.metRequirement ? 'green' : password_settings.barColor });
 
                     //remove last "," character
                     if (msgNstrength_array[0].lastIndexOf(",") !== -1) {
@@ -226,10 +232,6 @@
                     }
                     else {
                         container.text(msgNstrength_array[0]);
-                    }
-
-                    if (strengthPercent == barWidth) {
-                        password_settings.metRequirement = true;
                     }
 
                 }

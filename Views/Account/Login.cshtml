@@ -34,58 +34,12 @@
 </section>
     
 @section Scripts {
+    @Scripts.Render("~/bundles/jqueryui")
     @Scripts.Render("~/bundles/jqueryval")
     <script src="~/Scripts/jquery.passstrength.js"></script>
-    <script>
+    <script src="~/Scripts/jquery.qTip.min.js"></script>
+    <script src="~/Scripts/Pages/lz.pages.login-1.0.0.js"></script>    
 
-        (function ($) {
-            var app = $.sammy('#loginForm', function () {
-
-                this.get("#/Login", function (context) {
-                    $(".view").hide();
-                    $("#viewLogin").show();
-                });
-
-                this.get("#/Register", function (context) {
-                    $(".view").hide();
-                    $("#viewRegister").show();
-                });
-
-                this.get("#/ForgotPassword", function (context) {
-                    $(".view").hide();
-                    $("#viewForgotPassword").show();
-                });
-
-            });
-
-            $(function () {
-                app.run('#/Login');
-            });
-        })(jQuery);
-
-        // Register Partial Handling
-        // =========================
-        $(function () {
-            $('#viewRegister #UserName').on('keyup blur change', function () {
-                
-                var account = $(this).val();
-                if (account != '') {
-                    $('#viewRegister .user-found').addClass('wait');
-                    $.get('/api/account/get?name=' + encodeURIComponent(account), function (data) {
-                        $('#viewRegister .user-found')
-                            .removeClass('true').removeClass('false').removeClass('wait')
-                            .addClass(data.toString());
-                    });
-                }
-                else
-                    $('#viewRegister .user-found')
-                        .removeClass('true').removeClass('false').removeClass('wait');
-            });
-
-            $('#viewRegister input[type=password]').first().password_strength({
-                minLength: 8,
-                specialLength: 0
-            });
-        });
-    </script>
+    @Styles.Render("~/Content/themes/base/css")
+    <link href="~/Content/qTip/jquery.qtip.min.css" rel="stylesheet" />
 }

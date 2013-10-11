@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
@@ -56,5 +57,17 @@ public static class Extensions
         var anchorHtml = anchorBuilder.ToString(TagRenderMode.Normal);
 
         return MvcHtmlString.Create(anchorHtml);
+    }
+
+    public static MvcHtmlString HintFor<TModel, TValue>(this HtmlHelper<TModel> html, Expression<Func<TModel, TValue>> expression)
+    {
+        var description = ModelMetadata.FromLambdaExpression(expression, html.ViewData).Description;
+
+        var imgBuilder = new TagBuilder("div");
+        imgBuilder.MergeAttribute("class", "info");
+        imgBuilder.MergeAttribute("title", description);
+        string imgHtml = imgBuilder.ToString(TagRenderMode.StartTag) + imgBuilder.ToString(TagRenderMode.EndTag);
+
+        return MvcHtmlString.Create(imgHtml);
     }
 }
