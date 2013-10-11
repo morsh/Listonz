@@ -191,6 +191,7 @@
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\Attributes\IsTrueAttribute.cs" />
+    <Compile Include="Models\Attributes\PasswordStrengthAttribute.cs" />
     <Compile Include="Models\Extensions.cs" />
     <Compile Include="Models\LZ.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -63,7 +63,7 @@ $(function () {
                 switch (status) {
                     case 'wait': title = 'Finding user name...'; break;
                     case 'true': title = 'Oh darn, someone beat you to it.'; break;
-                    case 'false': title = 'No that\'s a star\'s name!'; break;
+                    case 'false': title = 'Now that\'s a star\'s name!'; break;
                 }
             }
             $e.attr('title', title);
@@ -81,8 +81,10 @@ $(function () {
             setUserFound();
     });
 
-    $('#viewRegister input[type=password]').first().password_strength({
+    var $password = $('#viewRegister input[type=password]').first();
+    $password.get(0).passStrength = $password.password_strength({
         minLength: 8,
-        specialLength: 0
+        specialLength: 0,
+        messages: ["Are you kidding me?!", "A little better", "Almost there...", "Now that wan't so hard, was it?"]
     });
 });

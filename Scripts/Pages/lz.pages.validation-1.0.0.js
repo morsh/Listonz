@@ -9,6 +9,17 @@ jQuery.validator.unobtrusive.adapters.add('istrue', {}, function (options) {
     options.messages['isTrue'] = options.message;
 });
 
+// we add a custom jquery validation method
+jQuery.validator.addMethod('isPasswordEnough', function (value, element, params) {
+    return element.passStrength.metMinReq();
+}, '');
+
+// and an unobtrusive adapter
+jQuery.validator.unobtrusive.adapters.add('passwordstrength', {}, function (options) {
+    options.rules['isPasswordEnough'] = true;
+    options.messages['isPasswordEnough'] = options.message;
+});
+
 $(function () {
 
     // Run this function for all validation error messages

@@ -111,7 +111,8 @@ namespace Listonz.Models
         public string UserName { get; set; }
 
         [Required]
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
+        //[StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
+        [PasswordStrength(8, 100, ErrorMessage = "Your password should be al least 8 characters long with at least 1 digit and 1 upper case letter")]
         [DataType(DataType.Password)]
         [Display(Name = "Password", Description = "Enter a pretty password")]
         public string Password { get; set; }

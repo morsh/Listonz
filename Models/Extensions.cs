@@ -51,7 +51,8 @@ public static class Extensions
         else
             anchorBuilder.MergeAttribute("href", url.Action(action, controllerName) + "#/" + hash);
 
-        anchorBuilder.MergeAttributes(new RouteValueDictionary(htmlAttributes));
+        if (htmlAttributes != null)
+            anchorBuilder.MergeAttributes(new RouteValueDictionary(htmlAttributes));
         anchorBuilder.SetInnerText(text);
         
         var anchorHtml = anchorBuilder.ToString(TagRenderMode.Normal);

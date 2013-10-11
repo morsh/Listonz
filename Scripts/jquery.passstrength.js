@@ -116,6 +116,8 @@
         mediumColor: 'Orange',
         strongColor: 'Green',
         specialChars: '!@#$', //allowable special characters
+        messages: [],
+        metMinRequirement: false,
         metRequirement: false
     };
 
@@ -136,13 +138,22 @@
             password_settings.numberLength = options.numberLength;
         if (typeof(options.barWidth) != 'undefined')
             password_settings.barWidth = options.barWidth;
-        if (typeof(options.barColor) != 'undefined')
+        if (typeof (options.barColor) != 'undefined')
             password_settings.barColor = options.barColor;
-        if (typeof(options.specialChars) != 'undefined')
+        if (typeof (options.mediumColor) != 'undefined')
+            password_settings.mediumColor = options.mediumColor;
+        if (typeof (options.strongColor) != 'undefined')
+            password_settings.strongColor = options.strongColor;
+        if (typeof (options.messages) != 'undefined')
+            password_settings.messages = options.messages;
+        if (typeof (options.specialChars) != 'undefined')
             password_settings.specialChars = options.specialChars;
 
         this.metReq = function () {
             return password_settings.metRequirement;
+        }
+        this.metMinReq = function () {
+            return password_settings.metMinRequirement;
         }
 
         ////read password setting from xml file
@@ -206,6 +217,7 @@
 
                 //set met requirement to false
                 password_settings.metRequirement = false;
+                password_settings.metMinRequirement = false;
 
                 if (passwordVal.length > 0) {
 
@@ -219,19 +231,36 @@
                         strengthPercent = (msgNstrength_array[1] / password_settings.minLength) * barWidth;
                     }
 
+                    if (strengthPercent >= (barWidth * 0.75) && passwordVal.length >= password_settings.minLength) {
+                        password_settings.metMinRequirement = true;
+                    }
                     if (strengthPercent == barWidth) {
                         password_settings.metRequirement = true;
                     }
 
                     $("[id$='PasswordStrengthBorder']").css({ display: 'inline', width: barWidth });
-                    $("[id$='PasswordStrengthBar']").css({ display: 'inline', width: strengthPercent, 'background-color': password_settings.metRequirement ? 'green' : password_settings.barColor });
+                    $("[id$='PasswordStrengthBar']").css({
+                        display: 'inline', width: strengthPercent,
+                        'background-color':
+                                password_settings.metRequirement ? password_settings.strongColor :
+                                password_settings.metMinRequirement ? password_settings.mediumColor : password_settings.barColor
+                    });
 
                     //remove last "," character
-                    if (msgNstrength_array[0].lastIndexOf(",") !== -1) {
-                        container.text(msgNstrength_array[0].substring(0, msgNstrength_array[0].length - 2));
+                    if (password_settings.messages.length == 0) {
+                        if (msgNstrength_array[0].lastIndexOf(",") !== -1) {
+                            container.text(msgNstrength_array[0].substring(0, msgNstrength_array[0].length - 2));
+                        }
+                        else {
+                            container.text(msgNstrength_array[0]);
+                        }
+                    }
+                    else if (strengthPercent == barWidth) {
+                        container.text(password_settings.messages[password_settings.messages.length - 1]);
                     }
                     else {
-                        container.text(msgNstrength_array[0]);
+                        var index = Math.floor((strengthPercent / barWidth) * (password_settings.messages.length - 1));
+                        container.text(password_settings.messages[index]);
                     }
 
                 }

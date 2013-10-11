@@ -12,10 +12,11 @@
     <div id="viewLogin" class="view">
         @Html.Partial("LoginPartial")
         <div>
-            Or <a href="Login#/Register">Register</a> if you don't have an account.
+            
+            Or @Html.ActionHash("Register", "Login", "Account", "Register", null) if you don't have an account.
         </div>
         <div>
-            Press <a href="Login#/ForgotPassword">here</a> if you forgot your password.
+            Press @Html.ActionHash("here", "Login", "Account", "ForgotPassword", null) if you forgot your password.
         </div>
     </div>
     <div id="viewRegister" class="view">
