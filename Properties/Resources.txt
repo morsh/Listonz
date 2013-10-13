@@ -26,7 +26,7 @@ http://docs.seleniumhq.org/docs/01_introducing_selenium.jsp#test-automation-for-
 Password strength:
 http://download.ysatech.com/ASP-NET-jQuery-Password-Strength/#
 
-cd ..\Listonz\Listonz\
+cd "C:\Users\mor\Documents\visual studio 2012\Projects\Listonz\Listonz"
 git add .
 git commit -m "Comment"
 git push appharbor master
