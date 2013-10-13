@@ -334,7 +334,7 @@ fieldset {
         list-style: none;
     }
 
-        fieldset ol li {padding-bottom: 5px;position:relative;clear:both;}
+        fieldset ol li {padding-bottom: 5px;}
         fieldset ol li .info {width:15px;height:15px;background:transparent url(/Images/info.png);margin:3px 15px 0 0;float:right;}
 
 label {
@@ -643,22 +643,16 @@ tr.pager td {
     }
 
     /* login page */
-    #loginForm {
-        border-right: none;
-        float: none;
-        width: auto;
-    }
+    #loginForm {float: none;width: auto;}
 
-        #loginForm .validation-error {
-            display: block;
-            margin-left: 15px;
-        }
+        #loginForm input,
+        #loginForm #Password,
+        #loginForm #ConfirmPassword {width: 260px;}
+        #loginForm #PasswordStrengthContainer {float:none !important;}
+
+        #loginForm .validation-error {display: block;margin-left: 15px;}
         
-    #socialLoginForm {
-        margin-left: 0;
-        float: none;
-        width: auto;
-    }
+    #socialLoginForm {margin-left: 0;float: none;width: auto;}
 
 
     /* footer

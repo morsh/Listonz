@@ -1,19 +1,21 @@
 ﻿(function ($) {
     var app = $.sammy('#loginForm', function () {
 
+        function showView(viewSelector) {
+            $(".view").hide().find('[data-hasqtip]').qtip('toggle', false);
+            $(viewSelector).show().find('[data-hasqtip]').qtip('toggle', true);
+        }
+
         this.get("#/Login", function (context) {
-            $(".view").hide();
-            $("#viewLogin").show();
+            showView('#viewLogin');
         });
 
         this.get("#/Register", function (context) {
-            $(".view").hide();
-            $("#viewRegister").show();
+            showView('#viewRegister');
         });
 
         this.get("#/ForgotPassword", function (context) {
-            $(".view").hide();
-            $("#viewForgotPassword").show();
+            showView('#viewForgotPassword');
         });
 
     });

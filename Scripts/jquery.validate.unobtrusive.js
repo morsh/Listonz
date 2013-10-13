@@ -58,7 +58,7 @@
         /**** Added code to display the error message in a qTip tooltip ****/
         // Set positioning based on the elements position in the form
         var elem = $(inputElement),
-            corners = ['left center', 'right center'],
+            corners = ['top center', 'bottom center'],
             flipIt = elem.parents('span.right').length > 0;
 
         // Check we have a valid error message
@@ -66,11 +66,18 @@
             // Apply the tooltip only if it isn't valid
             elem.filter(':not(.valid)').qtip({
                 overwrite: false,
-                content: error,
+                content: {
+                    text: error,
+                    button: true
+                },
                 position: {
-                    my: corners[flipIt ? 0 : 1],
-                    at: corners[flipIt ? 1 : 0],
-                    viewport: $(window)
+                    my: corners[flipIt ? 1 : 1],
+                    at: corners[flipIt ? 0 : 0],
+                    viewport: $(window),
+                    adjust: {
+                        method: 'shift none',
+                        resize: false
+                    }
                 },
                 show: {
                     event: false,
@@ -78,12 +85,14 @@
                 },
                 hide: false,
                 style: {
-                    classes: 'ui-tooltip-red' // Make it red... the classic error colour!
+                    tip: { corner: true, mimic: 'center' },
+                    classes: ' qtip-dark qtip-rounded ui-tooltip-red' // Make it red... the classic error colour!
                 }
             })
 
             // If we have a tooltip on this element already, just update its content
-            .qtip('option', 'content.text', error);
+            .qtip('option', 'content.text', error)
+            .qtip('show');
         }
 
             // If the error is empty, remove the qTip

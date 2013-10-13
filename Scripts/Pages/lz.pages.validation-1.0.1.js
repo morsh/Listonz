@@ -29,7 +29,7 @@ $(function () {
         // underscore but the data-valmsg-for value will have the original characters
         var inputElem = '#' + $(this).attr('data-valmsg-for').replace('.', '_').replace('[', '_').replace(']', '_');
 
-        var corners = ['left center', 'right center'];
+        var corners = ['top center', 'bottom center'];
         var flipIt = $(inputElem).parents('span.right').length > 0;
 
         // Hide the default validation error
@@ -39,13 +39,13 @@ $(function () {
         $(inputElem).filter(':not(.valid)').qtip({
             content: { text: $(this).text() }, // Set the content to be the error message
             position: {
-                my: corners[flipIt ? 0 : 1],
-                at: corners[flipIt ? 1 : 0],
+                my: corners[flipIt ? 1 : 1],
+                at: corners[flipIt ? 0 : 0],
                 viewport: $(window)
             },
             show: { ready: true },
             hide: false,
-            style: { classes: 'ui-tooltip-red' }
+            style: { classes: 'ui-dark' }
         });
     });
 });
