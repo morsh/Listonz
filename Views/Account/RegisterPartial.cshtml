@@ -1,6 +1,6 @@
 ﻿@model Listonz.Models.RegisterModel
 
-@using (Html.BeginForm("RegisterPartial", "Account"))
+@using (Ajax.BeginForm("RegisterPartial", "Account", new AjaxOptions { UpdateTargetId = "viewRegister", HttpMethod = "POST" }))
 {
     @Html.AntiForgeryToken()
 

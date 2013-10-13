@@ -1,9 +1,8 @@
 ﻿@model Listonz.Models.LoginModel
 
-@using (Html.BeginForm("LoginPartial", "Account", new { ReturnUrl = ViewBag.ReturnUrl }))
+@using (Ajax.BeginForm("LoginPartial", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, new AjaxOptions { UpdateTargetId = "viewLogin", HttpMethod = "POST" }))
 {
     @Html.AntiForgeryToken()
-    @Html.ValidationSummary(true)
 
     <fieldset>
         <legend>Log in Form</legend>
@@ -23,8 +22,15 @@
                 @Html.LabelFor(m => m.RememberMe, new { @class = "checkbox" })
             </li>
         </ol>
+        @Html.ValidationSummary(true)
         <div class="login-button">
             <input type="submit" value="Log in" />
         </div>
     </fieldset>
+    <div>
+        Or @Html.ActionHash("Register", "Login", "Account", "Register", null) if you don't have an account.
+    </div>
+    <div>
+        Press @Html.ActionHash("here", "Login", "Account", "ForgotPassword", null) if you forgot your password.
+    </div>
 }
