@@ -192,24 +192,32 @@
             var barLeftPos = $("[id$='" + this.id + "']").position().left + $("[id$='" + this.id + "']").width() / 2;
             var barTopPos = $("[id$='" + this.id + "']").position().top + $("[id$='" + this.id + "']").height() + 6;
 
-            //password indicator text container
-            var container = $('<span id="PasswordStrengthText"></span>')
-            .css({ position: 'absolute', top: barTopPos + 34, left: barLeftPos + 15, 'font-size': '75%', display: 'inline-block', width: password_settings.barWidth + 10 });
+            var container = $('<div id="PasswordStrengthContainer"></div>')
+                .css({ display: 'inline-block', float: 'right', width: '220px'});
 
             //add the container next to textbox
             $(this).after(container);
 
             //bar border and indicator div
-            var passIndi = $('<div id="PasswordStrengthBorder"></div><div id="PasswordStrengthBar" class="BarIndicator"></div>')
-            .css({ position: 'absolute', display: 'none' })
-            .eq(0).css({ height: 3, top: barTopPos + 24, left: barLeftPos + 15, 'border-style': 'solid', 'border-width': 1, padding: 2 }).end()
-            .eq(1).css({ height: 5, top: barTopPos + 26, left: barLeftPos + 17 }).end()
+            var passBar = $('<div id="PasswordStrengthBorder"></div>')
+                .css({ display: 'inline-block', display: 'none', height: 3, margin: '5px 0 0 0', 'border-style': 'solid', 'border-width': 1, padding: 2 })
 
+            var passIndi = $('<div id="PasswordStrengthBar" class="BarIndicator"></div>')
+                .css({ display: 'block', height: 5, marginTop: "-1px" });
+
+            passBar.append(passIndi);
             //set max length of textbox
             //$("[id$='" + this.id + "']").attr('maxLength', password_settings.maxLength);
 
             //add the boder and div
-            container.before(passIndi);
+            container.append(passBar);
+
+
+            //password indicator text container
+            var passText = $('<div id="PasswordStrengthText"></div>')
+                .css({ 'font-size': '75%', float: 'left', width: password_settings.barWidth + 10 });
+
+            container.append(passText);
 
             $(this).keyup(function () {
 
@@ -238,9 +246,9 @@
                         password_settings.metRequirement = true;
                     }
 
-                    $("[id$='PasswordStrengthBorder']").css({ display: 'inline', width: barWidth });
+                    $("[id$='PasswordStrengthBorder']").css({ display: 'inline-block', width: barWidth });
                     $("[id$='PasswordStrengthBar']").css({
-                        display: 'inline', width: strengthPercent,
+                        width: strengthPercent,
                         'background-color':
                                 password_settings.metRequirement ? password_settings.strongColor :
                                 password_settings.metMinRequirement ? password_settings.mediumColor : password_settings.barColor
@@ -249,23 +257,23 @@
                     //remove last "," character
                     if (password_settings.messages.length == 0) {
                         if (msgNstrength_array[0].lastIndexOf(",") !== -1) {
-                            container.text(msgNstrength_array[0].substring(0, msgNstrength_array[0].length - 2));
+                            passText.text(msgNstrength_array[0].substring(0, msgNstrength_array[0].length - 2));
                         }
                         else {
-                            container.text(msgNstrength_array[0]);
+                            passText.text(msgNstrength_array[0]);
                         }
                     }
                     else if (strengthPercent == barWidth) {
-                        container.text(password_settings.messages[password_settings.messages.length - 1]);
+                        passText.text(password_settings.messages[password_settings.messages.length - 1]);
                     }
                     else {
                         var index = Math.floor((strengthPercent / barWidth) * (password_settings.messages.length - 1));
-                        container.text(password_settings.messages[index]);
+                        passText.text(password_settings.messages[index]);
                     }
 
                 }
                 else {
-                    container.text('');
+                    passText.text('');
                     $("[id$='PasswordStrengthBorder']").css("display", "none"); //hide
                     $("[id$='PasswordStrengthBar']").css("display", "none"); //hide
                 }

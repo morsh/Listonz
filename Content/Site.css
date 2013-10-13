@@ -334,13 +334,14 @@ fieldset {
         list-style: none;
     }
 
-        fieldset ol li {padding-bottom: 5px;position:relative;}
-        fieldset ol li .info {position:absolute;right:15px;width:15px;height:15px;background:transparent url(/Images/info.png);margin-top:-12px;}
+        fieldset ol li {padding-bottom: 5px;position:relative;clear:both;}
+        fieldset ol li .info {width:15px;height:15px;background:transparent url(/Images/info.png);margin:3px 15px 0 0;float:right;}
 
 label {
     display: block;
     font-size: 1.2em;
     font-weight: 600;
+    width: 90%;
 }
 
 label.checkbox {

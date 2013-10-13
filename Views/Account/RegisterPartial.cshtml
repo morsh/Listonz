@@ -8,15 +8,15 @@
         <legend>Registration Form</legend>
         <ol>
             <li>
-                @Html.LabelFor(m => m.UserName)
                 @Html.HintFor(m => m.UserName)
+                @Html.LabelFor(m => m.UserName)
                 @Html.TextBoxFor(m => m.UserName)
                 <div class="user-found" />
                 @Html.ValidationMessageFor(m => m.UserName)
             </li>
             <li>
-                @Html.LabelFor(m => m.Password)
                 @Html.HintFor(m => m.Password)
+                @Html.LabelFor(m => m.Password)
                 <div style="position:relative">
                     @Html.PasswordFor(m => m.Password)
                 </div>
