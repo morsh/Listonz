@@ -52,7 +52,9 @@ namespace Listonz.Controllers
         {
             if (ModelState.IsValid && WebSecurity.Login(model.UserName, model.Password, persistCookie: model.RememberMe))
             {
-                return RedirectToLocal(returnUrl);
+                if (string.IsNullOrEmpty(returnUrl))
+                    returnUrl = "/";
+                return JavaScript("window.location = '" + returnUrl + "'");
             }
 
             // If we got this far, something failed, redisplay form

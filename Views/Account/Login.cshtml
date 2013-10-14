@@ -7,7 +7,7 @@
     <h1>@ViewBag.Title.</h1>
 </hgroup>
 
-<section id="loginForm">
+<section id="loginForm" class="narrow">
 
     <div id="viewLogin" class="view">
         @Html.Partial("LoginPartial")
@@ -18,9 +18,6 @@
     <div id="viewForgotPassword" class="view">
         @Html.Partial("ForgotPasswordPartial")
     </div>
-    <section class="social" id="socialLoginForm">
-        @Html.Action("ExternalLoginsList", new { ReturnUrl = ViewBag.ReturnUrl })
-    </section>
     @if (Request["Register"] != null)
     {
         <div>hello register</div>

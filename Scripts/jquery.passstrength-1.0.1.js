@@ -275,7 +275,6 @@
                 else {
                     passText.text('');
                     $("[id$='PasswordStrengthBorder']").css("display", "none"); //hide
-                    $("[id$='PasswordStrengthBar']").css("display", "none"); //hide
                 }
             });
         });

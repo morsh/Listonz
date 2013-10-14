@@ -12,7 +12,7 @@ namespace Listonz
                         "~/Scripts/jquery-{version}.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/lz").Include(
-                        "~/Scripts/Pages/lz-{version}.js"));
+                        "~/Scripts/Pages/lz.pages-{version}.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/ko").Include(
                         "~/Scripts/knockout-{version}.js",

@@ -250,34 +250,27 @@ aside {
     font-weight: 700;
 }
 
+/* narrow page */
+.narrow {width: 450px;margin-left: auto;margin-right: auto;border:1px dashed #ffea00;padding: 10px;}
+
+    .narrow .validation-error {display: block;margin-left: 15px;}
+
+    .narrow .validation-summary-errors ul {margin: 0;padding: 0;}
+
+    .narrow .validation-summary-errors li {list-style: none;margin: 0;}
+    .narrow input {width: 425px;}
+
+    .narrow input[type="checkbox"],
+    .narrow input[type="submit"],
+    .narrow input[type="button"],
+    .narrow button {width: auto;}
+    .narrow #Password,
+    .narrow #ConfirmPassword { width:200px; }
+
 /* login page */
-#loginForm {
-    width: 450px;
-    margin-left: auto;
-    margin-right: auto;
-    border:1px dashed #ffea00;
-    padding: 10px;
-}
 
-    #loginForm .validation-error {
-        display: block;
-        margin-left: 15px;
-    }
-
-    #loginForm .validation-summary-errors ul {
-        margin: 0;
-        padding: 0;
-    }
-
-    #loginForm .validation-summary-errors li {list-style: none;margin: 0;}
-    #loginForm input {width: 425px;}
-
-    #loginForm input[type="checkbox"],
-    #loginForm input[type="submit"],
-    #loginForm input[type="button"],
-    #loginForm button {
-        width: auto;
-    }
+    #viewLogin #Password,
+    #viewLogin #ConfirmPassword { width: 425px; }
 
     #viewRegister .user-found { position: absolute; width: 24px; height: 24px; margin-top: -35px; margin-left: 410px; }
         #viewRegister .user-found.false {background: transparent url(/images/greenv.png); }
@@ -285,8 +278,6 @@ aside {
         #viewRegister .user-found.wait { background: transparent url(/images/wait.gif); }
     #viewRegister .leagal { display:inline; }
     #viewRegister #leagalMessage { display: none; }
-    #viewRegister #Password,
-    #viewRegister #ConfirmPassword { width:200px; }
 
 .login-button { float:right; }
 #socialLoginForm { width: 100%; display: inline-block; }
@@ -638,20 +629,21 @@ tr.pager td {
         }
 
     /* forms */
-    input {
-        width: 90%;
-    }
+    input {width: 90%;}
 
-    /* login page */
-    #loginForm {float: none;width: auto;}
+    /* narrow page */
+    .narrow {float: none;width: auto;}
 
-        #loginForm input,
-        #loginForm #Password,
-        #loginForm #ConfirmPassword {width: 260px;}
-        #loginForm #PasswordStrengthContainer {float:none !important;}
+        .narrow input,
+        .narrow #Password,
+        .narrow #ConfirmPassword {width: 260px !important;}
+        .narrow #PasswordStrengthContainer {float:none !important;}
 
-        #loginForm .validation-error {display: block;margin-left: 15px;}
+        .narrow .validation-error {display: block;margin-left: 15px;}
         
+    /* login page */
+
+    #viewLogin 
     #socialLoginForm {margin-left: 0;float: none;width: auto;}
 
 

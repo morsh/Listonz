@@ -3,7 +3,6 @@
 @using (Ajax.BeginForm("LoginPartial", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, new AjaxOptions { UpdateTargetId = "viewLogin", HttpMethod = "POST" }))
 {
     @Html.AntiForgeryToken()
-
     <fieldset>
         <legend>Log in Form</legend>
         <ol>
@@ -34,3 +33,7 @@
         Press @Html.ActionHash("here", "Login", "Account", "ForgotPassword", null) if you forgot your password.
     </div>
 }
+
+<section class="social" id="socialLoginForm">
+    @Html.Action("ExternalLoginsList", new { ReturnUrl = ViewBag.ReturnUrl })
+</section>

@@ -1,6 +1,7 @@
 ﻿using Listonz.Migrations;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
@@ -102,6 +103,7 @@ namespace Listonz.Models
 
         [Display(Name = "Remember me?")]
         public bool RememberMe { get; set; }
+
     }
 
     public class RegisterModel
@@ -135,12 +137,6 @@ namespace Listonz.Models
         [Display(Name = "I agree to the terms.")]
         public bool Agreement { get; set; }
 
-    }
-
-    public class LoginPageModel
-    {
-        public LoginModel Login { get; set; }
-        public RegisterModel Register { get; set; }
     }
 
     public class ExternalLogin
