@@ -82,11 +82,4 @@ $(function () {
         else
             setUserFound();
     });
-
-    var $password = $('#viewRegister input[type=password]').first();
-    $password.get(0).passStrength = $password.password_strength({
-        minLength: 8,
-        specialLength: 0,
-        messages: ["Are you kidding me?!", "A little better", "Almost there...", "Now that wan't so hard, was it?"]
-    });
 });

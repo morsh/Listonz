@@ -11,3 +11,12 @@
     //        }
     //    });
 }
+
+$(function () {
+    var $password = $('.pass-strength input[type=password]');
+    $password.get(0).passStrength = $password.password_strength({
+        minLength: 8,
+        specialLength: 0,
+        messages: ["Are you kidding me?!", "A little better", "Almost there...", "Now that wan't so hard, was it?"]
+    });
+});

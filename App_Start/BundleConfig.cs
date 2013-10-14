@@ -22,6 +22,7 @@ namespace Listonz
                         "~/Scripts/jquery-ui-{version}.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
+                        "~/Scripts/jquery.passstrength-{version}.js",
                         "~/Scripts/jquery.qtip.js",
                         "~/Scripts/jquery.unobtrusive*",
                         "~/Scripts/jquery.validate*",
@@ -35,6 +36,7 @@ namespace Listonz
             bundles.Add(new StyleBundle("~/Content/css").Include("~/Content/site.css"));
 
             bundles.Add(new StyleBundle("~/Content/themes/base/css").Include(
+                        "~/Content/qTip/jquery.qtip.css",
                         "~/Content/themes/base/jquery.ui.core.css",
                         "~/Content/themes/base/jquery.ui.resizable.css",
                         "~/Content/themes/base/jquery.ui.selectable.css",
