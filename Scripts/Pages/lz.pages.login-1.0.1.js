@@ -2,8 +2,8 @@
     var app = $.sammy('#loginForm', function () {
 
         function showView(viewSelector) {
-            $(".view").hide().find('[data-hasqtip]').qtip('toggle', false);
-            $(viewSelector).show().find('[data-hasqtip]').qtip('toggle', true);
+            $(".view").hide().find('[data-hasqtip]');
+            $(viewSelector).show().find('[data-hasqtip]');
         }
 
         this.get("#/Login", function (context) {

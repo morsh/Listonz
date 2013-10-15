@@ -231,12 +231,17 @@
 
                     var msgNstrength = password_Strength.getStrengthInfo(passwordVal);
 
-                    var msgNstrength_array = msgNstrength.split(";"), strengthPercent = 0,
-                    barWidth = password_settings.barWidth;
+                    var msgNstrength_array = msgNstrength.split(";"),
+                        strengthPercent = 0,
+                        barWidth = password_settings.barWidth,
+                        overrideMessage = false;
 
                     //calculate the bar indicator length
                     if (msgNstrength_array.length > 1) {
                         strengthPercent = (msgNstrength_array[1] / password_settings.minLength) * barWidth;
+                    }
+                    else {
+                        overrideMessage = true;
                     }
 
                     if (strengthPercent >= (barWidth * 0.75) && passwordVal.length >= password_settings.minLength) {
@@ -255,7 +260,7 @@
                     });
 
                     //remove last "," character
-                    if (password_settings.messages.length == 0) {
+                    if (password_settings.messages.length == 0 || overrideMessage) {
                         if (msgNstrength_array[0].lastIndexOf(",") !== -1) {
                             passText.text(msgNstrength_array[0].substring(0, msgNstrength_array[0].length - 2));
                         }

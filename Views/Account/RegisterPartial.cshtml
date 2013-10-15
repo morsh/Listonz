@@ -43,6 +43,8 @@
             </li>
         </ol>
         <input type="submit" value="Register" />
+        <div>Already have an account?</div>
+        <input type="button" value="Log in" onclick="window.location = '@Html.ActionHashUrl("Login", "Account", "Login")'" />
     </fieldset>
     @Html.ValidationSummary()
 } 

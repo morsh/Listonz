@@ -6,9 +6,9 @@ using System.Web.Mvc;
 
 namespace Listonz.Controllers
 {
-    [Authorize]
     public class HomeController : Controller
     {
+        [Authorize]
         public ActionResult Index()
         {
             ViewBag.Message = "Your place to plan you next marvelous tour!";
@@ -16,6 +16,7 @@ namespace Listonz.Controllers
             return View();
         }
 
+        [Authorize]
         public ActionResult ProductionManager()
         {
             ViewBag.Message = "Production manager page.";
@@ -23,6 +24,7 @@ namespace Listonz.Controllers
             return View();
         }
 
+        [Authorize]
         public ActionResult Artist()
         {
             ViewBag.Message = "Artist page.";
@@ -30,6 +32,7 @@ namespace Listonz.Controllers
             return View();
         }
 
+        [Authorize]
         public ActionResult TourManager()
         {
             ViewBag.Message = "Tour Manager page.";

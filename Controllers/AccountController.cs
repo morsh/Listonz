@@ -422,25 +422,8 @@ namespace Listonz.Controllers
                 if (!string.IsNullOrEmpty(UserName))
                     user = Membership.GetUser(UserName);
 
-                if (!string.IsNullOrEmpty(Email) && user == null)
-                {
-                    using (var db = new UsersContext())
-                    {
-                        UserName = db.UserProfiles
-                            .Where(u => u.EmailId == Email)
-                            .Select(u => u.UserName)
-                            .FirstOrDefault();
-
-                        if (!string.IsNullOrEmpty(UserName))
-                            user = Membership.GetUser(UserName);
-                    }
-                }
-
-                if (user == null)
-                {
-                    TempData["Message"] = "User and Email does not Not exist.";
-                }
-                else
+                
+                if (user != null)
                 {
                     if (!WebSecurity.IsConfirmed(UserName))
                         TempData["Message"] = "Please make sure your user is confirmed, and that your account has a password.";
@@ -471,6 +454,40 @@ namespace Listonz.Controllers
 
                     //only for testing
                     //TempData["Message"] = resetLink;
+                }
+
+                if (!string.IsNullOrEmpty(Email) && user == null)
+                {
+                    using (var db = new UsersContext())
+                    {
+                        UserName = db.UserProfiles
+                            .Where(u => u.EmailId == Email)
+                            .Select(u => u.UserName)
+                            .FirstOrDefault();
+
+                        if (!string.IsNullOrEmpty(UserName))
+                            user = Membership.GetUser(UserName);
+                    }
+
+                    if (user == null)
+                    {
+                        TempData["Message"] = "User and Email does wer'e not found.";
+                    }
+                    else
+                    {
+                        //send mail
+                        string subject = "User Name Reminder";
+                        string body = "<b>Your User Name is: </b><span>" + UserName + "</span>"; //edit it
+                        try
+                        {
+                            LZ.SendEMail(Email.ToLower(), subject, body);
+                            TempData["Message"] = "Mail Sent.";
+                        }
+                        catch (Exception ex)
+                        {
+                            TempData["Message"] = "Error occured while sending email." + ex.Message;
+                        }
+                    }
                 }
             }
             catch (Exception ex)

@@ -35,21 +35,29 @@ public static class Extensions
         return MvcHtmlString.Create(anchorHtml);
     }
 
+    public static MvcHtmlString ActionHashUrl(this HtmlHelper html, string action, string hash)
+    {
+        return html.ActionHashUrl(action, null, hash);
+    }
+    public static MvcHtmlString ActionHashUrl(this HtmlHelper html, string action, string controllerName, string hash)
+    {
+        var url = new UrlHelper(html.ViewContext.RequestContext);
+        if (controllerName == null)
+            return new MvcHtmlString(url.Action(action) + "#/" + hash);
+        else
+            return new MvcHtmlString(url.Action(action, controllerName) + "#/" + hash);
+    }
     public static MvcHtmlString ActionHash(this HtmlHelper html, string text, string action, string hash, dynamic htmlAttributes)
     {
         return html.ActionHash(text, action, null, hash, null);
     }
     public static MvcHtmlString ActionHash(this HtmlHelper html, string text, string action, string controllerName, string hash, dynamic htmlAttributes)
     {
-        var url = new UrlHelper(html.ViewContext.RequestContext);
 
         // build the <a> tag
         var anchorBuilder = new TagBuilder("a");
 
-        if (controllerName == null)
-            anchorBuilder.MergeAttribute("href", url.Action(action));
-        else
-            anchorBuilder.MergeAttribute("href", url.Action(action, controllerName) + "#/" + hash);
+        anchorBuilder.MergeAttribute("href", html.ActionHashUrl(action, controllerName, hash).ToHtmlString());
 
         if (htmlAttributes != null)
             anchorBuilder.MergeAttributes(new RouteValueDictionary(htmlAttributes));

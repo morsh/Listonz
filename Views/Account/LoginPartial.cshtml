@@ -25,8 +25,11 @@
         <div class="login-button">
             <input type="submit" value="Log in" />
         </div>
+        <div class="login-button">
+            <input type="button" onclick="window.location = '@Html.ActionHashUrl("Login", "Account", "Register")'" value="Register" />
+        </div>
     </fieldset>
-    <div>
+    <div style="display:none;">
         Or @Html.ActionHash("Register", "Login", "Account", "Register", null) if you don't have an account.
     </div>
     <div>

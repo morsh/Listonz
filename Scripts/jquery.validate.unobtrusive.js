@@ -67,8 +67,18 @@
             elem.filter(':not(.valid)').qtip({
                 overwrite: false,
                 content: {
-                    text: error,
-                    button: true
+                    text: error/*,
+                    button: true*/
+                },
+                events: {
+                    show: function (event, api) {
+                        var $el = $(this);
+                        if (typeof (event.originalEvent) == 'undefined' ||
+                            typeof (event.originalEvent.fromElement) == 'undefined')
+                            window.setTimeout(function () {
+                                $el.qtip('hide');
+                            }, 2000);
+                    }
                 },
                 position: {
                     my: corners[flipIt ? 1 : 1],
@@ -80,10 +90,13 @@
                     }
                 },
                 show: {
-                    event: false,
+                    when: { event: 'focus' },
                     ready: true
                 },
-                hide: false,
+                hide: {
+                    when: 'inactive',
+                    delay: 500
+                },
                 style: {
                     tip: { corner: true, mimic: 'center' },
                     classes: ' qtip-dark qtip-rounded ui-tooltip-red' // Make it red... the classic error colour!
@@ -93,6 +106,8 @@
             // If we have a tooltip on this element already, just update its content
             .qtip('option', 'content.text', error)
             .qtip('show');
+
+
         }
 
             // If the error is empty, remove the qTip
