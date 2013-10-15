@@ -23,7 +23,7 @@ namespace Listonz
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                         "~/Scripts/jquery.passstrength-{version}.js",
-                        "~/Scripts/jquery.qtip.js",
+                        "~/Scripts/jquery.qtip*",
                         "~/Scripts/jquery.unobtrusive*",
                         "~/Scripts/jquery.validate*",
                         "~/Scripts/Pages/lz.pages.validation-{version}.js"));

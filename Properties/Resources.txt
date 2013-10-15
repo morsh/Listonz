@@ -26,6 +26,11 @@ http://docs.seleniumhq.org/docs/01_introducing_selenium.jsp#test-automation-for-
 Password strength:
 http://download.ysatech.com/ASP-NET-jQuery-Password-Strength/#
 
+Auditing:
+=============
+http://www.asp.net/mvc/tutorials/older-versions/controllers-and-routing/understanding-action-filters-cs
+http://www.codeproject.com/Articles/34491/Implementing-Audit-Trail-using-Entity-Framework-Pa
+
 cd "C:\Users\mor\Documents\visual studio 2012\Projects\Listonz\Listonz"
 git add .
 git commit -m "Comment"
