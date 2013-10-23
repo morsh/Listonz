@@ -10,9 +10,8 @@ namespace Listonz.Migrations
         public Configuration()
         {
             AutomaticMigrationsEnabled = true;
-            AutomaticMigrationDataLossAllowed = true;
         }
-        
+
         protected override void Seed(Listonz.Models.UsersContext context)
         {
             //  This method will be called after migrating to the latest version.

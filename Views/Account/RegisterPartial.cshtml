@@ -33,6 +33,10 @@
                 @Html.LabelFor(m => m.Details)
                 @Html.TextBoxFor(m => m.Details)
             </li>
+             <li>
+                @Html.LabelFor(m => m.AdminPassword)
+                @Html.PasswordFor(m => m.AdminPassword)
+            </li>
             <li>
                 @Html.CheckBoxFor(m => m.Agreement) 
                 @Html.LabelFor(m => m.Agreement, new { @class = "leagal", termslink = "terms" })

@@ -13,10 +13,7 @@ namespace Listonz.Models
     #region Database & Tables
     public class UsersContext : DbContext
     {
-        public UsersContext()
-            : base("context")
-        {
-        }
+        public UsersContext() : base("context") { }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -27,6 +24,7 @@ namespace Listonz.Models
 
         #region New Tables
         public DbSet<webpages_Membership> webpages_Memberships { get; set; }
+        public DbSet<Contact> Contacts { get; set; }
         #endregion
     }
 
@@ -136,6 +134,11 @@ namespace Listonz.Models
         [IsTrueAttribute(ErrorMessage = "Please confirm Agreement")]
         [Display(Name = "I agree to the terms.")]
         public bool Agreement { get; set; }
+
+        [Required]
+        [DataType(DataType.Password)]
+        [Display(Name = "Admin Password")]
+        public string AdminPassword { get; set; }
 
     }
 

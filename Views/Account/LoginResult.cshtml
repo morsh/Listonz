@@ -10,8 +10,9 @@
 <html>
 <head>
     <script type="text/javascript">
-        if (window.opener && window.opener.loginCallback) {
-            window.opener.loginCallback(@success, @Html.Raw(returnUrl));
+
+        if (window.opener && window.opener.lz && window.opener.lz.loginCallback) {
+            window.opener.lz.loginCallback(@success, @Html.Raw(returnUrl));
         }
 
         window.close();

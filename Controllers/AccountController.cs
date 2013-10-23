@@ -91,7 +91,7 @@ namespace Listonz.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult RegisterPartial(RegisterModel model)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && model.AdminPassword == "shikaka")
             {
                 // Attempt to register the user
                 try

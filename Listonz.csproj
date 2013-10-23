@@ -182,16 +182,30 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\Api\ContactsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\Api\AccountController.cs" />
     <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201310201438307_AddContacts_1.cs" />
+    <Compile Include="Migrations\201310201438307_AddContacts_1.Designer.cs">
+      <DependentUpon>201310201438307_AddContacts_1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201310201506504_AddContacts.cs" />
+    <Compile Include="Migrations\201310201506504_AddContacts.Designer.cs">
+      <DependentUpon>201310201506504_AddContacts.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201310201548055_UpdateContactsFirstName.cs" />
+    <Compile Include="Migrations\201310201548055_UpdateContactsFirstName.Designer.cs">
+      <DependentUpon>201310201548055_UpdateContactsFirstName.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\Attributes\IsTrueAttribute.cs" />
     <Compile Include="Models\Attributes\PasswordStrengthAttribute.cs" />
+    <Compile Include="Models\DataModules.cs" />
     <Compile Include="Models\Extensions.cs" />
     <Compile Include="Models\LZ.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -280,7 +294,10 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\knockout-2.2.0.debug.js" />
     <Content Include="Scripts\knockout-2.2.0.js" />
+    <Content Include="Scripts\knockout.mapping-latest.debug.js" />
+    <Content Include="Scripts\knockout.mapping-latest.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\Widget\lz.widget.contact-1.0.0.js" />
     <Content Include="Scripts\Pages\lz.pages.login-1.0.1.js" />
     <Content Include="Scripts\Pages\lz.pages.validation-1.0.1.js" />
     <Content Include="Scripts\Pages\lz.pages-1.0.1.js" />
@@ -344,6 +361,17 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201310201438307_AddContacts_1.resx">
+      <DependentUpon>201310201438307_AddContacts_1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201310201506504_AddContacts.resx">
+      <DependentUpon>201310201506504_AddContacts.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201310201548055_UpdateContactsFirstName.resx">
+      <DependentUpon>201310201548055_UpdateContactsFirstName.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
