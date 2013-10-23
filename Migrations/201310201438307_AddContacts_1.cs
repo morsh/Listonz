@@ -9,9 +9,9 @@ namespace Listonz.Migrations
         {
             try
             {
+                DropTable("dbo.Contacts");
             }
             catch (Exception) { }
-            DropTable("dbo.Contacts");
 
             CreateTable(
                 "dbo.Contacts",
