@@ -16,6 +16,8 @@ namespace Listonz
 
             bundles.Add(new ScriptBundle("~/bundles/ko").Include(
                         "~/Scripts/knockout-{version}.js",
+                        "~/Scripts/jquery.validator*",
+                        "~/Scripts/jquery.validator.knockout*",
                         "~/Scripts/sammy-{version}.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryui").Include(

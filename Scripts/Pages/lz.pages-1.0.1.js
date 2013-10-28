@@ -67,7 +67,6 @@ lz.loginCallback = function (success, returnUrl) {
     window.location.href = returnUrl;
 }
 
-
 // ko extenssions
 // ==================
 ko.bindingHandlers.showHide = {
@@ -135,6 +134,15 @@ vm.baseViewModel = function (extend) {
     self.selected = ko.observable(new self.model());
     self.cancelEdit = function () { self.showEditor(false); };
 
+    self.validationContext = ko.jqValidation({
+        returnBool: false, // We want more details of our validation result.
+        useInlineErrors: true, // Use inline errors
+        errorClass: 'error', // Apply error class
+        msg_empty: 'My friend, this just wont do.', // Global empty message.
+        noInlineErrors: "*[type='password']" // Password fields should not show inline errors.
+    });
+    self.validationErrors = ko.observableArray([]);
+
     // view model methods
     self.refresh = function () {
         self.collection.removeAll();
@@ -157,8 +165,25 @@ vm.baseViewModel = function (extend) {
         };
     }, self);
 
+    self.isItemValid = function (item) {
+        // Check for validation rules
+        var valid = true;
+        for (var attr in item)
+            if (typeof (item[attr]) != 'undefined' && typeof (item[attr].isValid) == 'function')
+                valid &= item[attr].isValid();
+        return valid;
+    };
+
     self.save = function (item) {
 
+        // Check for validation rules
+        var validationResult = self.validationContext.Validate();
+        if (!validationResult.valid) {
+            // Oh boy, you're in troubleeeeee!
+            self.validationErrors(validationResult.messages);
+            return;
+        }
+        
         // check if new or update
         var postData = ko.toJS(ko.utils.unwrapObservable(item));
         if (self.isNew())
@@ -204,6 +229,16 @@ vm.baseViewModel = function (extend) {
                 error: lz.showError
             });
         }
+    };
+
+    self.validate = function () {
+        if (!self.isValid()) {
+            self.errors.showAllMessages();
+
+            return false;
+        }
+
+        return true;
     };
 
     extend.view(self);

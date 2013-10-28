@@ -111,7 +111,7 @@
         }
 
             // If the error is empty, remove the qTip
-        else { elem.qtip('destroy'); }
+        else { elem.qtip('destroy', true); }
     }
 
     function onErrors(event, validator) {  // 'this' is the form element
