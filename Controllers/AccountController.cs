@@ -91,7 +91,7 @@ namespace Listonz.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult RegisterPartial(RegisterModel model)
         {
-            if (ModelState.IsValid && model.AdminPassword == "shikaka")
+            if (ModelState.IsValid && (string)Session["AdminPassword"] == "shikaka")
             {
                 // Attempt to register the user
                 try
@@ -229,13 +229,34 @@ namespace Listonz.Controllers
             return new ExternalLoginResult(provider, Url.Action("ExternalLoginCallback", new { ReturnUrl = returnUrl }));
         }
 
+        [AllowAnonymous]
+        public ActionResult Admin()
+        {
+            return View();
+        }
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public ActionResult Admin(string password)
+        {
+            Session["AdminPassword"] = password;
+            ViewBag.Message = "Admin Password Successfully set";
+            return View();
+        }
         //
         // GET: /Account/ExternalLoginCallback
+
+        
 
         [AllowAnonymous]
         public ActionResult ExternalLoginCallback(string returnUrl)
         {
             var result = OAuthWebSecurity.VerifyAuthentication(Url.Action("ExternalLoginCallback", new { ReturnUrl = returnUrl }));
+
+            if ((string)Session["AdminPassword"] != "shikaka")
+            {
+                return View("LoginResult", new LoginResultViewModel(false, Url.Action("ExternalLoginFailure")));
+            }
 
             if (!result.IsSuccessful)
             {
@@ -266,6 +287,9 @@ namespace Listonz.Controllers
             using (var db = new UsersContext())
             {
                 if (!db.UserProfiles.Any(u => u.UserName == userName))
+                    return View("LoginResult", new LoginResultViewModel(true, returnUrl));
+
+                if (!db.UserProfiles.Any(u => u.UserName == userName))
                 {
                     if (!db.UserProfiles.Any(u => u.UserName == email))
                     {
@@ -277,7 +301,7 @@ namespace Listonz.Controllers
                 }
             }
 
-            OAuthWebSecurity.CreateOrUpdateAccount(result.Provider, result.ProviderUserId, userName);
+            //OAuthWebSecurity.CreateOrUpdateAccount(result.Provider, result.ProviderUserId, userName);
             return View("LoginResult", new LoginResultViewModel(true, returnUrl));
 
             //AuthenticationResult result = OAuthWebSecurity.VerifyAuthentication(Url.Action("ExternalLoginCallback", new { ReturnUrl = returnUrl }));
@@ -334,7 +358,7 @@ namespace Listonz.Controllers
                 return RedirectToAction("Manage");
             }
 
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && (string)Session["AdminPassword"] == "shikaka")
             {
                 // Insert a new user into the database
                 using (UsersContext db = new UsersContext())

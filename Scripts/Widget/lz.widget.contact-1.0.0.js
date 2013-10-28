@@ -18,6 +18,10 @@ vm.contacts = new vm.baseViewModel({
             this.LastName = ko.observable('');
             this.Company = ko.observable('');
             this.Country = ko.observable('');
+            this.State = ko.observable('');
+            this.City = ko.observable('');
+            this.Street = ko.observable('');
+            this.Notes = ko.observable('');
         }
     },
     view: function (self) { }

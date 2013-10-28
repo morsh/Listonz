@@ -8,6 +8,12 @@
 </hgroup>
 
 <section id="loginForm" class="narrow">
+    <style>
+        .admin a { color: rgb(239, 238, 239); }
+    </style>
+    <div class="admin" style="float:right;">
+        @Html.ActionLink("Admin", "Admin")
+    </div>
 
     <div id="viewLogin" class="view">
         @Html.Partial("LoginPartial")

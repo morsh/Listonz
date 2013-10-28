@@ -5,69 +5,7 @@
 <h1>@ViewBag.Title.</h1>
 <h2>@ViewBag.Message</h2>
 
-<div data-bind="with: contacts">
-    <table>
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Company</th>
-                <th>Country</th>
-            </tr>
-        </thead>
-        <tbody data-bind="foreach: collection">
-            <tr>
-                <td data-bind="text: Id"></td>
-                <td data-bind="text: FirstName"></td>
-                <td data-bind="text: LastName"></td>
-                <td data-bind="text: Company"></td>
-                <td data-bind="text: Country"></td>
-                <td><button class="btn btn-mini btn-danger" data-bind="click: $parent.edit">edit</button></td>
-                <td><button class="btn btn-mini btn-danger" data-bind="click: $parent.remove">remove</button></td>
-            </tr>
-        </tbody>
-    </table>
-    <input type="button" id="btnGetcontacts" value="Get contacts" data-bind="click: refresh" />
-    <br />
-    <div data-bind=" { showHide: showEditor(), with: select() } ">
-        <h2 data-bind="if: $parent.isNew()">Add New Contact</h2>
-        <h2 data-bind="ifnot: $parent.isNew()">
-            Edit Contact 
-            <span data-bind="text: FirstName"></span>
-            <span data-bind="text: LastName"></span>
-        </h2>
-        <table>
-            <tr>
-                <td>First Name</td>
-                <td>
-                    <input type="text" data-bind="value: FirstName" />
-                </td>
-            </tr>
-            <tr>
-                <td>Last Name</td>
-                <td>
-                    <input type="text" data-bind="value: LastName" />
-                </td>
-            </tr>
-            <tr>
-                <td>Company</td>
-                <td>
-                    <input type="text" data-bind="value: Company" />
-                </td>
-            </tr>
-            <tr>
-                <td>Country</td>
-                <td>
-                    <input type="text" data-bind="value: Country" />
-                </td>
-            </tr>
-        </table>
-        <input type="button" value="Save" data-bind="click: $parent.save" />
-        <input type="button" value="Cancel" data-bind="click: $parent.cancelEdit" />
-    </div>
-    <input type="button" value="Add" data-bind=" { click: edit, showHide: !showEditor() } " />
-</div>
+@Html.Partial("_Contacts")
 
 @section Scripts 
 {

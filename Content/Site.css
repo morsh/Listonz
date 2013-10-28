@@ -65,8 +65,8 @@ footer {
 
 /* site title
 ----------------------------------------------------------*/
-.site-title {color: #c8c8c8;font-family: Rockwell, Consolas, "Courier New", Courier, monospace;font-size: 2.3em;margin: 0;display:none;}
-    .site-title img {max-height:80px;}
+.site-title {color: #c8c8c8;font-family: Rockwell, Consolas, "Courier New", Courier, monospace;font-size: 2.3em;margin: 0;display:block;}
+    .site-title img {max-height:80px;border:solid 0 #fff;display:none;}
 
 .site-title a, 
 .site-title a:hover, 
@@ -651,3 +651,11 @@ tr.pager td {
             margin: 0;
         }
 }
+
+/* View Model
+    ----------------------------------------------------------*/
+.vm-view ul { list-style:none;padding:0;}
+.vm-view label { width: 100px;display:inline-block; }
+
+/* Contacts View Model
+    ----------------------------------------------------------*/

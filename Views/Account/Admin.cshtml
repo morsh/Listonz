@@ -1,0 +1,26 @@
+﻿@model string
+
+@{
+    ViewBag.Title = "Admin";
+}
+
+<h2>Set Admin Password</h2>
+
+<section id="loginForm">
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Log in Form</legend>
+        <ol>
+            <li>
+                Admin Password: <input runat="server" name="password" type="password" />
+            </li>
+        </ol>
+        <input type="submit" value="Set Admin Password" />
+    </fieldset>
+}
+</section>
+
+<h2>@ViewBag.Message</h2>

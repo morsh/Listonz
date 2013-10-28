@@ -134,12 +134,6 @@ namespace Listonz.Models
         [IsTrueAttribute(ErrorMessage = "Please confirm Agreement")]
         [Display(Name = "I agree to the terms.")]
         public bool Agreement { get; set; }
-
-        [Required]
-        [DataType(DataType.Password)]
-        [Display(Name = "Admin Password")]
-        public string AdminPassword { get; set; }
-
     }
 
     public class ExternalLogin

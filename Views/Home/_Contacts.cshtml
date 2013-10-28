@@ -1,0 +1,71 @@
+﻿<div data-bind="with: contacts" class="vm-view vm-contacts">
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Company</th>
+                <th>Country</th>
+            </tr>
+        </thead>
+        <tbody data-bind="foreach: collection">
+            <tr>
+                <td data-bind="text: Id"></td>
+                <td data-bind="text: FirstName"></td>
+                <td data-bind="text: LastName"></td>
+                <td data-bind="text: Company"></td>
+                <td data-bind="text: Country"></td>
+                <td><button class="btn btn-mini btn-danger" data-bind="click: $parent.edit">edit</button></td>
+                <td><button class="btn btn-mini btn-danger" data-bind="click: $parent.remove">remove</button></td>
+            </tr>
+        </tbody>
+    </table>
+    <input type="button" id="btnGetcontacts" value="Get contacts" data-bind="click: refresh" />
+    <br />
+    <div data-bind=" { showHide: showEditor(), with: select() } ">
+        <h2 data-bind="if: $parent.isNew()">Add New Contact</h2>
+        <h2 data-bind="ifnot: $parent.isNew()">
+            Edit Contact 
+            <span data-bind="text: FirstName"></span>
+            <span data-bind="text: LastName"></span>
+        </h2>
+        <ul>
+            <li>
+                <label>First Name</label>
+                <span><input type="text" data-bind="value: FirstName" /></span>
+            </li>
+            <li>
+                <label>Last Name</label>
+                <span><input type="text" data-bind="value: LastName" /></span>
+            </li>
+            <li>
+                <label>Company</label>
+                <span><input type="text" data-bind="value: Company" /></span>
+            </li>
+            <li>
+                <label>Country</label>
+                <span><input type="text" data-bind="value: Country" /></span>
+            </li>
+            <li>
+                <label>State</label>
+                <span><input type="text" data-bind="value: State" /></span>
+            </li>
+            <li>
+                <label>City</label>
+                <span><input type="text" data-bind="value: City" /></span>
+            </li>
+            <li>
+                <label>Street</label>
+                <span><input type="text" data-bind="value: Street" /></span>
+            </li>
+            <li>
+                <label>Notes</label>
+                <span><input type="text" data-bind="value: Notes" /></span>
+            </li>
+        </ul>
+        <input type="button" value="Save" data-bind="click: $parent.save" />
+        <input type="button" value="Cancel" data-bind="click: $parent.cancelEdit" />
+    </div>
+    <input type="button" value="Add" data-bind=" { click: edit, showHide: !showEditor() } " />
+</div>

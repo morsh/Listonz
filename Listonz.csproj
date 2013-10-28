@@ -355,6 +355,8 @@
     <Content Include="Views\Home\TourManager.cshtml" />
     <Content Include="Views\Home\Pricing.cshtml" />
     <Content Include="Views\Shared\_HomeNavigationPartial.cshtml" />
+    <Content Include="Views\Home\_Contacts.cshtml" />
+    <Content Include="Views\Account\Admin.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
