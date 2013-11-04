@@ -7,6 +7,8 @@ a {color: #333;outline: none;padding-left: 3px;padding-right: 3px;text-decoratio
     a:active, a:hover {color: #333;}
     a:hover {background-color: #c7d1d6;}
 
+img {border:none;}
+
 header, footer, hgroup,
 nav, section {display: block;}
 
@@ -28,6 +30,17 @@ h5, h6 {font-size: 1em;}
 
     h5 a:link, h5 a:visited, h5 a:active {padding: 0;text-decoration: none;}
 
+.ie9-placeholder {color: #bababa;font-size: 1em; font-family: "Segoe UI", Verdana, Helvetica, Sans-Serif; position: absolute; overflow-x:hidden;top:1px;}
+
+input::-webkit-input-placeholder, 
+textarea::-webkit-input-placeholder,
+input:-moz-placeholder, 
+textarea:-moz-placeholder,
+input::-moz-placeholder, 
+textarea::-moz-placeholder,
+input:-ms-input-placeholder, 
+textarea:-ms-input-placeholder { color:#666; }
+/*.placeholder {color:silver;font-style:italic;position:absolute;margin:5px;white-space:nowrap;}*/
 
 /* main layout
 ----------------------------------------------------------*/
@@ -66,12 +79,12 @@ footer {
 
 /* site title
 ----------------------------------------------------------*/
-.site-title {color: #c8c8c8;font-family: Rockwell, Consolas, "Courier New", Courier, monospace;font-size: 2.3em;margin: 0;display:block;}
-    .site-title img {max-height:80px;border:solid 0 #fff;display:none;}
+.site-title {color: #c8c8c8;font-family: Rockwell, Consolas, "Courier New", Courier, monospace;font-size: 2.3em;margin: 0;display:block;float:left;}
+    .site-title img {max-height:80px;border:solid 0 #fff;display:block;}
 
 .site-title a, 
 .site-title a:hover, 
-.site-title a:active {background: none;color: #c8c8c8;outline: none;text-decoration: none;}
+.site-title a:active {background: none;color: #c8c8c8;outline: none;text-decoration: none;padding:0;}
 
 
 /* login
@@ -318,35 +331,15 @@ fieldset {
         fieldset ol li {padding-bottom: 5px;}
         fieldset ol li .info {width:15px;height:15px;background:transparent url(/Images/info.png);margin:3px 15px 0 0;float:right;}
 
-label {
-    display: block;
-    font-size: 1.2em;
-    font-weight: 600;
-    width: 90%;
-}
+label {display: block;font-size: 1em;font-weight: 600;width: 90%;}
 
-label.checkbox {
-    display: inline;
-}
+label.checkbox {display: inline;}
 
-input, textarea {
-    border: 1px solid #e2e2e2;
-    background: #fff;
-    color: #333;
-    font-size: 1.2em;
-    margin: 5px 0 6px 0;
-    padding: 5px;
-    width: 300px;
-}
+input, textarea {border: 1px solid #e2e2e2;background: #fff;color: #333;font-size: 1.2em;margin: 5px 0 6px 0;padding: 5px;width: 200px;}
 
-textarea {
-    font-family: inherit;
-    width: 500px;
-}
+textarea {font-family: inherit;height: 59px;}
 
-    input:focus, textarea:focus {
-        border: 1px solid #7ac0da;
-    }
+    input:focus, textarea:focus {border: 1px solid #7ac0da;}
 
     input[type="checkbox"] {
         background: transparent;
@@ -438,10 +431,10 @@ table {
 }
 
 th {
-    font-size: 1.2em;
+    font-size: 1em;
     text-align: left;
     border: none 0px;
-    padding-left: 0;
+    padding: 0.25em 2em 0.25em 0em
 }
 
     th a {
@@ -480,14 +473,9 @@ th {
         content: '▼';
     }
 
-td {
-    padding: 0.25em 2em 0.25em 0em;
-    border: 0 none;
-}
+td {padding: 0.25em 2em 0.25em 0em;border: 0 none;}
 
-tr.pager td {
-    padding: 0 0.25em 0 0;
-}
+tr.pager td {padding: 0 0.25em 0 0;}
 
 
 /********************
@@ -636,25 +624,27 @@ tr.pager td {
     /* footer
     ----------------------------------------------------------*/
     footer .float-left,
-    footer .float-right {
-        float: none;
-    }
+    footer .float-right {float: none;}
 
-    footer {
-        text-align: center;
-        height: auto;
-        padding: 10px 0;
-    }
+    footer {text-align: center;height: auto;padding: 10px 0;}
 
-        footer p {
-            margin: 0;
-        }
+        footer p {margin: 0;}
 }
 
 /* View Model
     ----------------------------------------------------------*/
-.vm-view ul { list-style:none;padding:0;}
-.vm-view label { width: 140px;display:inline-block; }
+.vm-view {display:none;}
+    .vm-view ul { list-style:none;padding:10px;}
+    .vm-view label { width: 140px;display:inline-block; }
 
+    .vm-view .edit .head {height:100px;}
+    .vm-view .edit .head .prf-pic {float:left;padding-right:20px;}
+    .vm-view .edit .head h2 {display:inline;}
+    .vm-view .edit .head .email { display:inline-block; }
+    .vm-view .edit .head .email div { padding:3px; }
+    .vm-view .edit .head .email a:hover {background:none;}
+
+.ui-tabs-panel > div {display:inline-block;}
+.chk-height {height:41px;}
 /* Contacts View Model
     ----------------------------------------------------------*/

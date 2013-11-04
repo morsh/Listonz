@@ -87,3 +87,4 @@ C:\Users\mor\documents\visual studio 2012\Projects\Listonz\Listonz\obj\Debug\Lis
 C:\Users\mor\documents\visual studio 2012\Projects\Listonz\Listonz\obj\Debug\Listonz.Migrations.AddContacts.resources
 C:\Users\mor\documents\visual studio 2012\Projects\Listonz\Listonz\obj\Debug\Listonz.csproj.GenerateResource.Cache
 C:\Users\mor\documents\visual studio 2012\Projects\Listonz\Listonz\obj\Debug\Listonz.Migrations.UpdateContactsFirstName.resources
+C:\Users\mor\Documents\Visual Studio 2012\Projects\Listonz\Listonz\obj\Debug\Listonz.Migrations.SocialSecurityRating.resources

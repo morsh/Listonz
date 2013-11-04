@@ -28,6 +28,7 @@ namespace Listonz
                         "~/Scripts/jquery.qtip*",
                         "~/Scripts/jquery.unobtrusive*",
                         "~/Scripts/jquery.validate*",
+                        "~/Scripts/jquery.rateit*",
                         "~/Scripts/Pages/lz.pages.validation-{version}.js"));
 
             // Use the development version of Modernizr to develop with and learn from. Then, when you're
@@ -35,7 +36,9 @@ namespace Listonz
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
                         "~/Scripts/modernizr-*"));
 
-            bundles.Add(new StyleBundle("~/Content/css").Include("~/Content/site.css"));
+            bundles.Add(new StyleBundle("~/Content/css").Include(
+                        "~/Content/site.css",
+                        "~/Content/rateit.css"));
 
             bundles.Add(new StyleBundle("~/Content/themes/base/css").Include(
                         "~/Content/qTip/jquery.qtip.css",

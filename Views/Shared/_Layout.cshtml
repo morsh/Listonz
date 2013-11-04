@@ -12,8 +12,8 @@
         <header>
             <div class="content-wrapper">
                 <div class="float-left">
-                    <p class="site-title">@Html.ActionImage("Index", "Home", null, "~/Images/logo.jpg", "Home Page")</p>
-
+                    <span class="site-title">@Html.ActionImage("Index", "Home", null, "~/Images/logo.jpg", "Home Page")</span>
+                    <span>@RenderSection("title", required: false)</span>
                 </div>
                 <div class="float-right">
                     <section id="login">

@@ -72,61 +72,58 @@ lz.loginCallback = function (success, returnUrl) {
 ko.bindingHandlers.showHide = {
     init: function (element, valueAccessor, allBindingsAccessor, viewModel) {
         var val = ko.utils.unwrapObservable(valueAccessor());
-        if (val) {
-            $(element).show("fast");
-        } else {
-            $(element).hide("fast");
-        }
+        if (val === "" || val === true) { $(element).show("fast"); }
+        else { $(element).hide("fast"); }
     },
     update: function (element, valueAccessor, allBindingsAccessor, viewModel) {
 
         var val = ko.utils.unwrapObservable(valueAccessor());
-
-        if (val) { $(element).show("fast"); }
+        if (val === "" || val === true) { $(element).show("fast"); }
         else { $(element).hide("fast"); }
     }
 };
 
+ko.bindingHandlers.rv = {
+    init: function (element, valueAccessor, allBindingsAccessor) {
+
+        var getInjectValueUpdate = function (allBindingsAccessor) {
+            var AFTERKEYDOWN = "afterkeydown";
+            return function () {
+                var allBindings = ko.utils.extend({}, allBindingsAccessor()),
+                    valueUpdate = allBindings.valueUpdate;
+
+                if (valueUpdate === undefined) {
+                    return ko.utils.extend(allBindings, { valueUpdate: AFTERKEYDOWN });
+                } else if (typeof valueUpdate === 'string' && ko.utils.arrayIndexOf(AFTERKEYDOWN, valueUpdate) === -1 ||
+                           typeof valueUpdate === 'array' /*&& ko.utils.arrayIndexOf(valueUpdate, AFTERKEYDOWN) === -1*/) {
+                    valueUpdate = ko.utils.arrayPushAll(AFTERKEYDOWN, valueUpdate);
+                    return ko.utils.extend(allBindings, { valueUpdate: [valueUpdate, AFTERKEYDOWN] });
+                }
+
+                return allBindings;
+            };
+        };
+
+        allBindingsAccessor = getInjectValueUpdate(allBindingsAccessor);
+        return ko.bindingHandlers.value.init(element, valueAccessor, allBindingsAccessor);
+    },
+    update: ko.bindingHandlers.value.update
+};
+
 // View Model definition
 var vm = namespace("lz.viewModel");
-
-/*********************************************
-// Example of usage in model:
-var vm = namespace("lz.viewModel");
-vm.contacts = new vm.baseViewModel({
-    api: function (self) {
-        self.api = "/api/contacts/";
-        self.options = {
-            getAll: "GetContacts",
-            add: "PostContact",
-            update: "PutContact",
-            remove: "DeleteContact",
-            removeConfirm: "Are you sure you want to delete this contact?"
-        };
-    },
-    model: function (self) {
-        self.model = function () {
-            this.Id = ko.observable(0);
-            this.FirstName = ko.observable('');
-            this.LastName = ko.observable('');
-            this.Company = ko.observable('');
-            this.Country = ko.observable('');
-        }
-    },
-    view: function (self) {
-
-    }
-}); 
-**********************************************/
+vm.viewModelsToLoad = ko.observable(0);
+vm.allloaded = ko.observable(false);
 vm.baseViewModel = function (extend) {
     var self = this;
 
     extend.api(self);
     extend.model(self);
 
-    
+    vm.viewModelsToLoad(vm.viewModelsToLoad() + 1);
 
     // View model variables
+    self.loaded = ko.observable(false);
     self.collection = ko.observableArray([]);
     self.isNew = ko.observable(true);
     self.isDelete = ko.observable(false);
@@ -148,6 +145,11 @@ vm.baseViewModel = function (extend) {
         self.collection.removeAll();
         $.getJSON(self.api + self.options.getAll, function (data) {
             self.collection(data);
+            self.loaded(true);
+            vm.viewModelsToLoad(vm.viewModelsToLoad() - 1);
+
+            if (vm.viewModelsToLoad() === 0)
+                vm.allloaded(true);
         });
     }
 
@@ -259,4 +261,120 @@ $(function () {
             messages: ["Are you kidding me?!", "A little better", "Almost there...", "Now that wan't so hard, was it?"]
         });
     }
+
+    $('.tabs').tabs();
+
+    // Fixing placeholders
+    /*if (!Modernizr.input.placeholder) {
+        $('[placeholder]').each(function () {
+            $this = $(this);
+            if ($this.attr('placeholder'))
+                $this.before(
+                    $('<label class="placeholder" onclick="$(this).next().focus();"></label>').text($this.attr('placeholder')));
+
+            $this.blur(function () {
+                var input = $(this);
+                if (input.val() == '')
+                    input.prev().show();
+                else
+                    input.prev().hide();
+            }).focus(function () {
+                alert($(this).prev('label').text());
+                $(this).prev('label').hide();
+            });
+        });
+        /*$('[placeholder]').focus(function () {
+            var input = $(this);
+            if (input.val() == input.attr('placeholder')) {
+                input.val('');
+                input.removeClass('placeholder');
+            }
+        }).blur(function () {
+            var input = $(this);
+            if (input.val() == '' || input.val() == input.attr('placeholder')) {
+                input.addClass('placeholder');
+                input.val(input.attr('placeholder'));
+            }
+        })
+        .blur()
+        .parents('form').submit(function () {
+            $(this).find('[placeholder]').each(function () {
+                var input = $(this);
+                if (input.val() == input.attr('placeholder')) {
+                    input.val('');
+                }
+            })
+        });*
+    }*/
 });
+
+
+
+
+
+
+(function ($) {
+    //feature detection
+    var hasPlaceholder = 'placeholder' in document.createElement('input');
+
+    //sniffy sniff sniff -- just to give extra left padding for the older
+    //graphics for type=email and type=url
+    var isOldOpera = $.browser.opera && $.browser.version < 10.5;
+
+    $.fn.placeholder = function (options) {
+        //merge in passed in options, if any
+        var options = $.extend({}, $.fn.placeholder.defaults, options),
+        //cache the original 'left' value, for use by Opera later
+        o_left = options.placeholderCSS.left;
+
+        //first test for native placeholder support before continuing
+        //feature detection inspired by ye olde jquery 1.4 hawtness, with paul irish
+        return (hasPlaceholder) ? this : this.each(function () {
+
+            //local vars
+            var $this = $(this),
+                inputVal = $.trim($this.val()),
+                inputWidth = $this.width(),
+                inputHeight = $this.height(),
+
+                //grab the inputs id for the <label @for>, or make a new one from the Date
+                placeholderText = $this.attr('placeholder'),
+                placeholder = $('<label class="ie9-placeholder">' + placeholderText + '</label>');
+
+            //stuff in some calculated values into the placeholderCSS object
+            options.placeholderCSS['width'] = inputWidth;
+            //options.placeholderCSS['height'] = inputHeight;
+
+            // adjust position of placeholder 
+            options.placeholderCSS.left = (isOldOpera && (this.type == 'email' || this.type == 'url')) ?
+              '11%' : o_left;
+            placeholder.css(options.placeholderCSS);
+
+            //place the placeholder if the input is empty
+            if (!inputVal) {
+                $this.wrap(options.inputWrapper);
+                $this.before(placeholder);
+
+                // TODO: Add binding handling in case value is more complex than value:...
+
+                var dataBind = $this.attr('data-bind');
+                if (dataBind.trim().indexOf('value:') >= 0) {
+                    placeholder.attr('data-bind', 'showHide: ' + dataBind.split(':')[1].trim() + '() == ""');
+                    $this.attr('data-bind', '{' + dataBind + ' , valueUpdate: ["afterkeydown", "blur", "input"] }')
+                }
+            };
+        });
+    };
+
+    //expose defaults
+    $.fn.placeholder.defaults = {
+        //you can pass in a custom wrapper
+        inputWrapper: '<span style="position:relative"></span>',
+
+        //more or less just emulating what webkit does here
+        //tweak to your hearts content
+        placeholderCSS: { 'left': '8px' }
+    };
+
+    $('[placeholder]').placeholder();
+})(jQuery);

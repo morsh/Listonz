@@ -201,6 +201,10 @@
     <Compile Include="Migrations\201310201548055_UpdateContactsFirstName.Designer.cs">
       <DependentUpon>201310201548055_UpdateContactsFirstName.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201311042254521_SocialSecurity-Rating.cs" />
+    <Compile Include="Migrations\201311042254521_SocialSecurity-Rating.Designer.cs">
+      <DependentUpon>201311042254521_SocialSecurity-Rating.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\Attributes\IsTrueAttribute.cs" />
@@ -213,6 +217,7 @@
   <ItemGroup>
     <Content Include="Content\qTip\jquery.qtip.min.css" />
     <Content Include="Content\qTip\jquery.qtip.css" />
+    <Content Include="Content\rateit.css" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
@@ -277,6 +282,7 @@
     <Content Include="Images\logo.jpg" />
     <Content Include="Images\profile.jpg" />
     <Content Include="Images\redx.png" />
+    <Content Include="Images\star.gif" />
     <Content Include="Images\wait.gif" />
     <Content Include="Properties\Resources.txt" />
     <Content Include="Scripts\jquery-1.8.2.js" />
@@ -287,6 +293,7 @@
     <Content Include="Scripts\jquery.passstrength-1.0.1.js" />
     <Content Include="Scripts\jquery.qtip.js" />
     <Content Include="Scripts\jquery.qtip.min.js" />
+    <Content Include="Scripts\jquery.rateit.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
@@ -376,6 +383,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201310201548055_UpdateContactsFirstName.resx">
       <DependentUpon>201310201548055_UpdateContactsFirstName.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201311042254521_SocialSecurity-Rating.resx">
+      <DependentUpon>201311042254521_SocialSecurity-Rating.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

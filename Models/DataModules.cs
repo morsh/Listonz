@@ -31,8 +31,10 @@ namespace Listonz.Models
         public string FaxNumber { get; set; }
         public string Birthday { get; set; }
         public bool? Single { get; set; }
-        public string SocialDecurity { get; set; }
+        public string SocialSecurity { get; set; }
         public string DrivingLisence { get; set; }
+
+        public int Rating { get; set; }
 
         public DateTime? LastUpdate { get; set; }
     }

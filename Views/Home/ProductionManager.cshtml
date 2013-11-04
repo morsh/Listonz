@@ -2,17 +2,34 @@
     ViewBag.Title = "Production Manager";
 }
 
-<h1>@ViewBag.Title.</h1>
-<h2>@ViewBag.Message</h2>
+@section title
+{
+    <h1>@ViewBag.Title</h1>
+}
 
-@Html.Partial("_Contacts")
+<div data-bind="ifnot: allloaded"><img src="~/Images/wait.gif" /></div>
+<section style="display:none;" class="tabs" data-bind="showHide: allloaded">
+    <ul>
+        <li><a href="#tabContacts">Contacts</a></li>
+        <li><a href="#tabEvents">Events</a></li>
+    </ul>
+    <div id="tabContacts">
+        @Html.Partial("_Contacts")
+    </div>
+    <div id="tabEvents">
+        Hi there!
+    </div>
+</section>
+
 
 @section Scripts 
 {
+    <script src="~/Scripts/jquery-ui-1.8.24.min.js"></script>
     <script src="~/Scripts/knockout.mapping-latest.debug.js"></script>
     <script src="~/Scripts/jquery.validator.js"></script>
     <script src="~/Scripts/jquery.validator.knockout.js"></script>
-    <script src="~/Scripts/jquery.qtip.js"></script>
+    <script src="~/Scripts/jquery.qtip.js"></script>        
+    <script src="~/Scripts/jquery.rateit.js"></script>
     <script src="~/Scripts/Widget/lz.widget.contact-1.0.0.js"></script>
 
     @Styles.Render("~/Content/themes/base/css")

@@ -1,129 +1,140 @@
-﻿<div data-bind="with: contacts" class="vm-view vm-contacts">
-    <table>
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Company</th>
-                <th>Country</th>
-            </tr>
-        </thead>
-        <tbody data-bind="foreach: collection">
-            <tr>
-                <td data-bind="text: Id"></td>
-                <td data-bind="text: FirstName"></td>
-                <td data-bind="text: LastName"></td>
-                <td data-bind="text: Company"></td>
-                <td data-bind="text: Country"></td>
-                <td><button class="btn btn-mini btn-danger" data-bind="click: $parent.edit">edit</button></td>
-                <td><button class="btn btn-mini btn-danger" data-bind="click: $parent.remove">remove</button></td>
-            </tr>
-        </tbody>
-    </table>
-    <input type="button" id="btnGetcontacts" value="Get contacts" data-bind="click: refresh" />
-    <br />
-    <div data-bind=" { showHide: showEditor(), with: select(), jqValidation: validationContext } ">
-        <h2 data-bind="if: $parent.isNew()">Add New Contact</h2>
-        <h2 data-bind="ifnot: $parent.isNew()">
-            Edit Contact 
-            <span data-bind="text: FirstName"></span>
-            <span data-bind="text: LastName"></span>
-        </h2>
-        <ul class="float-left">
-            <li>
-                <label style="position:absolute">Profile Picture</label>
-                <label>&nbsp;</label>
-                <span><img src="~/Images/profile.jpg" width="100px" /></span>
-            </li>
-            <li>
-                <label>First Name</label>
-                <span><input type="text" data-bind="value: FirstName" data-required="true" /></span>
-            </li>
-            <li>
-                <label>Last Name</label>
-                <span><input type="text" data-bind="value: LastName" data-required="true" /></span>
-            </li>
-            <li>
-                <label>Company</label>
-                <span><input type="text" data-bind="value: Company" data-required="true" /></span>
-            </li>
-            <li>
-                <label>Country</label>
-                <span><input type="text" data-bind="value: Country" data-required="true" /></span>
-            </li>
-            <li>
-                <label>State</label>
-                <span><input type="text" data-bind="value: State" data-required="true" /></span>
-            </li>
-            <li>
-                <label>City</label>
-                <span><input type="text" data-bind="value: City" data-required="true" /></span>
-            </li>
-            <li>
-                <label>Street</label>
-                <span><input type="text" data-bind="value: Street" data-required="true" /></span>
-            </li>
-        </ul>
-        <ul class="float-right">
-            <li>
-                <label>Notes</label>
-                <span><input type="text" data-bind="value: Notes" data-required="true" /></span>
-            </li>
-            <li>
-                <label>Category</label>
-                <span>
-                    <input type="text" 
-                        data-bind="value: Category"
-                        data-required="true" 
-                        data-lengthreq="4-16" 
-                        data-msg_empty="Category is required too."
-                        data-msg_lengthreq="Category must be between $MINLEN$ and $MAXLEN$ characters long." /></span>
-            </li>
-            <li>
-                <label>Email</label>
-                <span><input type="text" data-bind="value: Email" data-required="true" data-email="true"/></span>
-            </li>
-            <li>
-                <label>PhoneNumber</label>
-                <span><input type="tel" data-bind="value: PhoneNumber" data-required="true" data-phone="true" /></span>
-            </li>
-            <li>
-                <label>MobileNumber</label>
-                <span><input type="text" data-bind="value: MobileNumber" data-required="true" data-phone="true" /></span>
-            </li>
-            <li>
-                <label>FaxNumber</label>
-                <span><input type="text" data-bind="value: FaxNumber" data-required="true" data-phone="true"/></span>
-            </li>
-            <li>
-                <label>Birthday</label>
-                <span><input type="text" data-bind="value: Birthday" /></span>
-            </li>
-            <li>
-                <label>Single</label>
-                <span><input type="checkbox" data-bind="checked: Single" /></span>
-            </li>
-            <li>
-                <label>SocialDecurity</label>
-                <span><input type="text" data-bind="value: SocialDecurity" /></span>
-            </li>
-            <li>
-                <label>DrivingLisence</label>
-                <span><input type="text" data-bind="value: DrivingLisence" /></span>
-            </li>
-            <li>
-                <label>Last Update</label>
-                <span><label data-bind="value: LastUpdate" /></span>
-            </li>
-        </ul>
-        <div class="float-left clear-both">
-            <div data-bind="foreach: $parent.validationErrors">
-                <div data-bind="text: $data"></div>
+﻿<div data-bind="with: contacts">
+    <div data-bind="ifnot: loaded"><img src="~/Images/wait.gif" /></div>
+    <div data-bind="showHide: loaded" class="vm-view vm-contacts">
+        <div data-bind="ifnot: showEditor()">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Company</th>
+                        <th>Country</th>
+                    </tr>
+                </thead>
+                <tbody data-bind="foreach: collection">
+                    <tr>
+                        <td data-bind="text: Id"></td>
+                        <td data-bind="text: FirstName"></td>
+                        <td data-bind="text: LastName"></td>
+                        <td data-bind="text: Company"></td>
+                        <td data-bind="text: Country"></td>
+                        <td>
+                            <button class="btn btn-mini btn-danger" data-bind="click: $parent.edit">edit</button></td>
+                        <td>
+                            <button class="btn btn-mini btn-danger" data-bind="click: $parent.remove">remove</button></td>
+                    </tr>
+                </tbody>
+            </table>
+            <input type="button" id="btnGetcontacts" value="Get contacts" data-bind="click: refresh" />
+            <input type="button" value="Add" data-bind="click: edit" />
+        </div>
+        <div data-bind="if: showEditor" class="edit">
+            <div data-bind=" { with: select(), jqValidation: validationContext } ">
+                <section class="head">
+                    <div class="prf-pic"><img src="~/Images/profile.jpg" width="70px" /></div>
+                    <div>
+                        <h2>
+                            <span data-bind="if: FirstName() == '' && LastName() == '' && $parent.isNew()">Add New Contact</span>
+                            <span data-bind="text: FirstName"></span>
+                            <span data-bind="text: LastName"></span>
+                        </h2>
+                    </div>
+                    <div class="email">
+                        <a data-bind="attr: { href: 'mailto:' + Email() }">
+                            <div class="float-left"><img src="~/Images/email.png" height="20" /></div>
+                            <div data-bind="if: Email() == ''" class="float-left">No Email Found</div>
+                            <div data-bind="text: Email" class="float-left"></div>
+                        </a>
+                    </div>
+                    <div class="rating">
+                        <div data-bind="rateit: { value: SocialDecurity, max: 5, step: 0.1 }"></div>
+                    </div>
+                </section>
+                <ul class="float-left">
+                    <li>
+                        <span><input type="text" data-bind="value: FirstName" placeholder="First Name" data-required="true" /></span>
+                    </li>
+                    <li>
+                        <span><input type="text" data-bind="value: LastName" placeholder="Last Name" data-required="true" /></span>
+                    </li>
+                    <li>
+                        <span><input type="text" data-bind="value: Company" placeholder="Company" data-required="true" /></span>
+                    </li>
+                    <li>
+                        <span><input type="text" data-bind="value: Country" placeholder="Country" data-required="true" /></span>
+                    </li>
+                    <li>
+                        <span><input type="text" data-bind="value: State" placeholder="State" data-required="true" /></span>
+                    </li>
+                    <li>
+                        <span><input type="text" data-bind="value: City" placeholder="City" data-required="true" /></span>
+                    </li>
+                    <li>
+                        <span><input type="text" data-bind="value: Street" placeholder="Street" data-required="true" /></span>
+                    </li>
+                    <li>
+                        <span><textarea data-bind="value: Notes" placeholder="Notes" data-required="true"></textarea></span>
+                    </li>
+                </ul>
+                <ul class="float-right">
+                    <li>
+                        <span>
+                            <input type="text"
+                                data-bind="value: Category"
+                                placeholder="Category"
+                                data-required="true"
+                                data-lengthreq="4-16"
+                                data-msg_empty="Category is required too."
+                                data-msg_lengthreq="Category must be between $MINLEN$ and $MAXLEN$ characters long." /></span>
+                    </li>
+                    <li>
+                        <span>
+                            <input type="text"
+                                data-bind="value: Email"
+                                placeholder="Email"
+                                data-required="true"
+                                data-email="true" /></span>
+                    </li>
+                    <li>
+                        <span><input type="tel" data-bind="value: PhoneNumber" placeholder="Phone Number" data-required="true" data-phone="true" /></span>
+                    </li>
+                    <li>
+                        <span><input type="text" data-bind="value: MobileNumber" placeholder="Mobile Number" data-required="true" data-phone="true" /></span>
+                    </li>
+                    <li>
+                        <span><input type="text" data-bind="value: FaxNumber" placeholder="Fax Number" data-required="true" data-phone="true" /></span>
+                    </li>
+                    <li>
+                        <span><input type="text" data-bind="value: Birthday" placeholder="Birthday" /></span>
+                    </li>
+                    <li class="chk-height">
+                        <input type="checkbox" data-bind="checked: Single" />
+                        <label onclick="$(this).prev().click()">Single</label>
+                    </li>
+                    <li>
+                        <span>
+                            <input type="text" data-bind="value: SocialDecurity" placeholder="Social Security / ID" /></span>
+                    </li>
+                    <li>
+                        <span>
+                            <input type="text" data-bind="value: DrivingLisence" placeholder="Driving Lisence" /></span>
+                    </li>
+                    <li>
+                        <label>Last Update</label>
+                        <span>
+                            <!--label data-bind="text: LastUpdate" /-->
+                        </span>
+                    </li>
+                </ul>
+                <div class="float-left clear-both">
+                    <div data-bind="foreach: $parent.validationErrors">
+                        <div data-bind="text: $data"></div>
+                    </div>
+                    <input type="button" value="Save" data-bind="click: $parent.save" />
+                    <input type="button" value="Cancel" data-bind="click: $parent.cancelEdit" />
+                </div>
             </div>
-            <input type="button" value="Save" data-bind="click: $parent.save" />
-            <input type="button" value="Cancel" data-bind="click: $parent.cancelEdit" />
         </div>
     </div>
-    <input type="button" value="Add" data-bind=" { click: edit, showHide: !showEditor() } " />
 </div>
