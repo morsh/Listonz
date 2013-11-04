@@ -262,7 +262,7 @@ $(function () {
         });
     }
 
-    $('.tabs').tabs();
+    if ($('.tabs').tabs) $('.tabs').tabs();
 
     // Fixing placeholders
     /*if (!Modernizr.input.placeholder) {

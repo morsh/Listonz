@@ -34,7 +34,7 @@ namespace Listonz.Models
         public string SocialSecurity { get; set; }
         public string DrivingLisence { get; set; }
 
-        public int Rating { get; set; }
+        public double? Rating { get; set; }
 
         public DateTime? LastUpdate { get; set; }
     }

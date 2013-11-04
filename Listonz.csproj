@@ -205,6 +205,10 @@
     <Compile Include="Migrations\201311042254521_SocialSecurity-Rating.Designer.cs">
       <DependentUpon>201311042254521_SocialSecurity-Rating.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201311042304315_floatRating.cs" />
+    <Compile Include="Migrations\201311042304315_floatRating.Designer.cs">
+      <DependentUpon>201311042304315_floatRating.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\Attributes\IsTrueAttribute.cs" />
@@ -386,6 +390,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201311042254521_SocialSecurity-Rating.resx">
       <DependentUpon>201311042254521_SocialSecurity-Rating.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201311042304315_floatRating.resx">
+      <DependentUpon>201311042304315_floatRating.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

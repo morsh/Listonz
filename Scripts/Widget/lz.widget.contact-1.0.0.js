@@ -29,8 +29,9 @@ vm.contacts = new vm.baseViewModel({
             this.FaxNumber = ko.observable('');
             this.Birthday = ko.observable('');
             this.Single = ko.observable('');
-            this.SocialDecurity = ko.observable('');
+            this.SocialSecurity = ko.observable('');
             this.DrivingLisence = ko.observable('');
+            this.Rating = ko.observable(0);
             this.LastUpdate = ko.observable('');
         }
     },
