@@ -32,6 +32,9 @@ http://tech.pro/blog/1606/knockoutjs-input-placeholders-and-ie-oh-my
 Rating:
 http://www.radioactivethinking.com/rateit/example/example.htm
 
+validator plugins:
+https://github.com/jeffijoe/jQuery-Validator/blob/master/Src/Plugins/jQuery.Validator.FieldMatch.js
+
 Auditing:
 =============
 http://www.asp.net/mvc/tutorials/older-versions/controllers-and-routing/understanding-action-filters-cs
