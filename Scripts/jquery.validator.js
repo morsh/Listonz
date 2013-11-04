@@ -482,7 +482,7 @@ jQuery(function () {
         defaultErrorMessage: "Requires atleast 7 numbers. Can use +, -, etc", // Default error message when validation fails and no message has been explicitly set.
         method: function (paramObj) {
             // The property value indicates if this is a phonenumber field or not.
-            if (paramObj.propertyValue)
+            if (paramObj.propertyValue && paramObj.input.val())
                 // Phone number regex check
                 // Requires atleast 7 numbers. Can use +, -, etc (all valid phone number chars)
                 if (!(/^\d{7,}$/).test(paramObj.input.val().replace(/[\s()+\-\.]|ext/gi, ''))) {

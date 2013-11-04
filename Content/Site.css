@@ -32,14 +32,10 @@ h5, h6 {font-size: 1em;}
 
 .ie9-placeholder {color: #bababa;font-size: 1em; font-family: "Segoe UI", Verdana, Helvetica, Sans-Serif; position: absolute; overflow-x:hidden;top:1px;}
 
-input::-webkit-input-placeholder, 
-textarea::-webkit-input-placeholder,
-input:-moz-placeholder, 
-textarea:-moz-placeholder,
-input::-moz-placeholder, 
-textarea::-moz-placeholder,
-input:-ms-input-placeholder, 
-textarea:-ms-input-placeholder { color:#666; }
+input::-webkit-input-placeholder, textarea::-webkit-input-placeholder { color:#666; }
+input:-moz-placeholder, textarea:-moz-placeholder { color:#666; }
+input::-moz-placeholder, textarea::-moz-placeholder { color:#666; }
+input:-ms-input-placeholder, textarea:-ms-input-placeholder { color:#666; }
 /*.placeholder {color:silver;font-style:italic;position:absolute;margin:5px;white-space:nowrap;}*/
 
 /* main layout
