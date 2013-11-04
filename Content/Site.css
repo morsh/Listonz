@@ -20,7 +20,7 @@ mark {background-color: #a6dbed;padding-left: 5px;padding-right: 5px;}
 .clear-fix:after {content: ".";clear: both;display: block;height: 0;visibility: hidden;}
 
 h1, h2, h3,
-h4, h5, h6 {color: #000;margin-bottom: 0;padding-bottom: 0;}
+h4, h5, h6 {color: #000;margin-bottom: 0;padding-bottom: 0;white-space:nowrap;}
 
 h1 {font-size: 2em;}
 h2 {font-size: 1.75em;}
@@ -430,12 +430,7 @@ table {
     border: 0 none;
 }
 
-th {
-    font-size: 1em;
-    text-align: left;
-    border: none 0px;
-    padding: 0.25em 2em 0.25em 0em
-}
+th {font-size: 1em;text-align: left;border: none 0px;padding: 0.25em 2em 0.25em 0em;white-space:nowrap;}
 
     th a {
         display: block;
