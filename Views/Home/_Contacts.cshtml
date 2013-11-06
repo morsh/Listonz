@@ -1,5 +1,4 @@
 ﻿<div data-bind="with: contacts">
-    <div data-bind="ifnot: loaded"><img src="~/Images/wait.gif" /></div>
     <div data-bind="showHide: loaded" class="vm-view vm-contacts">
         <div data-bind="ifnot: showEditor()">
             <table>
@@ -9,7 +8,7 @@
                         <th>First Name</th>
                         <th>Last Name</th>
                         <th>Company</th>
-                        <th>Country</th>
+                        <th>Category</th>
                     </tr>
                 </thead>
                 <tbody data-bind="foreach: collection">
@@ -17,8 +16,8 @@
                         <td data-bind="text: Id"></td>
                         <td data-bind="text: FirstName"></td>
                         <td data-bind="text: LastName"></td>
-                        <td data-bind="text: Company"></td>
-                        <td data-bind="text: Country"></td>
+                        <td><span data-bind="if: Company != null"><span data-bind="text: Company.FirstName"></span></span></td>
+                        <td data-bind="text: Category"></td>
                         <td>
                             <button class="btn btn-mini btn-danger" data-bind="click: $parent.edit">edit</button></td>
                         <td>
@@ -59,7 +58,12 @@
                         <span><input type="text" data-bind="value: LastName" placeholder="Last Name" /></span>
                     </li>
                     <li>
-                        <span><input type="text" data-bind="value: Company" placeholder="Company" /></span>
+                        <span>
+                            <hidden data-bind="value: CompanyId" />
+                            <input type="text" placeholder="Company" data-bind="
+                                value: $parent.EditCompanyName,
+                                autocomplete_select: 'UpdateCompany',
+                                autoComplete: $parent.api + $parent.options.getAll + '?$filter=substringof(\'REP_URL\',FirstName) and Category eq \'Company\''" /></span>
                     </li>
                     <li>
                         <span><input type="text" data-bind="value: Country" placeholder="Country" /></span>

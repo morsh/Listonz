@@ -9,6 +9,7 @@ using System.Net.Http;
 using System.Web;
 using System.Web.Http;
 using Listonz.Models;
+using System.Web.Http.OData.Query;
 
 namespace Listonz.Controllers.Api
 {
@@ -17,12 +18,9 @@ namespace Listonz.Controllers.Api
         private UsersContext db = new UsersContext();
 
         // GET api/Contact
+        [Queryable]
         public IEnumerable<Contact> GetContacts()
         {
-            foreach (var con in db.Contacts.Where(c => c.FirstName == null || c.FirstName == ""))
-                db.Contacts.Remove(con);
-            db.SaveChanges();
-
             return db.Contacts.AsEnumerable();
         }
 
@@ -51,6 +49,12 @@ namespace Listonz.Controllers.Api
                 return Request.CreateResponse(HttpStatusCode.BadRequest);
             }
 
+            contact.Company = contact.CompanyId != null ? db.Contacts.FirstOrDefault(c => c.Id == contact.CompanyId) : null;
+            if (contact.Company == null || contact.Company.CompanyId != null)
+            {
+                contact.CompanyId = null;
+                contact.Company = null;
+            }
             db.Entry(contact).State = EntityState.Modified;
 
             try
@@ -62,7 +66,7 @@ namespace Listonz.Controllers.Api
                 return Request.CreateErrorResponse(HttpStatusCode.NotFound, ex);
             }
 
-            return Request.CreateResponse(HttpStatusCode.OK);
+            return Request.CreateResponse(HttpStatusCode.OK, contact);
         }
 
         // POST api/Contact

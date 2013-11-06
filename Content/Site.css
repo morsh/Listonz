@@ -624,6 +624,9 @@ tr.pager td {padding: 0 0.25em 0 0;}
 
 /* View Model
     ----------------------------------------------------------*/
+.loader {width:100%;text-align:center; }
+.loader img {display:none;}
+
 .vm-view {display:none;}
     .vm-view ul { list-style:none;padding:10px;}
     .vm-view label { width: 140px;display:inline-block; }
@@ -637,5 +640,11 @@ tr.pager td {padding: 0 0.25em 0 0;}
 
 .ui-tabs-panel > div {display:inline-block;}
 .chk-height {height:41px;}
+
+.ui-autocomplete-loading {background: white url('/images/wait.gif') right center no-repeat;}
+.ui-autocomplete li table { width:300px;  }
+.ui-autocomplete li table td { padding:0;  }
+.ui-menu .ui-menu-item a { height: 55px; }
+.ui-menu .ui-menu-item a div { padding-right: 15px; }
 /* Contacts View Model
     ----------------------------------------------------------*/

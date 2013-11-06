@@ -26,7 +26,7 @@ http://docs.seleniumhq.org/docs/01_introducing_selenium.jsp#test-automation-for-
 Password strength:
 http://download.ysatech.com/ASP-NET-jQuery-Password-Strength/#
 
-knockout placeholder:
+knockout placeholder fix:
 http://tech.pro/blog/1606/knockoutjs-input-placeholders-and-ie-oh-my
 
 Rating:

@@ -9,6 +9,7 @@ namespace Listonz
     {
         public static void Register(HttpConfiguration config)
         {
+            config.EnableQuerySupport();
             config.Routes.MapHttpRoute(
                 name: "ApiById",
                 routeTemplate: "api/{controller}/{id}",

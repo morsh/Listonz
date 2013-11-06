@@ -17,7 +17,6 @@ namespace Listonz.Models
         public int Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public string Company { get; set; }
         public string Country { get; set; }
         public string State { get; set; }
         public string City { get; set; }
@@ -36,6 +35,10 @@ namespace Listonz.Models
 
         public double? Rating { get; set; }
 
+        public int? CompanyId { get; set; }
+        [ForeignKey("CompanyId")]
+        public virtual Contact Company { get; set; }
+        
         public DateTime? LastUpdate { get; set; }
     }
 }

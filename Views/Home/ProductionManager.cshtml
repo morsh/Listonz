@@ -7,8 +7,10 @@
     <h1>@ViewBag.Title</h1>
 }
 
-<div data-bind="ifnot: allloaded"><img src="~/Images/wait.gif" /></div>
-<section style="display:none;" class="tabs" data-bind="showHide: allloaded">
+<div data-bind="ifnot: allloaded()">
+    <div class="loader"><img src="~/Images/wait.gif" /></div>
+</div>
+<section style="display:none;" class="tabs" data-bind="showHide: allloaded()">
     <ul>
         <li><a href="#tabContacts">Contacts</a></li>
         <li><a href="#tabEvents">Events</a></li>
@@ -30,8 +32,9 @@
     <script src="~/Scripts/jquery.validator.knockout.js"></script>
     <script src="~/Scripts/jquery.qtip.js"></script>        
     <script src="~/Scripts/jquery.rateit.js"></script>
+    <script src="https://www.google.com/jsapi" type="text/javascript"></script>
     <script src="~/Scripts/Widget/lz.widget.contact-1.0.0.js"></script>
-
+    
     @Styles.Render("~/Content/themes/base/css")
 
 }

@@ -13,7 +13,10 @@ namespace Listonz.Models
     #region Database & Tables
     public class UsersContext : DbContext
     {
-        public UsersContext() : base("context") { }
+        public UsersContext() : base("context") 
+        {
+            base.Configuration.ProxyCreationEnabled = false;
+        }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

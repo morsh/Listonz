@@ -110,6 +110,59 @@ ko.bindingHandlers.rv = {
     update: ko.bindingHandlers.value.update
 };
 
+ko.bindingHandlers.autoComplete = {
+    init: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+
+        var postUrl = valueAccessor();
+        var updateValue = allBindingsAccessor().autocomplete_select;
+
+        var updateFunction = function (selectedItem, setTimeout) {
+            $(element).data('selected', selectedItem);
+            if (updateValue && typeof (bindingContext.$parent[updateValue]) == 'function')
+                bindingContext.$parent[updateValue](element, selectedItem, viewModel);
+
+            if (setTimeout !== false)
+                window.setTimeout(function () {
+                    updateFunction(selectedItem, false);
+                }, 1);
+        };
+
+        $(element).autocomplete({
+            minLength: 0,
+            autoFocus: false,
+            source: function (request, response) {
+                updateFunction(null, false);
+                $.ajax({
+                    url: postUrl.replace('REP_URL', this.term),
+                    data: { term: request.term },
+                    success: function (data) {
+                        response(data);
+                    },
+                    error: function (e) {
+                        alert(e);
+                    }
+                });
+            },
+            focus:function (event, ui) {
+                updateFunction(ui.item);
+            },
+            select: function (event, ui) {
+                updateFunction(ui.item);
+            },
+            change: function (event, ui) {
+                updateFunction(ui.item);
+            }
+
+        // On later version it should be ui-autocomplete instead of autocomplete
+        }).data("autocomplete")._renderItem = function (ul, item) {
+            return $("<li style='display:inline-block'>")
+                .data('item.autocomplete', item)
+                .append("<a><div class='float-left'><img src='/images/companyLogo.png' /></div><div>" + item.FirstName + ' ' + item.LastName + "<br>Company: " + item.Company + "</div></a>")
+                .appendTo(ul);
+        };
+    }
+};
+
 // View Model definition
 var vm = namespace("lz.viewModel");
 vm.viewModelsToLoad = ko.observable(0);
@@ -117,6 +170,7 @@ vm.allloaded = ko.observable(false);
 vm.baseViewModel = function (extend) {
     var self = this;
 
+    extend.extend(self);
     extend.api(self);
     extend.model(self);
 
@@ -127,7 +181,10 @@ vm.baseViewModel = function (extend) {
     self.collection = ko.observableArray([]);
     self.isNew = ko.observable(true);
     self.isDelete = ko.observable(false);
+
     self.showEditor = ko.observable(false);
+    self.startSave = ko.observable();
+
     self.selected = ko.observable(new self.model());
     self.cancelEdit = function () { self.showEditor(false); };
 
@@ -178,6 +235,8 @@ vm.baseViewModel = function (extend) {
 
     self.save = function (item) {
 
+        self.startSave.valueHasMutated();
+
         // Check for validation rules
         var validationResult = self.validationContext.Validate();
         if (!validationResult.valid) {
@@ -186,25 +245,30 @@ vm.baseViewModel = function (extend) {
             return;
         }
         
-        // check if new or update
-        var postData = ko.toJS(ko.utils.unwrapObservable(item));
-        if (self.isNew())
-            $.post(self.api + self.options.add, postData, function (data) {
-                self.collection.push(data);
-            });
-        else
-            $.ajax({
-                url: self.api + self.options.update + "?id=" + postData.Id,
-                data: postData,
-                type: "PUT",
-                success: function (data) {
-                    for (var i = 0, j = self.collection().length; i < j; i++) 
-                        if (self.collection()[i].Id == postData.Id)
-                            self.collection.replace(self.collection()[i], postData);
-                },
-                error: lz.showError
-            });
-        self.showEditor(false);
+        window.setTimeout(function () {
+
+            // check if new or update
+            var postData = ko.toJS(ko.utils.unwrapObservable(item));
+            if (self.isNew())
+                $.post(self.api + self.options.add, postData, function (data) {
+                    self.collection.push(data);
+                });
+            else
+                $.ajax({
+                    url: self.api + self.options.update + "?id=" + postData.Id,
+                    data: postData,
+                    type: "PUT",
+                    success: function (data) {
+                        if (arguments.length > 2 && arguments[2] != null && arguments[2].responseText != '')
+                            postData = JSON.parse(arguments[2].responseText)
+                        for (var i = 0, j = self.collection().length; i < j; i++)
+                            if (self.collection()[i].Id == postData.Id)
+                                self.collection.replace(self.collection()[i], postData);
+                    },
+                    error: lz.showError
+                });
+            self.showEditor(false);
+        }, 100);
     };
 
     self.edit = function (data) {
@@ -251,7 +315,21 @@ vm.baseViewModel = function (extend) {
 
 /**********************************************************************************/
 
+// Page load methods
 $(function () {
+
+    var $loader = $('.loader');
+    var $body = $('#body');
+    var $footer = $('footer');
+    
+    var middleHeight = $(document).height() - $loader.position().top;
+    var bottomBuffer = $(document).height() - $('body').height();
+    $loader.css({
+        paddingTop: ($(window).height() - $body.position().top - $footer.height() - $loader.height() - 200) / 2,
+        paddingBottom: ($(window).height() - $body.position().top - $footer.height() - $loader.height() - 200) / 2
+    });
+    $loader.find('img').show();
+
     var $password = $('.pass-strength input[type=password]');
 
     if ($password.length > 0) {
@@ -308,11 +386,7 @@ $(function () {
     }*/
 });
 
-
-
-
-
-
+// Placeholder fix for ie9
 (function ($) {
     //feature detection
     var hasPlaceholder = 'placeholder' in document.createElement('input');

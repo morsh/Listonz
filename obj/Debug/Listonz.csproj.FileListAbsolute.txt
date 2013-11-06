@@ -82,10 +82,13 @@ c:\users\mor\documents\visual studio 2012\Projects\Listonz\Listonz\bin\zh-Hans\S
 c:\users\mor\documents\visual studio 2012\Projects\Listonz\Listonz\bin\zh-Hant\System.Spatial.resources.dll
 c:\users\mor\documents\visual studio 2012\Projects\Listonz\Listonz\obj\Debug\Listonz.dll
 c:\users\mor\documents\visual studio 2012\Projects\Listonz\Listonz\obj\Debug\Listonz.pdb
-C:\Users\mor\Documents\Visual Studio 2012\Projects\Listonz\Listonz\obj\Debug\Listonz.csprojResolveAssemblyReference.cache
 C:\Users\mor\documents\visual studio 2012\Projects\Listonz\Listonz\obj\Debug\Listonz.Migrations.AddContacts_1.resources
 C:\Users\mor\documents\visual studio 2012\Projects\Listonz\Listonz\obj\Debug\Listonz.Migrations.AddContacts.resources
 C:\Users\mor\documents\visual studio 2012\Projects\Listonz\Listonz\obj\Debug\Listonz.csproj.GenerateResource.Cache
 C:\Users\mor\documents\visual studio 2012\Projects\Listonz\Listonz\obj\Debug\Listonz.Migrations.UpdateContactsFirstName.resources
 C:\Users\mor\Documents\Visual Studio 2012\Projects\Listonz\Listonz\obj\Debug\Listonz.Migrations.SocialSecurityRating.resources
 C:\Users\mor\Documents\Visual Studio 2012\Projects\Listonz\Listonz\obj\Debug\Listonz.Migrations.floatRating.resources
+C:\Users\mor\documents\visual studio 2012\Projects\Listonz\Listonz\obj\Debug\Listonz.Migrations.CompanyIDField.resources
+C:\Users\mor\documents\visual studio 2012\Projects\Listonz\Listonz\obj\Debug\Listonz.Migrations.CompanyIDField3.resources
+C:\Users\mor\documents\visual studio 2012\Projects\Listonz\Listonz\obj\Debug\Listonz.Migrations.CompanyIDField4.resources
+C:\Users\mor\documents\visual studio 2012\Projects\Listonz\Listonz\obj\Debug\Listonz.csprojResolveAssemblyReference.cache
