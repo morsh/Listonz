@@ -125,7 +125,7 @@
                             <input type="text" data-bind="value: DrivingLisence" placeholder="Driving Lisence" /></span>
                     </li>
                     <li>
-                        <label style="white-space:nowrap">
+                        <label style="white-space:nowrap" data-bind="ifnot: $parent.isNew()">
                             <span>Last Update: </span>
                             <span data-bind="text: moment(LastUpdate()).format('LL')"></span>
                         </label>
