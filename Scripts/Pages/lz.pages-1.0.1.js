@@ -322,8 +322,6 @@ $(function () {
     var $body = $('#body');
     var $footer = $('footer');
     
-    var middleHeight = $(document).height() - $loader.position().top;
-    var bottomBuffer = $(document).height() - $('body').height();
     $loader.css({
         paddingTop: ($(window).height() - $body.position().top - $footer.height() - $loader.height() - 200) / 2,
         paddingBottom: ($(window).height() - $body.position().top - $footer.height() - $loader.height() - 200) / 2
