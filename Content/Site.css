@@ -638,6 +638,13 @@ tr.pager td {padding: 0 0.25em 0 0;}
     .vm-view .edit .head .email div { padding:3px; }
     .vm-view .edit .head .email a:hover {background:none;}
 
+.btn-mini { background: transparent url(none) scroll no-repeat top center; width:22px; height:22px;border:none; }
+.tr-highlight tr .btn-mini {visibility:hidden;float:left;}
+.tr-highlight tr:hover {background:#d8e0f7; }
+.tr-highlight tr:hover .btn-mini {visibility:visible;}
+.btn-edit { background-image: url(/images/edit.jpg);}
+.btn-delete { background-image: url(/images/delete.jpg);}
+
 .ui-tabs-panel > div {display:inline-block;}
 .chk-height {height:41px;}
 
