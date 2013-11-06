@@ -67,6 +67,7 @@ lz.loginCallback = function (success, returnUrl) {
     window.location.href = returnUrl;
 }
 
+
 // ko extenssions
 // ==================
 ko.bindingHandlers.showHide = {

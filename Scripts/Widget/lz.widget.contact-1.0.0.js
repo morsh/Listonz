@@ -69,7 +69,7 @@ vm.contacts = new vm.baseViewModel({
             this.SocialSecurity = ko.observable('');
             this.DrivingLisence = ko.observable('');
             this.Rating = ko.observable(0);
-            this.LastUpdate = ko.observable('');
+            this.LastUpdate = ko.observable('').extend({ date: true });
         }
     },
     view: function (self) {

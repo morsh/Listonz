@@ -125,10 +125,10 @@
                             <input type="text" data-bind="value: DrivingLisence" placeholder="Driving Lisence" /></span>
                     </li>
                     <li>
-                        <label>Last Update</label>
-                        <span>
-                            <!--label data-bind="text: LastUpdate" /-->
-                        </span>
+                        <label style="white-space:nowrap">
+                            <span>Last Update: </span>
+                            <span data-bind="text: moment(LastUpdate()).format('LL')"></span>
+                        </label>
                     </li>
                 </ul>
                 <div class="float-left clear-both">

@@ -17,6 +17,17 @@ namespace Listonz.Controllers.Api
     {
         private UsersContext db = new UsersContext();
 
+        private void EnsureContactData(Contact contact)
+        {
+            contact.Company = contact.CompanyId != null ? db.Contacts.FirstOrDefault(c => c.Id == contact.CompanyId) : null;
+            if (contact.Category == "Company" || contact.Company == null || contact.Company.CompanyId != null)
+            {
+                contact.CompanyId = null;
+                contact.Company = null;
+            }
+            contact.LastUpdate = DateTime.Now;
+        }
+
         // GET api/Contact
         [Queryable]
         public IEnumerable<Contact> GetContacts()
@@ -49,12 +60,7 @@ namespace Listonz.Controllers.Api
                 return Request.CreateResponse(HttpStatusCode.BadRequest);
             }
 
-            contact.Company = contact.CompanyId != null ? db.Contacts.FirstOrDefault(c => c.Id == contact.CompanyId) : null;
-            if (contact.Category == "Company" || contact.Company == null || contact.Company.CompanyId != null)
-            {
-                contact.CompanyId = null;
-                contact.Company = null;
-            }
+            EnsureContactData(contact);
             db.Entry(contact).State = EntityState.Modified;
 
             try
@@ -74,7 +80,7 @@ namespace Listonz.Controllers.Api
         {
             if (ModelState.IsValid)
             {
-                contact.LastUpdate = DateTime.Now;
+                EnsureContactData(contact);
                 db.Contacts.Add(contact);
                 db.SaveChanges();
 
