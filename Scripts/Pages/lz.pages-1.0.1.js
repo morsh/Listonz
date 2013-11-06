@@ -157,7 +157,7 @@ ko.bindingHandlers.autoComplete = {
         }).data("autocomplete")._renderItem = function (ul, item) {
             return $("<li style='display:inline-block'>")
                 .data('item.autocomplete', item)
-                .append("<a><div class='float-left'><img src='/images/companyLogo.png' /></div><div>" + item.FirstName + ' ' + item.LastName + "<br>Company: " + item.Company + "</div></a>")
+                .append("<a><div class='float-left'><img src='/images/companyLogo.png' /></div><div>" + item.FirstName + ' ' + item.LastName + "<br>Email: " + item.Email + "</div></a>")
                 .appendTo(ul);
         };
     }

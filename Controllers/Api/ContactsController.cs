@@ -50,7 +50,7 @@ namespace Listonz.Controllers.Api
             }
 
             contact.Company = contact.CompanyId != null ? db.Contacts.FirstOrDefault(c => c.Id == contact.CompanyId) : null;
-            if (contact.Company == null || contact.Company.CompanyId != null)
+            if (contact.Category == "Company" || contact.Company == null || contact.Company.CompanyId != null)
             {
                 contact.CompanyId = null;
                 contact.Company = null;

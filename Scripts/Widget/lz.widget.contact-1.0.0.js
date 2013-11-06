@@ -45,30 +45,30 @@ vm.contacts = new vm.baseViewModel({
     },
     model: function (self) {
         self.model = function () {
-            this.Id = 0;
-            this.FirstName = '';
-            this.LastName = '';
+            this.Id = ko.observable(0);
+            this.FirstName = ko.observable('');
+            this.LastName = ko.observable('');
 
-            this.CompanyId = null;
-            this.Company = {
-                Id: null,
-                FirstName: ''
-            };
-            this.Country = null;
-            this.State = '';
-            this.City = '';
-            this.Street = '';
-            this.Notes = ''; 
-            this.Category = '';
-            this.Email = '';
-            this.PhoneNumber = '';
-            this.MobileNumber = '';
-            this.FaxNumber = '';
-            this.Birthday = '';
-            this.Single = '';
-            this.SocialSecurity = '';
-            this.DrivingLisence = '';
-            this.Rating = 0;
+            this.CompanyId = ko.observable();
+            this.Company = ko.observable({
+                Id: ko.observable(),
+                FirstName: ko.observable('')
+            });
+            this.Country = ko.observable();
+            this.State = ko.observable('');
+            this.City = ko.observable('');
+            this.Street = ko.observable('');
+            this.Notes = ko.observable(''); 
+            this.Category = ko.observable('');
+            this.Email = ko.observable('');
+            this.PhoneNumber = ko.observable('');
+            this.MobileNumber = ko.observable('');
+            this.FaxNumber = ko.observable('');
+            this.Birthday = ko.observable('');
+            this.Single = ko.observable('');
+            this.SocialSecurity = ko.observable('');
+            this.DrivingLisence = ko.observable('');
+            this.Rating = ko.observable(0);
             this.LastUpdate = ko.observable('');
         }
     },
