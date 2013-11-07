@@ -19,8 +19,8 @@
                         <td><span data-bind="if: Company != null"><span data-bind="text: Company.FirstName"></span></span></td>
                         <td data-bind="text: Category"></td>
                         <td>
-                            <button class="btn btn-mini btn-edit" data-bind="click: $parent.edit"></button>
-                            <button class="btn btn-mini btn-delete" data-bind="click: $parent.remove"></button>
+                            <button class="btn btn-mini btn-edit" data-bind="click: $parent.edit" title="Edit Contact"></button>
+                            <button class="btn btn-mini btn-delete" data-bind="click: $parent.remove" title="Delete Contact"></button>
                         </td>
                     </tr>
                 </tbody>
