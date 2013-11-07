@@ -38,7 +38,9 @@ namespace Listonz.Models
         public int? CompanyId { get; set; }
         [ForeignKey("CompanyId")]
         public virtual Contact Company { get; set; }
-        
+
+        public string ProfilePicture { get; set; }
+
         public DateTime? LastUpdate { get; set; }
     }
 }

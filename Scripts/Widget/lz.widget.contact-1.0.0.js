@@ -1,38 +1,7 @@
 ﻿var vm = namespace("lz.viewModel");
 
-vm.contactsExt = {
-    updateImages: function (ctrl) {
-        $('#searchcontrol').hide();
-        return;
-        var companyName = null;
-        if (typeof(ctrl) == 'function')
-            companyName = ctrl();
-        window.setTimeout(function () {
-            // Create a search control
-            var searchControl = new google.search.SearchControl();
-
-            // Add in a full set of searchers
-            searchControl.addSearcher(new google.search.ImageSearch());
-
-            // tell the searcher to draw itself and tell it where to attach
-            searchControl.draw(document.getElementById("searchcontrol"));
-
-            // execute an inital search
-            searchControl.execute(companyName != null ? companyName + " logo" : "");
-        }, 10);
-    }
-};
-
 vm.contacts = new vm.baseViewModel({
-    extend: function (self) {
-        self.UpdateCompany = function (element, selectedItem, viewModel) {
-            if (selectedItem != null)
-                $(element).val(selectedItem.FirstName);
-            viewModel.CompanyId(selectedItem ? selectedItem.Id : null);
-            viewModel.Company = null;
-        };
-        self.EditCompanyName = ko.observable('');
-    },
+    
     api: function (self) {
         self.api = "/api/contacts/";
         self.options = {
@@ -48,6 +17,7 @@ vm.contacts = new vm.baseViewModel({
             this.Id = ko.observable(0);
             this.FirstName = ko.observable('');
             this.LastName = ko.observable('');
+            this.ProfilePicture = ko.observable('');
 
             this.CompanyId = ko.observable();
             this.Company = ko.observable({
@@ -74,7 +44,7 @@ vm.contacts = new vm.baseViewModel({
     },
     view: function (self) {
 
-        self.showEditor.subscribe(vm.contactsExt.updateImages);
+        self.showEditor.subscribe(self.updateImages);
         self.showEditor.subscribe(function () {
             if (self.selected().Company != null)
                 self.EditCompanyName(self.selected().Company.FirstName);
@@ -82,6 +52,66 @@ vm.contacts = new vm.baseViewModel({
                 self.EditCompanyName('');
         });
         //self.model.Company.subscribe(updateImages);
+    },
+    extend: function (self) {
+        self.UpdateCompany = function (element, selectedItem, viewModel) {
+            if (selectedItem != null)
+                $(element).val(selectedItem.FirstName);
+            viewModel.CompanyId(selectedItem ? selectedItem.Id : null);
+            viewModel.Company = null;
+        };
+        self.renderCompany = function (ul, item) {
+            var picture = (item.ProfilePicture ? item.ProfilePicture : '/images/companyLogo.png');
+            var name = item.FirstName + (item.LastName != null ? ' ' + item.LastName : '');
+            var email = item.Email ? '<br/><a href="mailto:' + item.Email + '">' + item.Email + '</a>' : '';
+            return $("<li style='display:inline-block'>")
+                .data('item.autocomplete', item)
+                .append("<a><div class='float-left'><img src='" + picture + "' /></div><div>" + name + email + "</div></a>")
+                .appendTo(ul);
+        },
+        self.prepareDataForSave = function (data) {
+            data.Birthday = moment(data.Birthday).format();
+        };
+        self.updateImages = function (ctrl) {
+            $('#searchcontrol').hide();
+            return;
+            var companyName = null;
+            if (typeof (ctrl) == 'function')
+                companyName = ctrl();
+            window.setTimeout(function () {
+                // Create a search control
+                var searchControl = new google.search.SearchControl();
+
+                // Add in a full set of searchers
+                searchControl.addSearcher(new google.search.ImageSearch());
+
+                // tell the searcher to draw itself and tell it where to attach
+                searchControl.draw(document.getElementById("searchcontrol"));
+
+                // execute an inital search
+                searchControl.execute(companyName != null ? companyName + " logo" : "");
+            }, 10);
+        };
+        self.changePicture = function () {
+            var srcElement = event.srcElement;
+            $("#dialog-picture").find('#PictureUrl').val(ko.dataFor(srcElement).ProfilePicture());
+            $("#dialog-picture").dialog({
+                autoOpen: true,
+                height: 'auto',
+                width: 'auto',
+                modal: true,
+                buttons: {
+                    "Set Picture": function () {
+                        var newProfilePicture = $(this).find('#PictureUrl').val();
+                        ko.dataFor(srcElement).ProfilePicture(newProfilePicture);
+                        $(this).dialog("close");
+                    },
+                    Cancel: function () { $(this).dialog("close"); }
+                },
+                close: function () { }
+            });
+        };
+        self.EditCompanyName = ko.observable('');
     }
 });
 

@@ -31,7 +31,21 @@
         <div data-bind="if: showEditor" class="edit">
             <div data-bind=" { with: select(), jqValidation: validationContext } ">
                 <section class="head">
-                    <div class="prf-pic"><img src="~/Images/profile.jpg" width="70px" /></div>
+                    <div class="prf-pic" onclick="vm.contacts.changePicture();">
+                        <span data-bind="ifnot: ProfilePicture"><img src="~/Images/profile.jpg" width="70px" /></span>
+                        <span data-bind="if: ProfilePicture"><img data-bind=" attr: { src: ProfilePicture }" src="" width="70px" /></span>
+                        <div class="pic-edit">Change</div>
+
+                        <!-- Url enter dialog -->
+                        <div id="dialog-picture" class="dialog" title="Enter a Profile Picture">
+                          <form>
+                          <fieldset>
+                            <label for="PictureUrl">Picture Url</label>
+                            <input type="text" name="PictureUrl" id="PictureUrl" class="text ui-widget-content ui-corner-all" style="width: 800px;" />
+                          </fieldset>
+                          </form>
+                        </div>
+                    </div>
                     <div>
                         <h2>
                             <span data-bind="if: FirstName() == '' && LastName() == '' && $parent.isNew()">Add New Contact</span>
@@ -62,7 +76,9 @@
                             <hidden data-bind="value: CompanyId" />
                             <input type="text" placeholder="Company" data-bind="
                                 value: $parent.EditCompanyName,
+                                enable: Category() != 'Company',
                                 autocomplete_select: 'UpdateCompany',
+                                autocomplete_render: 'renderCompany',
                                 autoComplete: $parent.api + $parent.options.getAll + '?$filter=substringof(\'REP_URL\',FirstName) and Category eq \'Company\''" /></span>
                     </li>
                     <li>
@@ -110,7 +126,7 @@
                         <span><input type="text" data-bind="value: FaxNumber" placeholder="Fax Number" data-phone="true" data-validate="true" /></span>
                     </li>
                     <li>
-                        <span><input type="text" data-bind="value: Birthday" placeholder="Birthday" /></span>
+                        <span><input type="text" data-bind="datepicker: Birthday" placeholder="Birthday" data-date="true" data-validate="true" /></span>
                     </li>
                     <li class="chk-height">
                         <input type="checkbox" data-bind="checked: Single" />

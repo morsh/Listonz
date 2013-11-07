@@ -10,6 +10,7 @@ using Microsoft.Web.WebPages.OAuth;
 using WebMatrix.WebData;
 using Listonz.Filters;
 using Listonz.Models;
+using DotNetOpenAuth.AspNet.Clients;
 
 namespace Listonz.Controllers
 {
@@ -255,6 +256,12 @@ namespace Listonz.Controllers
 
             if ((string)Session["AdminPassword"] != "shikaka")
             {
+                //if (result.Provider == "facebook")
+                //{
+                //    var client = new FacebookClient(
+                //    result.ProviderUserId
+                //}
+
                 return View("LoginResult", new LoginResultViewModel(false, Url.Action("ExternalLoginFailure")));
             }
 

@@ -475,17 +475,17 @@ jQuery(function () {
 
     // Extend the validator object.
     $.Validator.Extend({
-        dataProp: "phone", // The property on the element - eg. <input type="text" data-email="true" />
-        configProp: "isPhone", // The property on the config.
-        messageDataProp: "msg_invalidphonenumber", // The error message property on the element
-        messageConfigProp: "msg_invalidphonenumber", // The error message property on the config
-        defaultErrorMessage: "Requires atleast 7 numbers. Can use +, -, etc", // Default error message when validation fails and no message has been explicitly set.
+        dataProp: "date", // The property on the element - eg. <input type="text" data-email="true" />
+        configProp: "isDate", // The property on the config.
+        messageDataProp: "msg_invaliddate", // The error message property on the element
+        messageConfigProp: "msg_invaliddate", // The error message property on the config
+        defaultErrorMessage: "This is not a valid date", // Default error message when validation fails and no message has been explicitly set.
         method: function (paramObj) {
             // The property value indicates if this is a phonenumber field or not.
             if (paramObj.propertyValue && paramObj.input.val())
                 // Phone number regex check
                 // Requires atleast 7 numbers. Can use +, -, etc (all valid phone number chars)
-                if (!(/^\d{7,}$/).test(paramObj.input.val().replace(/[\s()+\-\.]|ext/gi, ''))) {
+                if (!moment(paramObj.input.val(), 'DD/MM/YYYY').isValid()) {
                     // Failed, return false
                     return false;
                 }

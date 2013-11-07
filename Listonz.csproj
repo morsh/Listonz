@@ -39,6 +39,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Facebook">
+      <HintPath>..\packages\Facebook.6.4.2\lib\net45\Facebook.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -178,6 +181,7 @@
   <ItemGroup>
     <Compile Include="App_Start\AuthConfig.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\FacebookExtendedClient.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
@@ -220,6 +224,10 @@
     <Compile Include="Migrations\201311060826596_CompanyIDField4.cs" />
     <Compile Include="Migrations\201311060826596_CompanyIDField4.Designer.cs">
       <DependentUpon>201311060826596_CompanyIDField4.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201311071347165_Add Profile Picture.cs" />
+    <Compile Include="Migrations\201311071347165_Add Profile Picture.Designer.cs">
+      <DependentUpon>201311071347165_Add Profile Picture.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountModels.cs" />
@@ -420,6 +428,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201311060826596_CompanyIDField4.resx">
       <DependentUpon>201311060826596_CompanyIDField4.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201311071347165_Add Profile Picture.resx">
+      <DependentUpon>201311071347165_Add Profile Picture.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

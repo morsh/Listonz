@@ -92,3 +92,6 @@ C:\Users\mor\documents\visual studio 2012\Projects\Listonz\Listonz\obj\Debug\Lis
 C:\Users\mor\documents\visual studio 2012\Projects\Listonz\Listonz\obj\Debug\Listonz.Migrations.CompanyIDField3.resources
 C:\Users\mor\documents\visual studio 2012\Projects\Listonz\Listonz\obj\Debug\Listonz.Migrations.CompanyIDField4.resources
 C:\Users\mor\documents\visual studio 2012\Projects\Listonz\Listonz\obj\Debug\Listonz.csprojResolveAssemblyReference.cache
+C:\Users\mor\Documents\Visual Studio 2012\Projects\Listonz\Listonz\bin\Facebook.dll
+C:\Users\mor\Documents\Visual Studio 2012\Projects\Listonz\Listonz\bin\Facebook.xml
+C:\Users\mor\Documents\Visual Studio 2012\Projects\Listonz\Listonz\obj\Debug\Listonz.Migrations.AddProfilePicture.resources

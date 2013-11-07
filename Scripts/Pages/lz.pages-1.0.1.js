@@ -21,34 +21,6 @@ lz.getRootUrl = function () {
     return relativeHomeUrl + "MyProject/";
 };
 
-lz.AjaxtoJSON = function (params) {
-    var param = new Object();
-    param.serviceName = params.serviceName;
-    param.methodName = params.methodName;
-    param.zeroValue = params.zeroValue;
-    param.serviceData = params.serviceData;
-    param.async = params.async || false;
-
-    var result;
-
-    $.ajax({
-        type: "POST",
-        contentType: "application/json; charset=utf-8",
-        url: myUtes.getRootUrl() + "Webservices/" + param.serviceName + ".asmx/" + param.methodName,
-        data: JSON.stringify(param.serviceData),
-        async: param.async,
-        dataType: "json",
-        success: function (data, textResponse) {
-            result = $.parseJSON(data.d);
-            if (param.zeroValue) {
-                result.unshift(param.zeroValue);
-            }
-        }
-    });
-    return result;
-
-};
-
 lz.showError = function (err) {
     var error = JSON.parse(err.responseText);
     $("<div></div>").html(error.Message).dialog({
@@ -66,7 +38,6 @@ lz.loginCallback = function (success, returnUrl) {
     }
     window.location.href = returnUrl;
 }
-
 
 // ko extenssions
 // ==================
@@ -116,6 +87,7 @@ ko.bindingHandlers.autoComplete = {
 
         var postUrl = valueAccessor();
         var updateValue = allBindingsAccessor().autocomplete_select;
+        var renderItem = allBindingsAccessor().autocomplete_render;
 
         var updateFunction = function (selectedItem, setTimeout) {
             $(element).data('selected', selectedItem);
@@ -128,7 +100,7 @@ ko.bindingHandlers.autoComplete = {
                 }, 1);
         };
 
-        $(element).autocomplete({
+        var autoComp = $(element).autocomplete({
             minLength: 0,
             autoFocus: false,
             source: function (request, response) {
@@ -155,12 +127,48 @@ ko.bindingHandlers.autoComplete = {
             }
 
         // On later version it should be ui-autocomplete instead of autocomplete
-        }).data("autocomplete")._renderItem = function (ul, item) {
-            return $("<li style='display:inline-block'>")
-                .data('item.autocomplete', item)
-                .append("<a><div class='float-left'><img src='/images/companyLogo.png' /></div><div>" + item.FirstName + ' ' + item.LastName + "<br>Email: " + item.Email + "</div></a>")
-                .appendTo(ul);
-        };
+        })
+
+        if (renderItem && typeof (bindingContext.$parent[renderItem]) == 'function')
+            autoComp.data("autocomplete")._renderItem = function (ul, item) {
+                var picture = (item.ProfilePicture ? item.ProfilePicture : '/images/companyLogo.png');
+                return $("<li style='display:inline-block'>")
+                    .data('item.autocomplete', item)
+                    .append("<a><div class='float-left'><img src='" + picture + "' /></div><div>" + item.FirstName + ' ' + item.LastName + "<br>Email: " + item.Email + "</div></a>")
+                    .appendTo(ul);
+            };
+    }
+};
+
+ko.bindingHandlers.datepicker = {
+    init: function (element, valueAccessor, allBindingsAccessor) {
+        //initialize datepicker with some optional options
+        var options = allBindingsAccessor().datepickerOptions || { "dateFormat": 'dd/mm/yy' },
+            $el = $(element);
+
+        $el.datepicker(options);
+
+        //handle the field changing
+        ko.utils.registerEventHandler(element, "change", function () {
+            var observable = valueAccessor();
+            observable($el.datepicker("getDate"));
+        });
+
+        //handle disposal (if KO removes by the template binding)
+        ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
+            $el.datepicker("destroy");
+        });
+
+    },
+    update: function (element, valueAccessor) {
+        var value = ko.utils.unwrapObservable(valueAccessor()),
+            $el = $(element);
+
+        var current = $el.datepicker("getDate");
+
+        if (value - current !== 0) {
+            $el.datepicker("setDate", new Date(moment(value).format()));
+        }
     }
 };
 
@@ -250,6 +258,8 @@ vm.baseViewModel = function (extend) {
 
             // check if new or update
             var postData = ko.toJS(ko.utils.unwrapObservable(item));
+            if (self.prepareDataForSave)
+                self.prepareDataForSave(postData);
             if (self.isNew())
                 $.post(self.api + self.options.add, postData, function (data) {
                     self.collection.push(data);
