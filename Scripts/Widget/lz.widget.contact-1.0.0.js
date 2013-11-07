@@ -63,10 +63,10 @@ vm.contacts = new vm.baseViewModel({
         self.renderCompany = function (ul, item) {
             var picture = (item.ProfilePicture ? item.ProfilePicture : '/images/companyLogo.png');
             var name = item.FirstName + (item.LastName != null ? ' ' + item.LastName : '');
-            var email = item.Email ? '<br/><a href="mailto:' + item.Email + '">' + item.Email + '</a>' : '';
+            var email = item.Email ? '<a href="mailto:' + item.Email + '">' + item.Email + '</a>' : '';
             return $("<li style='display:inline-block'>")
                 .data('item.autocomplete', item)
-                .append("<a><div class='float-left'><img src='" + picture + "' /></div><div>" + name + email + "</div></a>")
+                .append("<a><div class='float-left'><img src='" + picture + "' /></div><div>" + name + "</div></a>")
                 .appendTo(ul);
         },
         self.prepareDataForSave = function (data) {
