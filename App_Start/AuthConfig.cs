@@ -37,13 +37,18 @@ namespace Listonz
             //    consumerKey: "",
             //    consumerSecret: "");
 
+            //// https://developers.facebook.com/apps/432403596878782/summary?ref=nav
+            //OAuthWebSecurity.RegisterClient(new FacebookExtendedClient(
+            //    "432403596878782",
+            //    "1396d3fd52bdba83b7e890e1671a5552",
+            //    "id,first_name,last_name,link,username,gender,email,age_range,picture.height(200)",
+            //    new Func<string, object, string>(fieldsTransformer),
+            //    "email"), "Facebook", null);
+
             // https://developers.facebook.com/apps/432403596878782/summary?ref=nav
-            OAuthWebSecurity.RegisterClient(new FacebookExtendedClient(
-                "432403596878782",
-                "1396d3fd52bdba83b7e890e1671a5552",
-                "id,first_name,last_name,link,username,gender,email,age_range,picture.height(200)",
-                new Func<string, object, string>(fieldsTransformer),
-                "email"), "Facebook", null);
+            OAuthWebSecurity.RegisterFacebookClient(
+                appId: "432403596878782",
+                appSecret: "1396d3fd52bdba83b7e890e1671a5552");
 
             // https://www.linkedin.com/secure/developer?showinfo=&app_id=3258791&acc_id=1725431&compnay_name=Listonz&app_name=Listonz
             OAuthWebSecurity.RegisterLinkedInClient(
