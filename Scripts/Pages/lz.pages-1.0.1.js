@@ -130,13 +130,7 @@ ko.bindingHandlers.autoComplete = {
         })
 
         if (renderItem && typeof (bindingContext.$parent[renderItem]) == 'function')
-            autoComp.data("autocomplete")._renderItem = function (ul, item) {
-                var picture = (item.ProfilePicture ? item.ProfilePicture : '/images/companyLogo.png');
-                return $("<li style='display:inline-block'>")
-                    .data('item.autocomplete', item)
-                    .append("<a><div class='float-left'><img src='" + picture + "' /></div><div>" + item.FirstName + ' ' + item.LastName + "<br>Email: " + item.Email + "</div></a>")
-                    .appendTo(ul);
-            };
+            autoComp.data("autocomplete")._renderItem = bindingContext.$parent[renderItem];
     }
 };
 
