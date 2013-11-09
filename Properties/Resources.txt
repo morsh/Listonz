@@ -40,6 +40,10 @@ Auditing:
 http://www.asp.net/mvc/tutorials/older-versions/controllers-and-routing/understanding-action-filters-cs
 http://www.codeproject.com/Articles/34491/Implementing-Audit-Trail-using-Entity-Framework-Pa
 
+Facebook Clinet:
+===============
+http://stackoverflow.com/questions/14987868/net-mvc-app-facebook-oauth-with-defiend-scope
+
 cd "C:\Users\mor\Documents\visual studio 2012\Projects\Listonz\Listonz"
 git add .
 git commit -m "Comment"
