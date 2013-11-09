@@ -241,6 +241,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="CodeParts.txt" />
     <Content Include="Content\qTip\jquery.qtip.min.css" />
     <Content Include="Content\qTip\jquery.qtip.css" />
     <Content Include="Content\rateit.css" />

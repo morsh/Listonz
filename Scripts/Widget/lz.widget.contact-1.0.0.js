@@ -1,7 +1,6 @@
 ﻿var vm = namespace("lz.viewModel");
 
 vm.contacts = new vm.baseViewModel({
-    
     api: function (self) {
         self.api = "/api/contacts/";
         self.options = {
@@ -40,6 +39,10 @@ vm.contacts = new vm.baseViewModel({
             this.DrivingLisence = ko.observable('');
             this.Rating = ko.observable(0);
             this.LastUpdate = ko.observable('').extend({ date: true });
+
+            this.isCompany = ko.computed(function () {
+                return this.Category == "Company";
+            }, this);
         }
     },
     view: function (self) {
@@ -54,45 +57,117 @@ vm.contacts = new vm.baseViewModel({
         //self.model.Company.subscribe(updateImages);
     },
     extend: function (self) {
-        self.UpdateCompany = function (element, selectedItem, viewModel) {
-            if (selectedItem != null)
-                $(element).val(selectedItem.FirstName);
-            viewModel.CompanyId(selectedItem ? selectedItem.Id : null);
-            viewModel.Company = null;
-        };
-        self.renderCompany = function (ul, item) {
-            var picture = (item.ProfilePicture ? item.ProfilePicture : '/images/companyLogo.png');
-            var name = item.FirstName + (item.LastName != null ? ' ' + item.LastName : '');
-            var email = item.Email ? '<a href="mailto:' + item.Email + '">' + item.Email + '</a>' : '';
-            return $("<li style='display:inline-block'>")
-                .data('item.autocomplete', item)
-                .append("<a><div class='float-left'><img src='" + picture + "' /></div><div>" + name + "</div></a>")
-                .appendTo(ul);
-        },
-        self.prepareDataForSave = function (data) {
-            data.Birthday = moment(data.Birthday).format();
-        };
-        self.updateImages = function (ctrl) {
-            $('#searchcontrol').hide();
-            return;
-            var companyName = null;
-            if (typeof (ctrl) == 'function')
-                companyName = ctrl();
-            window.setTimeout(function () {
-                // Create a search control
-                var searchControl = new google.search.SearchControl();
 
-                // Add in a full set of searchers
-                searchControl.addSearcher(new google.search.ImageSearch());
+        // Handle Properties
+        // =================
 
-                // tell the searcher to draw itself and tell it where to attach
-                searchControl.draw(document.getElementById("searchcontrol"));
+            self.Categories = ko.observableArray(['Company', 'Artist', 'Venue', 'Service Provider', 'Other']).sort();
 
-                // execute an inital search
-                searchControl.execute(companyName != null ? companyName + " logo" : "");
-            }, 10);
-        };
-        self.changePicture = function () {
+        // Companies autocomplete
+        // ======================
+
+            // Update company after it is selected from the autocomplete list
+            self.UpdateCompany = function (element, selectedItem, viewModel) {
+                if (selectedItem != null)
+                    $(element).val(selectedItem.FirstName);
+                viewModel.CompanyId(selectedItem ? selectedItem.Id : null);
+                viewModel.Company = null;
+            };
+
+            // render the company item for each company in the autocomplete list
+            self.renderCompany = function (ul, item) {
+                var picture = (item.ProfilePicture ? item.ProfilePicture : '/images/companyLogo.png');
+                var name = item.FirstName + (item.LastName != null ? ' ' + item.LastName : '');
+                var email = item.Email ? '<a href="mailto:' + item.Email + '">' + item.Email + '</a>' : '';
+                return $("<li style='display:inline-block'>")
+                    .data('item.autocomplete', item)
+                    .append("<a><div class='float-left'><img src='" + picture + "' /></div><div>" + name + "</div></a>")
+                    .appendTo(ul);
+            },
+
+            // A helper to save the selected compamy name from the autocomplete
+            self.EditCompanyName = ko.observable('');
+            self.NewCompany = ko.observable(false);
+
+            self.AddNewCompany = function () {
+                var viewModel = ko.contextFor(event.srcElement).$parent;
+                var newCompanyName = viewModel.EditCompanyName();
+                viewModel.NewCompany(true);
+
+                var $form = $('.company .add-form');
+                $form.find('#comp-name').val(newCompanyName);
+                $form.find('#comp-emal').val('');
+                $form.find('#comp-pnum').val('');
+            };
+            self.saveCompany = function (item) {
+                var viewModel = ko.contextFor(event.srcElement).$parent;
+                var newCompanyName = viewModel.EditCompanyName();
+
+                // Get form concurrent values
+                var $form = $('.company .add-form');
+                var newCompanyName = $form.find('#comp-name').val();
+                var newCompanyEmail = $form.find('#comp-emal').val();
+                var newCompanyPhone = $form.find('#comp-pnum').val();
+
+                // Prepare data for sending to server
+                var compData = ko.toJS(ko.utils.unwrapObservable(new self.model()));
+                compData.FirstName = newCompanyName;
+                compData.Email = newCompanyEmail;
+                compData.PhoneNumber = newCompanyPhone;
+                compData.Category = 'Company';
+
+                // Sending data for saving
+                $.post(viewModel.api + viewModel.options.add, compData, function (data) {
+                    viewModel.NewCompany(false);
+                    viewModel.collection.push(data);
+                    viewModel.EditCompanyName(newCompanyName);
+                    
+                    // Setting new id in company Id field
+                    ko.dataFor($('.company hidden[data-bind*=CompanyId]')[0]).CompanyId(data.Id);
+                });
+            };
+            self.cancelCompany = function () {
+                var viewModel = ko.contextFor(event.srcElement).$parent;
+                var newCompanyName = viewModel.EditCompanyName();
+                viewModel.NewCompany(false);
+            };
+
+        // Countries Methods
+        // =================
+        // http://ws.geonames.org/search?q=&country=IL
+
+        // Helper Methods
+        // ==============
+
+            // Handle data before save (after the data was turned into JSON)
+            self.prepareDataForSave = function (data) {
+                data.Birthday = moment(data.Birthday).format();
+            };
+
+            // Search for company images automatically when entering a company name
+            self.updateImages = function (ctrl) {
+                $('#searchcontrol').hide();
+                return;
+                var companyName = null;
+                if (typeof (ctrl) == 'function')
+                    companyName = ctrl();
+                window.setTimeout(function () {
+                    // Create a search control
+                    var searchControl = new google.search.SearchControl();
+
+                    // Add in a full set of searchers
+                    searchControl.addSearcher(new google.search.ImageSearch());
+
+                    // tell the searcher to draw itself and tell it where to attach
+                    searchControl.draw(document.getElementById("searchcontrol"));
+
+                    // execute an inital search
+                    searchControl.execute(companyName != null ? companyName + " logo" : "");
+                }, 10);
+            };
+
+            // Opens a dialog to enter a url for a contact picture
+            self.changePicture = function () {
             var srcElement = event.srcElement;
             $("#dialog-picture").find('#PictureUrl').val(ko.dataFor(srcElement).ProfilePicture());
             $("#dialog-picture").dialog({
@@ -111,48 +186,8 @@ vm.contacts = new vm.baseViewModel({
                 close: function () { }
             });
         };
-        self.EditCompanyName = ko.observable('');
     }
 });
 
+// TODO: google images web service should be loaded dynamically into the page
 //google.load('search', '1');
-
-$(function () {
-    ko.applyBindings(lz.viewModel);
-});
-
-
-/*
-self.model = function (data) {
-    this.Id = ko.observable(data ? data.Id : 0);
-    this.FirstName = ko.observable(data ? data.FirstName : '');
-    this.LastName = ko.observable(data ? data.LastName : '');
-
-    this.CompanyId = ko.observable();
-    this.Company = ko.observable(new function () {
-        this.Id = ko.observable(data && data.Company ? data.Company.Id : 0);
-        this.FirstName = ko.observable(data && data.Company ? data.Company.FirstName : '');
-    }());
-    this.Country = ko.observable(data ? data.Country : null);
-    this.State = ko.observable(data ? data.State : '');
-    this.City = ko.observable(data ? data.City : '');
-    this.Street = ko.observable(data ? data.Street : '');
-    this.Notes = ko.observable(data ? data.Notes : '');
-    this.Category = ko.observable(data ? data.Category : '');
-    this.Email = ko.observable(data ? data.Email : '');
-    this.PhoneNumber = ko.observable(data ? data.PhoneNumber : '');
-    this.MobileNumber = ko.observable(data ? data.MobileNumber : '');
-    this.FaxNumber = ko.observable(data ? data.FaxNumber : '');
-    this.Birthday = ko.observable(data ? data.Birthday : '');
-    this.Single = ko.observable(data ? data.Single : '');
-    this.SocialSecurity = ko.observable(data ? data.SocialSecurity : '');
-    this.DrivingLisence = ko.observable(data ? data.DrivingLisence : '');
-    this.Rating = ko.observable(data ? data.Rating : 0);
-    this.LastUpdate = ko.observable(data ? data.LastUpdate : '');
-
-    this.UpdateCompany = function (element, selectedItem, viewModel) {
-        $(element).val(selectedItem.Company);
-        viewModel.FirstName(selectedItem.FirstName);
-
-    };
-}*/

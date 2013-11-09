@@ -71,15 +71,39 @@
                     <li>
                         <span><input type="text" data-bind="value: LastName" placeholder="Last Name" /></span>
                     </li>
-                    <li>
-                        <span>
-                            <hidden data-bind="value: CompanyId" />
+                    <li class="company">
+                        <span class="rel">
+                            <hidden data-bind="value: CompanyId" value="" ></hidden>
                             <input type="text" placeholder="Company" data-bind="
                                 value: $parent.EditCompanyName,
                                 enable: Category() != 'Company',
+                                valueUpdate: 'afterkeydown',
                                 autocomplete_select: 'UpdateCompany',
                                 autocomplete_render: 'renderCompany',
-                                autoComplete: $parent.api + $parent.options.getAll + '?$filter=substringof(\'REP_URL\',FirstName) and Category eq \'Company\''" /></span>
+                                autoComplete: $parent.api + $parent.options.getAll + '?$filter=substringof(\'REP_URL\',FirstName) and Category eq \'Company\''" />
+                            <div class="add-choice" data-bind="
+                                showHide: (CompanyId() == undefined || CompanyId() == '') && $parent.EditCompanyName() != '' && $parent.EditCompanyName() != undefined,
+                                click: $parent.AddNewCompany ">
+                                Add
+                            </div>
+                            <div class="add-form" data-bind="showHide: $parent.NewCompany">
+                                 <ul class="float-left" data-bind="if: $parent.NewCompany">
+                                    <li>
+                                        <span><input type="text" id="comp-name" placeholder="Company Name" data-required="true" /></span>
+                                    </li>
+                                     <li>
+                                        <span><input type="text" id="comp-emal" placeholder="Email" /></span>
+                                    </li>
+                                     <li>
+                                        <span><input type="text" id="comp-pnum" placeholder="Phone Number" /></span>
+                                    </li>
+                                    <li>
+                                        <input type="button" value="Save" data-bind="click: $parent.saveCompany" />
+                                        <input type="button" value="Cancel" data-bind="click: $parent.cancelCompany" />
+                                     </li>
+                                </ul>
+                            </div>
+                        </span>
                     </li>
                     <li>
                         <span><input type="text" data-bind="value: Country" placeholder="Country" /></span>
@@ -100,13 +124,16 @@
                 <ul class="float-right">
                     <li>
                         <span>
-                            <input type="text"
+                            <!--input type="text"
                                 data-bind="value: Category"
                                 placeholder="Category"
                                 data-required="true"
                                 data-lengthreq="4-16"
                                 data-msg_empty="Category is required too."
-                                data-msg_lengthreq="Category must be between $MINLEN$ and $MAXLEN$ characters long." /></span>
+                                data-msg_lengthreq="Category must be between $MINLEN$ and $MAXLEN$ characters long." /-->
+                            <select data-bind="value: Category, optionsCaption: 'Choose Category...', options: $parent.Categories"></select>
+                        </span>
+                            
                     </li>
                     <li>
                         <span>

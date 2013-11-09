@@ -1,4 +1,4 @@
-﻿/***********this section is pulled from my typical Utility.js include**************/
+﻿/***********Base View Model Methods**************/
 function namespace(namespaceString) {
     var parts = namespaceString.split('.'),
         parent = window,
@@ -14,163 +14,18 @@ function namespace(namespaceString) {
 }
 
 var lz = namespace("lz");
-lz.getRootUrl = function () {
-    var currentURL = document.URL;
-    var rootPosition = currentURL.indexOf("/", 7);
-    var relativeHomeUrl = currentURL.substring(0, rootPosition + 1);
-    return relativeHomeUrl + "MyProject/";
-};
-
-lz.showError = function (err) {
-    var error = JSON.parse(err.responseText);
-    $("<div></div>").html(error.Message).dialog({
-        modal: true,
-        title: "Error", buttons: {
-            "Ok":
-            function () { $(this).dialog("close"); }
-        }
-    }).show();
-}
-
-lz.loginCallback = function (success, returnUrl) {
-    if (!returnUrl) {
-        returnUrl = "/";
-    }
-    window.location.href = returnUrl;
-}
-
-// ko extenssions
-// ==================
-ko.bindingHandlers.showHide = {
-    init: function (element, valueAccessor, allBindingsAccessor, viewModel) {
-        var val = ko.utils.unwrapObservable(valueAccessor());
-        if (val === "" || val === true) { $(element).show("fast"); }
-        else { $(element).hide("fast"); }
-    },
-    update: function (element, valueAccessor, allBindingsAccessor, viewModel) {
-
-        var val = ko.utils.unwrapObservable(valueAccessor());
-        if (val === "" || val === true) { $(element).show("fast"); }
-        else { $(element).hide("fast"); }
-    }
-};
-
-ko.bindingHandlers.rv = {
-    init: function (element, valueAccessor, allBindingsAccessor) {
-
-        var getInjectValueUpdate = function (allBindingsAccessor) {
-            var AFTERKEYDOWN = "afterkeydown";
-            return function () {
-                var allBindings = ko.utils.extend({}, allBindingsAccessor()),
-                    valueUpdate = allBindings.valueUpdate;
-
-                if (valueUpdate === undefined) {
-                    return ko.utils.extend(allBindings, { valueUpdate: AFTERKEYDOWN });
-                } else if (typeof valueUpdate === 'string' && ko.utils.arrayIndexOf(AFTERKEYDOWN, valueUpdate) === -1 ||
-                           typeof valueUpdate === 'array' /*&& ko.utils.arrayIndexOf(valueUpdate, AFTERKEYDOWN) === -1*/) {
-                    valueUpdate = ko.utils.arrayPushAll(AFTERKEYDOWN, valueUpdate);
-                    return ko.utils.extend(allBindings, { valueUpdate: [valueUpdate, AFTERKEYDOWN] });
-                }
-
-                return allBindings;
-            };
-        };
-
-        allBindingsAccessor = getInjectValueUpdate(allBindingsAccessor);
-        return ko.bindingHandlers.value.init(element, valueAccessor, allBindingsAccessor);
-    },
-    update: ko.bindingHandlers.value.update
-};
-
-ko.bindingHandlers.autoComplete = {
-    init: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
-
-        var postUrl = valueAccessor();
-        var updateValue = allBindingsAccessor().autocomplete_select;
-        var renderItem = allBindingsAccessor().autocomplete_render;
-
-        var updateFunction = function (selectedItem, setTimeout) {
-            $(element).data('selected', selectedItem);
-            if (updateValue && typeof (bindingContext.$parent[updateValue]) == 'function')
-                bindingContext.$parent[updateValue](element, selectedItem, viewModel);
-
-            if (setTimeout !== false)
-                window.setTimeout(function () {
-                    updateFunction(selectedItem, false);
-                }, 1);
-        };
-
-        var autoComp = $(element).autocomplete({
-            minLength: 0,
-            autoFocus: false,
-            source: function (request, response) {
-                updateFunction(null, false);
-                $.ajax({
-                    url: postUrl.replace('REP_URL', this.term),
-                    data: { term: request.term },
-                    success: function (data) {
-                        response(data);
-                    },
-                    error: function (e) {
-                        alert(e);
-                    }
-                });
-            },
-            focus:function (event, ui) {
-                updateFunction(ui.item);
-            },
-            select: function (event, ui) {
-                updateFunction(ui.item);
-            },
-            change: function (event, ui) {
-                updateFunction(ui.item);
-            }
-
-        // On later version it should be ui-autocomplete instead of autocomplete
-        })
-
-        if (renderItem && typeof (bindingContext.$parent[renderItem]) == 'function')
-            autoComp.data("autocomplete")._renderItem = bindingContext.$parent[renderItem];
-    }
-};
-
-ko.bindingHandlers.datepicker = {
-    init: function (element, valueAccessor, allBindingsAccessor) {
-        //initialize datepicker with some optional options
-        var options = allBindingsAccessor().datepickerOptions || { "dateFormat": 'dd/mm/yy' },
-            $el = $(element);
-
-        $el.datepicker(options);
-
-        //handle the field changing
-        ko.utils.registerEventHandler(element, "change", function () {
-            var observable = valueAccessor();
-            observable($el.datepicker("getDate"));
-        });
-
-        //handle disposal (if KO removes by the template binding)
-        ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
-            $el.datepicker("destroy");
-        });
-
-    },
-    update: function (element, valueAccessor) {
-        var value = ko.utils.unwrapObservable(valueAccessor()),
-            $el = $(element);
-
-        var current = $el.datepicker("getDate");
-
-        if (value - current !== 0) {
-            $el.datepicker("setDate", new Date(moment(value).format()));
-        }
-    }
-};
-
-// View Model definition
 var vm = namespace("lz.viewModel");
+
+// This method keeps check on how many view models are loaded.
+// When all view models are finished loading, the loader can be hidden
 vm.viewModelsToLoad = ko.observable(0);
+
+// A flag to know if all the view models have finished loading
 vm.allloaded = ko.observable(false);
+
+// Base class for all the view models
 vm.baseViewModel = function (extend) {
+    "use strict";
     var self = this;
 
     extend.extend(self);
@@ -198,7 +53,13 @@ vm.baseViewModel = function (extend) {
         msg_empty: 'My friend, this just wont do.', // Global empty message.
         noInlineErrors: "*[type='password']" // Password fields should not show inline errors.
     });
+
+    // Display a summasry of validation messages
     self.validationErrors = ko.observableArray([]);
+    self.showEditor.subscribe(function () {
+        if (!self.showEditor())
+            self.validationErrors([]);
+    });
 
     // view model methods
     self.refresh = function () {
@@ -317,80 +178,36 @@ vm.baseViewModel = function (extend) {
     self.refresh();
 
 };
+/************************************************/
 
-/**********************************************************************************/
+lz.getRootUrl = function () {
+    var currentURL = document.URL;
+    var rootPosition = currentURL.indexOf("/", 7);
+    var relativeHomeUrl = currentURL.substring(0, rootPosition + 1);
+    return relativeHomeUrl + "MyProject/";
+};
 
-// Page load methods
-$(function () {
+lz.showError = function (err) {
+    var error = JSON.parse(err.responseText);
+    $("<div></div>").html(error.Message).dialog({
+        modal: true,
+        title: "Error", buttons: {
+            "Ok":
+            function () { $(this).dialog("close"); }
+        }
+    }).show();
+}
 
-    var $loader = $('.loader');
-    var $body = $('#body');
-    var $footer = $('footer');
-    
-    $loader.css({
-        paddingTop: ($(window).height() - $body.position().top - $footer.height() - $loader.height() - 200) / 2,
-        paddingBottom: ($(window).height() - $body.position().top - $footer.height() - $loader.height() - 200) / 2
-    });
-    $loader.find('img').show();
-
-    var $password = $('.pass-strength input[type=password]');
-
-    if ($password.length > 0) {
-        $password.get(0).passStrength = $password.password_strength({
-            minLength: 8,
-            specialLength: 0,
-            messages: ["Are you kidding me?!", "A little better", "Almost there...", "Now that wan't so hard, was it?"]
-        });
+// Handle external login dialog callback
+lz.loginCallback = function (success, returnUrl) {
+    if (!returnUrl) {
+        returnUrl = "/";
     }
+    window.location.href = returnUrl;
+}
 
-    if ($('.tabs').tabs) $('.tabs').tabs();
-
-    // Fixing placeholders
-    /*if (!Modernizr.input.placeholder) {
-        $('[placeholder]').each(function () {
-            $this = $(this);
-            if ($this.attr('placeholder'))
-                $this.before(
-                    $('<label class="placeholder" onclick="$(this).next().focus();"></label>').text($this.attr('placeholder')));
-
-            $this.blur(function () {
-                var input = $(this);
-                if (input.val() == '')
-                    input.prev().show();
-                else
-                    input.prev().hide();
-            }).focus(function () {
-                alert($(this).prev('label').text());
-                $(this).prev('label').hide();
-            });
-        });
-        /*$('[placeholder]').focus(function () {
-            var input = $(this);
-            if (input.val() == input.attr('placeholder')) {
-                input.val('');
-                input.removeClass('placeholder');
-            }
-        }).blur(function () {
-            var input = $(this);
-            if (input.val() == '' || input.val() == input.attr('placeholder')) {
-                input.addClass('placeholder');
-                input.val(input.attr('placeholder'));
-            }
-        })
-        .blur()
-        .parents('form').submit(function () {
-            $(this).find('[placeholder]').each(function () {
-                var input = $(this);
-                if (input.val() == input.attr('placeholder')) {
-                    input.val('');
-                }
-            })
-        });*
-    }*/
-});
-
-// Placeholder fix for ie9
-(function ($) {
+// Fix place holder for IE9-
+lz.fixPlaceholder = function () {
     //feature detection
     var hasPlaceholder = 'placeholder' in document.createElement('input');
 
@@ -454,4 +271,179 @@ $(function () {
     };
 
     $('[placeholder]').placeholder();
-})(jQuery);
+};
+
+/*********** ko extenssion methods **************/
+// ko extenssions
+ko.bindingHandlers.showHide = {
+    init: function (element, valueAccessor, allBindingsAccessor, viewModel) {
+        var val = ko.utils.unwrapObservable(valueAccessor());
+        if (val === "" || val === true) { $(element).show("fast"); }
+        else { $(element).hide("fast"); }
+    },
+    update: function (element, valueAccessor, allBindingsAccessor, viewModel) {
+
+        var val = ko.utils.unwrapObservable(valueAccessor());
+        if (val === "" || val === true) { $(element).show("fast"); }
+        else { $(element).hide("fast"); }
+    }
+};
+
+ko.bindingHandlers.rv = {
+    init: function (element, valueAccessor, allBindingsAccessor) {
+
+        var getInjectValueUpdate = function (allBindingsAccessor) {
+            var AFTERKEYDOWN = "afterkeydown";
+            return function () {
+                var allBindings = ko.utils.extend({}, allBindingsAccessor()),
+                    valueUpdate = allBindings.valueUpdate;
+
+                if (valueUpdate === undefined) {
+                    return ko.utils.extend(allBindings, { valueUpdate: AFTERKEYDOWN });
+                } else if (typeof valueUpdate === 'string' && ko.utils.arrayIndexOf(AFTERKEYDOWN, valueUpdate) === -1 ||
+                           typeof valueUpdate === 'array' /*&& ko.utils.arrayIndexOf(valueUpdate, AFTERKEYDOWN) === -1*/) {
+                    valueUpdate = ko.utils.arrayPushAll(AFTERKEYDOWN, valueUpdate);
+                    return ko.utils.extend(allBindings, { valueUpdate: [valueUpdate, AFTERKEYDOWN] });
+                }
+
+                return allBindings;
+            };
+        };
+
+        allBindingsAccessor = getInjectValueUpdate(allBindingsAccessor);
+        return ko.bindingHandlers.value.init(element, valueAccessor, allBindingsAccessor);
+    },
+    update: ko.bindingHandlers.value.update
+};
+
+ko.bindingHandlers.autoComplete = {
+    init: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+
+        var postUrl = valueAccessor();
+        var updateValue = allBindingsAccessor().autocomplete_select;
+        var renderItem = allBindingsAccessor().autocomplete_render;
+
+        var updateFunction = function (selectedItem, setTimeout) {
+            $(element).data('selected', selectedItem);
+            if (updateValue && typeof (bindingContext.$parent[updateValue]) == 'function')
+                bindingContext.$parent[updateValue](element, selectedItem, viewModel);
+
+            if (setTimeout !== false)
+                window.setTimeout(function () {
+                    updateFunction(selectedItem, false);
+                }, 1);
+        };
+
+        var autoComp = $(element).autocomplete({
+            minLength: 0,
+            autoFocus: false,
+            source: function (request, response) {
+                updateFunction(null, false);
+                $.ajax({
+                    url: postUrl.replace('REP_URL', this.term),
+                    data: { term: request.term },
+                    success: function (data) {
+                        response(data);
+                    },
+                    error: function (e) {
+                        alert(e);
+                    }
+                });
+            },
+            focus: function (event, ui) {
+                updateFunction(ui.item);
+            },
+            select: function (event, ui) {
+                updateFunction(ui.item);
+            },
+            change: function (event, ui) {
+                updateFunction(ui.item);
+            }
+
+            // On later version it should be ui-autocomplete instead of autocomplete
+        })
+
+        if (renderItem && typeof (bindingContext.$parent[renderItem]) == 'function')
+            autoComp.data("autocomplete")._renderItem = bindingContext.$parent[renderItem];
+    }
+};
+
+ko.bindingHandlers.datepicker = {
+    init: function (element, valueAccessor, allBindingsAccessor) {
+        //initialize datepicker with some optional options
+        var options = allBindingsAccessor().datepickerOptions || { "dateFormat": 'dd/mm/yy' },
+            $el = $(element);
+
+        $el.datepicker(options);
+
+        //handle the field changing
+        ko.utils.registerEventHandler(element, "change", function () {
+            var observable = valueAccessor();
+            observable($el.datepicker("getDate"));
+        });
+
+        //handle disposal (if KO removes by the template binding)
+        ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
+            $el.datepicker("destroy");
+        });
+
+    },
+    update: function (element, valueAccessor) {
+        var value = ko.utils.unwrapObservable(valueAccessor()),
+            $el = $(element);
+
+        var current = $el.datepicker("getDate");
+
+        if (value - current !== 0) {
+            $el.datepicker("setDate", new Date(moment(value).format()));
+        }
+    }
+};
+/************************************************/
+
+
+// Page load methods
+$(function () {
+
+    // Fixing loader location on screen
+    var $loader = $('.loader');
+    var $body = $('#body');
+    var $footer = $('footer');
+    
+    $loader.css({
+        paddingTop: ($(window).height() - $body.position().top - $footer.height() - $loader.height() - 200) / 2,
+        paddingBottom: ($(window).height() - $body.position().top - $footer.height() - $loader.height() - 200) / 2
+    });
+    $loader.find('img').show();
+
+    // Binding password strength control
+    var $password = $('.pass-strength input[type=password]');
+
+    if ($password.length > 0) {
+        $password.get(0).passStrength = $password.password_strength({
+            minLength: 8,
+            specialLength: 0,
+            messages: ["Are you kidding me?!", "A little better", "Almost there...", "Now that wan't so hard, was it?"]
+        });
+    }
+
+    // Enable tabs on tab controls
+    if ($('.tabs').tabs)
+        $('.tabs').tabs()
+        .find('>ul>li>a').click(function () {
+
+
+            var currentTabID = $(this).attr('href');
+            var $view = $(currentTabID + ':visible .vm-view');
+
+            if ($view.length > 0)
+                ko.dataFor($view[0]).showEditor(false);
+        });
+
+    // Binding all view models
+    ko.applyBindings(lz.viewModel);
+
+    // Placeholder fix for ie9
+    lz.fixPlaceholder();
+});
+
