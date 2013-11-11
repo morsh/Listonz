@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Mail;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
 
 namespace Listonz.Models
 {
@@ -70,6 +71,14 @@ namespace Listonz.Models
         internal static void SetCache(string keyName, object obj)
         {
             _Cache[keyName] = obj;
+        }
+
+        internal static int CurrentUserID
+        {
+            get
+            {
+                return Membership.GetUser().ProviderUserKey is int ? (int)Membership.GetUser().ProviderUserKey : -1;
+            }
         }
     }
 }

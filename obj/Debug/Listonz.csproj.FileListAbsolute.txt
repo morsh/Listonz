@@ -97,3 +97,4 @@ C:\Users\mor\Documents\Visual Studio 2012\Projects\Listonz\Listonz\obj\Debug\Lis
 C:\Users\mor\documents\visual studio 2012\Projects\Listonz\Listonz\obj\Debug\Listonz.csprojResolveAssemblyReference.cache
 C:\Users\mor\documents\visual studio 2012\Projects\Listonz\Listonz\obj\Debug\Listonz.Migrations.AddCategories.resources
 C:\Users\mor\documents\visual studio 2012\Projects\Listonz\Listonz\obj\Debug\Listonz.Migrations.CategoryLookup.resources
+C:\Users\mor\documents\visual studio 2012\Projects\Listonz\Listonz\obj\Debug\Listonz.Migrations.AddUserID.resources

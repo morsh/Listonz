@@ -14,6 +14,7 @@ using Listonz.Models.Helpers;
 using System.Xml;
 using System.Text;
 using System.Reflection;
+using System.Web.Security;
 
 namespace Listonz.Controllers.Api
 {
@@ -32,10 +33,16 @@ namespace Listonz.Controllers.Api
     {
         private UsersContext db = new UsersContext();
 
-        private void EnsureContactData(Contact contact)
+        private void EnsureData(Contact contact)
         {
-            contact.Category = contact.CategoryId != null ? db.Categories.FirstOrDefault(c => c.Id == contact.CategoryId) : null;
+            contact.UserId = LZ.CurrentUserID;
+            if (contact.UserId == null || contact.UserId.Value != LZ.CurrentUserID)
+                throw new Exception("A user can only update it's own data");
 
+            contact.User = contact.UserId != null ? db.UserProfiles.FirstOrDefault(c => c.UserId == contact.UserId) : null;
+
+            contact.Category = contact.CategoryId != null ? db.Categories.FirstOrDefault(c => c.Id == contact.CategoryId) : null;
+            
             contact.Company = contact.CompanyId != null ? db.Contacts.FirstOrDefault(c => c.Id == contact.CompanyId) : null;
             if ((contact.Category != null && contact.Category.Name == "Company") || 
                 contact.Company == null || contact.Company.CompanyId != null)
@@ -50,14 +57,19 @@ namespace Listonz.Controllers.Api
         [Queryable]
         public IEnumerable<Contact> GetContacts()
         {
-            return db.Contacts.Include(c => c.Category).AsEnumerable();
+            var userID = LZ.CurrentUserID;
+            return db.Contacts
+                .Where(c => c.UserId == userID)
+                .Include(c => c.Category)
+                .Include(c => c.Company)
+                .AsEnumerable();
         }
 
         // GET api/Contact/5
         public Contact GetContact(int id)
         {
-            Contact contact = db.Contacts.Find(id);
-            if (contact == null)
+            var contact = db.Contacts.Find(id);
+            if (contact == null || contact.UserId != LZ.CurrentUserID)
             {
                 throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
             }
@@ -73,12 +85,12 @@ namespace Listonz.Controllers.Api
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
             }
 
-            if (id != contact.Id)
+            if (id != contact.Id || contact.UserId != LZ.CurrentUserID)
             {
                 return Request.CreateResponse(HttpStatusCode.BadRequest);
             }
 
-            EnsureContactData(contact);
+            EnsureData(contact);
             db.Entry(contact).State = EntityState.Modified;
 
             try
@@ -98,7 +110,8 @@ namespace Listonz.Controllers.Api
         {
             if (ModelState.IsValid)
             {
-                EnsureContactData(contact);
+                contact.UserId = LZ.CurrentUserID;
+                EnsureData(contact);
                 db.Contacts.Add(contact);
                 db.SaveChanges();
 
@@ -115,8 +128,8 @@ namespace Listonz.Controllers.Api
         // DELETE api/Contact/5
         public HttpResponseMessage DeleteContact(int id)
         {
-            Contact contact = db.Contacts.Find(id);
-            if (contact == null)
+            var contact = db.Contacts.Find(id);
+            if (contact == null || contact.UserId != LZ.CurrentUserID)
             {
                 return Request.CreateResponse(HttpStatusCode.NotFound);
             }
@@ -188,10 +201,17 @@ namespace Listonz.Controllers.Api
         {
             try
             {
+                if (string.IsNullOrEmpty(country))
+                    return null;
+
                 var cacheKey = "Countries:" + country;
                 var cities = LZ.GetCache<List<string>>(cacheKey);
                 if (cities == null)
                 {
+                    var countries = GetCountries();
+                    if (!countries.Any(c => c.i2 == country))
+                        country = countries.Where(c => c.n == country).Select(c => c.i2).FirstOrDefault() + "";
+
                     var m_strFilePath = "http://ws.geonames.org/search?q=&country=" + country;
                     string xmlStr;
                     using (var wc = new WebClient())

@@ -14,18 +14,30 @@ namespace Listonz.Controllers.Api
     {
         private UsersContext db = new UsersContext();
 
+        private void EnsureData(Category category)
+        {
+            category.UserId = LZ.CurrentUserID;
+            if (category.UserId == null || category.UserId.Value != LZ.CurrentUserID)
+                throw new Exception("A user can only update it's own data");
+
+            category.User = category.UserId != null ? db.UserProfiles.FirstOrDefault(c => c.UserId == category.UserId) : null;
+
+            //category.LastUpdate = DateTime.Now;
+        }
+
         // GET api/contactscategories
         [Queryable]
         public IEnumerable<Category> Get()
         {
-            return db.Categories.AsEnumerable();
+            var currentUserID = LZ.CurrentUserID;
+            return db.Categories.Where(c => c.UserId == null || c.UserId == currentUserID).AsEnumerable();
         }
 
         // GET api/contactscategories/5
         public Category Get(int id)
         {
             var category = db.Categories.Find(id);
-            if (category == null)
+            if (category == null || category.UserId != LZ.CurrentUserID)
             {
                 throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
             }
@@ -38,8 +50,9 @@ namespace Listonz.Controllers.Api
         {
             // Checking model is valid and the category name is valid
             // TODO: check for current user only unique name
-            if (ModelState.IsValid && !db.Categories.Any(c => c.Name == category.Name))
+            if (ModelState.IsValid && !Get().Any(c => c.Name == category.Name))
             {
+                EnsureData(category);
                 db.Categories.Add(category);
                 db.SaveChanges();
 
@@ -61,11 +74,12 @@ namespace Listonz.Controllers.Api
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
             }
 
-            if (id != category.Id)
+            if (id != category.Id || category.UserId != LZ.CurrentUserID)
             {
                 return Request.CreateResponse(HttpStatusCode.BadRequest);
             }
 
+            EnsureData(category);
             db.Entry(category).State = EntityState.Modified;
 
             try
@@ -83,11 +97,14 @@ namespace Listonz.Controllers.Api
         // DELETE api/contactscategories/5
         public HttpResponseMessage Delete(int id)
         {
-            Category category = db.Categories.Find(id);
+            var category = db.Categories.Find(id);
             if (category == null)
             {
                 return Request.CreateResponse(HttpStatusCode.NotFound);
             }
+
+            if (category.UserId != LZ.CurrentUserID)
+                throw new Exception("A user can only update it's own data");
 
             db.Categories.Remove(category);
 

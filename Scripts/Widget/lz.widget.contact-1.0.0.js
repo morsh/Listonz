@@ -23,6 +23,7 @@ vm.contacts = new vm.baseViewModel({
     model: function (self) {
         self.model = function () {
             this.Id = ko.observable(0);
+            this.UserId = ko.observable(0);
             this.FirstName = ko.observable('');
             this.LastName = ko.observable('');
             this.ProfilePicture = ko.observable('');
@@ -124,31 +125,45 @@ vm.contacts = new vm.baseViewModel({
                 $form.find('#comp-pnum').val('');
             };
             self.saveCompany = function (item) {
-                var viewModel = ko.contextFor(event.srcElement).$parent;
-                var newCompanyName = viewModel.EditCompanyName();
 
-                // Get form concurrent values
-                var $form = $('.company .add-form');
-                var newCompanyName = $form.find('#comp-name').val();
-                var newCompanyEmail = $form.find('#comp-emal').val();
-                var newCompanyPhone = $form.find('#comp-pnum').val();
+                try
+                {
+                    var viewModel = ko.contextFor(event.srcElement).$parent;
+                    var newCompanyName = viewModel.EditCompanyName();
 
-                // Prepare data for sending to server
-                var compData = ko.toJS(ko.utils.unwrapObservable(new self.model()));
-                compData.FirstName = newCompanyName;
-                compData.Email = newCompanyEmail;
-                compData.PhoneNumber = newCompanyPhone;
-                compData.Category = 'Company';
+                    // Get form concurrent values
+                    var $form = $('.company .add-form');
+                    var newCompanyName = $form.find('#comp-name').val();
+                    var newCompanyEmail = $form.find('#comp-emal').val();
+                    var newCompanyPhone = $form.find('#comp-pnum').val();
 
-                // Sending data for saving
-                $.post(viewModel.api + viewModel.options.add, compData, function (data) {
-                    viewModel.NewCompany(false);
-                    viewModel.collection.push(data);
-                    viewModel.EditCompanyName(newCompanyName);
+                    // Prepare data for sending to server
+                    var compData = ko.toJS(ko.utils.unwrapObservable(new self.model()));
+                    compData.FirstName = newCompanyName;
+                    compData.Email = newCompanyEmail;
+                    compData.PhoneNumber = newCompanyPhone;
+
+                    // Get company category id
+                    $.ajax({
+                        url: viewModel.cat_api + viewModel.cat_options.getAll + "?$filter=Name%20eq%20'Company'",
+                        async: false,
+                        success: function (data) { compData.CategoryId = data[0].Id; },
+                        error: lz.showError
+                    });
+
+                    // Sending data for saving
+                    $.post(viewModel.api + viewModel.options.add, compData, function (data) {
+                        viewModel.NewCompany(false);
+                        viewModel.collection.push(data);
+                        viewModel.EditCompanyName(newCompanyName);
                     
-                    // Setting new id in company Id field
-                    ko.dataFor($('.company hidden[data-bind*=CompanyId]')[0]).CompanyId(data.Id);
-                });
+                        // Setting new id in company Id field
+                        ko.dataFor($('.company hidden[data-bind*=CompanyId]')[0]).CompanyId(data.Id);
+                    });
+                }
+                catch (e) {
+                    alert('There was a problem adding the company');
+                }
             };
             self.cancelCompany = function () {
                 var viewModel = ko.contextFor(event.srcElement).$parent;
@@ -245,8 +260,10 @@ vm.contacts = new vm.baseViewModel({
 
             // Update company after it is selected from the autocomplete list
             self.UpdateCity = function (element, selectedItem, viewModel) {
-                if (selectedItem != null)
+                if (selectedItem != null) {
                     $(element).val(selectedItem.value).data('item', selectedItem);
+                    viewModel.City(selectedItem.value);
+                }
             };
 
             // render the company item for each company in the autocomplete list
@@ -267,6 +284,7 @@ vm.contacts = new vm.baseViewModel({
             self.UpdateState = function (element, selectedItem, viewModel) {
                 if (selectedItem != null) {
                     $(element).val(selectedItem.name).data('item', selectedItem);
+                    viewModel.State(selectedItem.name);
                     self.selectedState(selectedItem.abb);
                 }
             };

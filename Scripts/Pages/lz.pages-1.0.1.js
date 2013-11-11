@@ -99,7 +99,10 @@ vm.baseViewModel = function (extend) {
 
     self.save = function (item) {
 
-        self.startSave.valueHasMutated();
+        if (self.startSave()) return;
+
+        self.startSave(true);
+        window.setTimeout(function () { self.startSave(false); }, 500);
 
         // Check for validation rules
         var validationResult = self.validationContext.Validate();
@@ -341,16 +344,18 @@ ko.bindingHandlers.autoComplete = {
                 }, 1);
         };
 
-        var cache = null;
-        var getFromCache = function (s) {
+        var cache = [];
+        var getFromCache = function (s, url) {
 
-            if (!s) return cache;
+            if (!s) return cache[url];
 
             var filterFunction = null;
             if (cacheFilter && typeof (bindingContext.$parent[cacheFilter]) == 'function')
                 filterFunction = bindingContext.$parent[cacheFilter];
 
-            return $.grep(cache, function (item) {
+            if (!cache[url]) return null;
+
+            return $.grep(cache[url], function (item) {
                 if (!filterFunction)
                     return item.toLowerCase().indexOf(s.toLowerCase()) === 0;
                 else
@@ -364,20 +369,20 @@ ko.bindingHandlers.autoComplete = {
                 updateFunction(null, false);
                 var _postUrl = valueAccessor().replace('REP_URL', encodeURIComponent(this.term));
                 var term = this.term;
-                if (!cacheFilter || cache == null)
+                if (!cacheFilter || cache[_postUrl] === undefined)
                     $.get(_postUrl,
                         function (data) 
                         {
                             if (cacheFilter) {
-                                cache = data; 
-                                response(getFromCache(term));
+                                cache[_postUrl] = data;
+                                response(getFromCache(term, _postUrl));
                             }
                             else {
                                 response(data);
                             }
                         });
                 else
-                    response(getFromCache(term));
+                    response(getFromCache(term, _postUrl));
             },
             focus: function (event, ui) {
                 updateFunction(ui.item);

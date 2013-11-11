@@ -80,7 +80,7 @@
                                 valueUpdate: 'afterkeydown',
                                 autocomplete_select: 'UpdateCompany',
                                 autocomplete_render: 'renderCompany',
-                                autoComplete: $parent.api + $parent.options.getAll + '?$filter=substringof(\'REP_URL\',FirstName) and Category eq \'Company\''" />
+                                autoComplete: $parent.api + $parent.options.getAll + '?$filter=substringof(\'REP_URL\',FirstName) and Category/Name eq \'Company\''" />
                             <div class="add-choice" data-bind="
                                 showHide: (CompanyId() == undefined || CompanyId() == '') && $parent.EditCompanyName() != '' && $parent.EditCompanyName() != undefined,
                                 click: $parent.AddNewCompany ">
@@ -114,14 +114,14 @@
                     </li>
                     <li>
                         <span><input type="text" data-bind="value: State,
-    autoComplete: '/api/contacts/GetStates?country=' + $parent.selectedCountry(),
+    autoComplete: '/api/contacts/GetStates?country=' + ($parent.selectedCountry() != '' ? $parent.selectedCountry() : Country()),
     autocomplete_select: 'UpdateState',
     autocomplete_render: 'renderState',
     autocomplete_cache: 'filterState'" placeholder="State" /></span>
                     </li>
                     <li>
                         <span><input type="text" data-bind="value: City,
-    autoComplete: '/api/contacts/GetCities?country=' + $parent.selectedCountry(),
+    autoComplete: '/api/contacts/GetCities?country=' + ($parent.selectedCountry() != '' ? $parent.selectedCountry() : Country()),
     autocomplete_select: 'UpdateCity',
     autocomplete_cache: true" placeholder="City" /></span>
                     </li>
@@ -205,6 +205,7 @@
                     </div>
                     <input type="button" value="Save" data-bind="click: $parent.save" />
                     <input type="button" value="Cancel" data-bind="click: $parent.cancelEdit" />
+                    <input type="button" value="Delete" data-bind="click: $parent.remove" />
                 </div>
             </div>
         </div>

@@ -42,6 +42,9 @@ namespace Listonz.Models
         [ForeignKey("CategoryId")]
         public virtual Category Category { get; set; }
 
+        public int? UserId { get; set; }
+        [ForeignKey("UserId")]
+        public virtual UserProfile User { get; set; }
 
         public string ProfilePicture { get; set; }
 
@@ -55,5 +58,10 @@ namespace Listonz.Models
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public string Name { get; set; }
+
+        public int? UserId { get; set; }
+        [ForeignKey("UserId")]
+        public virtual UserProfile User { get; set; }
+
     }
 }

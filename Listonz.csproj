@@ -240,6 +240,10 @@
     <Compile Include="Migrations\201311102240345_Category Lookup.Designer.cs">
       <DependentUpon>201311102240345_Category Lookup.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201311111013572_Add User ID.cs" />
+    <Compile Include="Migrations\201311111013572_Add User ID.Designer.cs">
+      <DependentUpon>201311111013572_Add User ID.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\Attributes\IsTrueAttribute.cs" />
@@ -450,6 +454,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201311102240345_Category Lookup.resx">
       <DependentUpon>201311102240345_Category Lookup.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201311111013572_Add User ID.resx">
+      <DependentUpon>201311111013572_Add User ID.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
