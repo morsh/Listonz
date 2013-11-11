@@ -46,5 +46,30 @@ namespace Listonz.Models
 
             client.Send(msg);
         }
+
+        private static Dictionary<string, object> _Cache = new Dictionary<string, object>();
+        internal static T GetCache<T>(string keyName)
+        {
+            var value = _Cache.ContainsKey(keyName) ? _Cache[keyName] : null;
+            var type = typeof(T);
+            if (type.IsGenericType &&
+                type.GetGenericTypeDefinition() == typeof(Nullable<>).GetGenericTypeDefinition())
+            {
+                type = Nullable.GetUnderlyingType(type);
+            }
+
+            return (T)(type.IsEnum ? Enum.ToObject(type, Convert.ToInt32(value)) :
+                Convert.ChangeType(value, type));
+
+        }
+        internal static object GetCache(string keyName)
+        {
+            return _Cache.ContainsKey(keyName) ? _Cache[keyName] : null;
+        }
+
+        internal static void SetCache(string keyName, object obj)
+        {
+            _Cache[keyName] = obj;
+        }
     }
 }

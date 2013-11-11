@@ -28,6 +28,7 @@ namespace Listonz.Models
         #region New Tables
         public DbSet<webpages_Membership> webpages_Memberships { get; set; }
         public DbSet<Contact> Contacts { get; set; }
+        public DbSet<Category> Categories { get; set; }
         #endregion
     }
 

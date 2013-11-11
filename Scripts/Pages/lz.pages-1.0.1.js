@@ -180,6 +180,12 @@ vm.baseViewModel = function (extend) {
 };
 /************************************************/
 
+$.ajaxSetup({
+    error: function (xhr, status, error) {
+        alert("An AJAX error occured: " + status + "\nError: " + error);
+    }
+});
+
 lz.getRootUrl = function () {
     var currentURL = document.URL;
     var rootPosition = currentURL.indexOf("/", 7);
@@ -322,6 +328,7 @@ ko.bindingHandlers.autoComplete = {
         var postUrl = valueAccessor();
         var updateValue = allBindingsAccessor().autocomplete_select;
         var renderItem = allBindingsAccessor().autocomplete_render;
+        var cacheFilter = allBindingsAccessor().autocomplete_cache || false;
 
         var updateFunction = function (selectedItem, setTimeout) {
             $(element).data('selected', selectedItem);
@@ -334,21 +341,43 @@ ko.bindingHandlers.autoComplete = {
                 }, 1);
         };
 
+        var cache = null;
+        var getFromCache = function (s) {
+
+            if (!s) return cache;
+
+            var filterFunction = null;
+            if (cacheFilter && typeof (bindingContext.$parent[cacheFilter]) == 'function')
+                filterFunction = bindingContext.$parent[cacheFilter];
+
+            return $.grep(cache, function (item) {
+                if (!filterFunction)
+                    return item.toLowerCase().indexOf(s.toLowerCase()) === 0;
+                else
+                    return filterFunction(item, s);
+            });
+        };
         var autoComp = $(element).autocomplete({
             minLength: 0,
             autoFocus: false,
             source: function (request, response) {
                 updateFunction(null, false);
-                $.ajax({
-                    url: postUrl.replace('REP_URL', this.term),
-                    data: { term: request.term },
-                    success: function (data) {
-                        response(data);
-                    },
-                    error: function (e) {
-                        alert(e);
-                    }
-                });
+                var _postUrl = valueAccessor().replace('REP_URL', encodeURIComponent(this.term));
+                var term = this.term;
+                if (!cacheFilter || cache == null)
+                    $.get(_postUrl,
+                        function (data) 
+                        {
+                            if (cacheFilter) {
+                                cache = data; 
+                                response(getFromCache(term));
+                            }
+                            else {
+                                response(data);
+                            }
+                        });
+                else
+                    response(getFromCache(term));
             },
             focus: function (event, ui) {
                 updateFunction(ui.item);

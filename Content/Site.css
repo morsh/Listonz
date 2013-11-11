@@ -552,7 +552,7 @@ tr.pager td {padding: 0 0.25em 0 0;}
     .vm-view label { width: 140px;display:inline-block; }
 
     .vm-view .edit .head {height:100px;}
-    .vm-view .edit .head .prf-pic {float:left;padding-right:20px;cursor:pointer;}
+    .vm-view .edit .head .prf-pic {float:left;padding-right:20px;cursor:pointer;display:none;}
         .vm-view .edit .head .prf-pic .pic-edit {position:absolute; display:none;margin:-50px 0 0 5px;opacity:0.5;color:#fff;background:#000;border:2px solid #fff;}
         .vm-view .edit .head .prf-pic:hover .pic-edit {display:block;}
 
@@ -574,10 +574,12 @@ tr.pager td {padding: 0 0.25em 0 0;}
 .chk-height {height:41px;}
 
 .ui-autocomplete-loading {background: white url('/images/wait.gif') right center no-repeat;}
+.ui-autocomplete {max-height: 200px; overflow-y: auto; overflow-x: hidden;}
 .ui-autocomplete li table { width:300px;  }
 .ui-autocomplete li table td { padding:0;  }
 .ui-autocomplete li img {width:30px; height:30px;}
-.ui-menu .ui-menu-item a { height: 55px; }
+.ui-menu .ui-menu-item a { }
 .ui-menu .ui-menu-item a div { padding-right: 15px; }
+.ui-menu .ac-big a {display:inline-block;height:auto;height: 55px;}
 /* Contacts View Model
     ----------------------------------------------------------*/

@@ -17,7 +17,7 @@
                         <td data-bind="text: FirstName"></td>
                         <td data-bind="text: LastName"></td>
                         <td><span data-bind="if: Company != null"><span data-bind="text: Company.FirstName"></span></span></td>
-                        <td data-bind="text: Category"></td>
+                        <td><span data-bind="if: Category != null"><span data-bind="text: Category.Name"></span></span></td>
                         <td>
                             <button class="btn btn-mini btn-edit" data-bind="click: $parent.edit" title="Edit Contact"></button>
                             <button class="btn btn-mini btn-delete" data-bind="click: $parent.remove" title="Delete Contact"></button>
@@ -76,7 +76,7 @@
                             <hidden data-bind="value: CompanyId" value="" ></hidden>
                             <input type="text" placeholder="Company" data-bind="
                                 value: $parent.EditCompanyName,
-                                enable: Category() != 'Company',
+                                enable: Category != undefined && Category.Name != 'Company',
                                 valueUpdate: 'afterkeydown',
                                 autocomplete_select: 'UpdateCompany',
                                 autocomplete_render: 'renderCompany',
@@ -106,13 +106,24 @@
                         </span>
                     </li>
                     <li>
-                        <span><input type="text" data-bind="value: Country" placeholder="Country" /></span>
+                        <span><input type="text" data-bind="value: Country,
+    autoComplete: '/api/contacts/GetCountries',
+    autocomplete_select: 'UpdateCountry',
+    autocomplete_render: 'renderCountry',
+    autocomplete_cache: 'filterCountry'" placeholder="Country" /></span>
                     </li>
                     <li>
-                        <span><input type="text" data-bind="value: State" placeholder="State" /></span>
+                        <span><input type="text" data-bind="value: State,
+    autoComplete: '/api/contacts/GetStates?country=' + $parent.selectedCountry(),
+    autocomplete_select: 'UpdateState',
+    autocomplete_render: 'renderState',
+    autocomplete_cache: 'filterState'" placeholder="State" /></span>
                     </li>
                     <li>
-                        <span><input type="text" data-bind="value: City" placeholder="City" /></span>
+                        <span><input type="text" data-bind="value: City,
+    autoComplete: '/api/contacts/GetCities?country=' + $parent.selectedCountry(),
+    autocomplete_select: 'UpdateCity',
+    autocomplete_cache: true" placeholder="City" /></span>
                     </li>
                     <li>
                         <span><input type="text" data-bind="value: Street" placeholder="Street" /></span>
@@ -122,18 +133,32 @@
                     </li>
                 </ul>
                 <ul class="float-right">
-                    <li>
-                        <span>
-                            <!--input type="text"
-                                data-bind="value: Category"
-                                placeholder="Category"
-                                data-required="true"
-                                data-lengthreq="4-16"
-                                data-msg_empty="Category is required too."
-                                data-msg_lengthreq="Category must be between $MINLEN$ and $MAXLEN$ characters long." /-->
-                            <select data-bind="value: Category, optionsCaption: 'Choose Category...', options: $parent.Categories"></select>
+                    <li class="category">
+                        <span class="rel">
+                            <hidden data-bind="value: CategoryId" value="" ></hidden>
+                            <input type="text" placeholder="Category" onclick="if ($(this).val() == '') $(this).autocomplete('search', '');" data-bind="
+    value: $parent.EditCategoryName,
+    valueUpdate: 'afterkeydown',
+    autocomplete_select: 'UpdateCategory',
+    autocomplete_render: 'renderCategory',
+    autoComplete: $parent.cat_api + $parent.cat_options.getAll + '?$filter=substringof(\'REP_URL\',Name)'" />
+                            <div class="add-choice" data-bind="
+    showHide: (CategoryId() == undefined || CategoryId() == '') && $parent.EditCategoryName() != '' && $parent.EditCategoryName() != undefined,
+    click: $parent.saveCategory">
+                                Add
+                            </div>
+                            <div class="add-form" data-bind="showHide: $parent.NewCategory">
+                                 <ul class="float-left" data-bind="if: $parent.NewCategory">
+                                    <li>
+                                        <span><input type="text" id="cat-name" placeholder="Category Name" data-required="true" /></span>
+                                    </li>
+                                    <li>
+                                        <input type="button" value="Save" data-bind="click: $parent.saveCategory" />
+                                        <input type="button" value="Cancel" data-bind="click: $parent.cancelCategory" />
+                                     </li>
+                                </ul>
+                            </div>
                         </span>
-                            
                     </li>
                     <li>
                         <span>

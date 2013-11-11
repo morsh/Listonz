@@ -10,6 +10,15 @@ vm.contacts = new vm.baseViewModel({
             remove: "DeleteContact",
             removeConfirm: "Are you sure you want to delete this contact?"
         };
+
+        self.cat_api = "/api/contactscategories/";
+        self.cat_options = {
+            getAll: "Get",
+            add: "Post",
+            update: "Put",
+            remove: "Delete"
+        };
+
     },
     model: function (self) {
         self.model = function () {
@@ -28,7 +37,12 @@ vm.contacts = new vm.baseViewModel({
             this.City = ko.observable('');
             this.Street = ko.observable('');
             this.Notes = ko.observable(''); 
-            this.Category = ko.observable('');
+            this.CategoryId = ko.observable();
+            this.Category = ko.observable({
+                Id: ko.observable(),
+                Name: ko.observable('')
+            });
+
             this.Email = ko.observable('');
             this.PhoneNumber = ko.observable('');
             this.MobileNumber = ko.observable('');
@@ -44,6 +58,11 @@ vm.contacts = new vm.baseViewModel({
                 return this.Category == "Company";
             }, this);
         }
+
+        self.categoryModel = function () {
+            this.Id = ko.observable(0);
+            this.Name = ko.observable('');
+        };
     },
     view: function (self) {
 
@@ -53,6 +72,11 @@ vm.contacts = new vm.baseViewModel({
                 self.EditCompanyName(self.selected().Company.FirstName);
             else
                 self.EditCompanyName('');
+
+            if (self.selected().Category != null)
+                self.EditCategoryName(self.selected().Category.Name);
+            else
+                self.EditCategoryName('');
         });
         //self.model.Company.subscribe(updateImages);
     },
@@ -79,7 +103,7 @@ vm.contacts = new vm.baseViewModel({
                 var picture = (item.ProfilePicture ? item.ProfilePicture : '/images/companyLogo.png');
                 var name = item.FirstName + (item.LastName != null ? ' ' + item.LastName : '');
                 var email = item.Email ? '<a href="mailto:' + item.Email + '">' + item.Email + '</a>' : '';
-                return $("<li style='display:inline-block'>")
+                return $("<li class='ac-big' />")
                     .data('item.autocomplete', item)
                     .append("<a><div class='float-left'><img src='" + picture + "' /></div><div>" + name + "</div></a>")
                     .appendTo(ul);
@@ -132,9 +156,133 @@ vm.contacts = new vm.baseViewModel({
                 viewModel.NewCompany(false);
             };
 
+        // Category autocomplete
+        // ======================
+
+            // Update company after it is selected from the autocomplete list
+            self.UpdateCategory = function (element, selectedItem, viewModel) {
+                if (selectedItem != null)
+                    $(element).val(selectedItem.Name);
+                viewModel.CategoryId(selectedItem ? selectedItem.Id : null);
+                viewModel.Category = null;
+            };
+
+            // render the company item for each company in the autocomplete list
+            self.renderCategory = function (ul, item) {
+                var name = item.Name;
+                return $("<li />")
+                    .data('item.autocomplete', item)
+                    .append("<a><div>" + name + "</div></a>")
+                    .appendTo(ul);
+            },
+
+            // A helper to save the selected compamy name from the autocomplete
+            self.EditCategoryName = ko.observable('');
+            self.NewCategory = ko.observable(false);
+
+            self.AddNewCategory = function () {
+                var viewModel = ko.contextFor(event.srcElement).$parent;
+                var newCategoryName = viewModel.EditCategoryName();
+                viewModel.NewCategory(true);
+
+                var $form = $('.category .add-form');
+                $form.find('#cat-name').val(newCategoryName);
+                $form.find('#cat-emal').val('');
+                $form.find('#cat-pnum').val('');
+            };
+            self.saveCategory = function (item) {
+                var viewModel = ko.contextFor(event.srcElement).$parent;
+                var newCategoryName = viewModel.EditCategoryName();
+
+                // Prepare data for sending to server
+                var catData = ko.toJS(ko.utils.unwrapObservable(new self.categoryModel()));
+                catData.Name = newCategoryName;
+
+                // Sending data for saving
+                $.post(viewModel.cat_api + viewModel.cat_options.add, catData, function (data) {
+                    viewModel.NewCategory(false);
+                    //viewModel.collection.push(data);
+                    viewModel.EditCategoryName(newCategoryName);
+
+                    // Setting new id in company Id field
+                    ko.dataFor($('.category hidden[data-bind*=CategoryId]')[0]).CategoryId(data.Id);
+                });
+            };
+            self.cancelCategory = function () {
+                var viewModel = ko.contextFor(event.srcElement).$parent;
+                var newCategoryName = viewModel.EditCategoryName();
+                viewModel.NewCategory(false);
+            };
+
         // Countries Methods
         // =================
-        // http://ws.geonames.org/search?q=&country=IL
+
+            self.selectedCountry = ko.observable('');
+
+            // Update company after it is selected from the autocomplete list
+            self.UpdateCountry = function (element, selectedItem, viewModel) {
+                if (selectedItem != null) {
+                    $(element).val(selectedItem.n).data('item', selectedItem);
+                    self.selectedCountry(selectedItem.i2);
+                }
+            };
+
+            // render the company item for each company in the autocomplete list
+            self.renderCountry = function (ul, item) {
+                var name = item.n;
+                return $("<li />")
+                    .data('item.autocomplete', item)
+                    .append("<a><div>" + name + "</div></a>")
+                    .appendTo(ul);
+            };
+
+            self.filterCountry = function (item, search) {
+                return item.n.toLowerCase().indexOf(search.toLowerCase()) === 0;
+            };
+
+        // City Methods
+        // ============
+
+            // Update company after it is selected from the autocomplete list
+            self.UpdateCity = function (element, selectedItem, viewModel) {
+                if (selectedItem != null)
+                    $(element).val(selectedItem.value).data('item', selectedItem);
+            };
+
+            // render the company item for each company in the autocomplete list
+            self.renderCity = function (ul, item) {
+                var name = item.n;
+                return $("<li />")
+                    .data('item.autocomplete', item)
+                    .append("<a><div>" + name + "</div></a>")
+                    .appendTo(ul);
+            };
+
+        // State Methods
+        // =============
+
+            self.selectedState = ko.observable('');
+
+            // Update company after it is selected from the autocomplete list
+            self.UpdateState = function (element, selectedItem, viewModel) {
+                if (selectedItem != null) {
+                    $(element).val(selectedItem.name).data('item', selectedItem);
+                    self.selectedState(selectedItem.abb);
+                }
+            };
+
+            self.filterState = function (item, search) {
+                return item.name.toLowerCase().indexOf(search.toLowerCase()) === 0;
+            };
+
+            // render the company item for each company in the autocomplete list
+            self.renderState = function (ul, item) {
+                var name = item.name;
+                return $("<li />")
+                    .data('item.autocomplete', item)
+                    .append("<a><div>" + name + "</div></a>")
+                    .appendTo(ul);
+            };
 
         // Helper Methods
         // ==============

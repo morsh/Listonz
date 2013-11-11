@@ -23,7 +23,6 @@ namespace Listonz.Models
         public string Street { get; set; }
         public string Notes { get; set; }
         
-        public string Category { get; set; }
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
         public string MobileNumber { get; set; }
@@ -39,8 +38,22 @@ namespace Listonz.Models
         [ForeignKey("CompanyId")]
         public virtual Contact Company { get; set; }
 
+        public int? CategoryId { get; set; }
+        [ForeignKey("CategoryId")]
+        public virtual Category Category { get; set; }
+
+
         public string ProfilePicture { get; set; }
 
         public DateTime? LastUpdate { get; set; }
+    }
+
+    [Table("Categories")]
+    public class Category
+    {
+        [Key]
+        [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
+        public string Name { get; set; }
     }
 }

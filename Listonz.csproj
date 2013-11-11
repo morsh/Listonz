@@ -188,6 +188,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\Api\ContactsCategoriesController.cs" />
     <Compile Include="Controllers\Api\ContactsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\Api\AccountController.cs" />
@@ -231,12 +232,21 @@
     <Compile Include="Migrations\201311071347165_Add Profile Picture.Designer.cs">
       <DependentUpon>201311071347165_Add Profile Picture.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201311102233215_Add Categories.cs" />
+    <Compile Include="Migrations\201311102233215_Add Categories.Designer.cs">
+      <DependentUpon>201311102233215_Add Categories.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201311102240345_Category Lookup.cs" />
+    <Compile Include="Migrations\201311102240345_Category Lookup.Designer.cs">
+      <DependentUpon>201311102240345_Category Lookup.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\Attributes\IsTrueAttribute.cs" />
     <Compile Include="Models\Attributes\PasswordStrengthAttribute.cs" />
     <Compile Include="Models\DataModules.cs" />
     <Compile Include="Models\Extensions.cs" />
+    <Compile Include="Models\Helpers\XmlToJson.cs" />
     <Compile Include="Models\LZ.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -434,6 +444,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201311071347165_Add Profile Picture.resx">
       <DependentUpon>201311071347165_Add Profile Picture.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201311102233215_Add Categories.resx">
+      <DependentUpon>201311102233215_Add Categories.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201311102240345_Category Lookup.resx">
+      <DependentUpon>201311102240345_Category Lookup.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
