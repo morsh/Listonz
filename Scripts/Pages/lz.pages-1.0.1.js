@@ -28,9 +28,9 @@ vm.baseViewModel = function (extend) {
     "use strict";
     var self = this;
 
-    extend.extend(self);
     extend.api(self);
     extend.model(self);
+    extend.extend(self);
 
     vm.viewModelsToLoad(vm.viewModelsToLoad() + 1);
 
@@ -64,7 +64,7 @@ vm.baseViewModel = function (extend) {
     // view model methods
     self.refresh = function () {
         self.collection.removeAll();
-        $.getJSON(self.api + self.options.getAll, function (data) {
+        $.getJSON(self.api + self.options.getAll(), function (data) {
             self.collection(data);
             self.loaded(true);
             vm.viewModelsToLoad(vm.viewModelsToLoad() - 1);

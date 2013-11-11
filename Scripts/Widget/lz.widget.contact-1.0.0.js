@@ -4,7 +4,7 @@ vm.contacts = new vm.baseViewModel({
     api: function (self) {
         self.api = "/api/contacts/";
         self.options = {
-            getAll: "GetContacts",
+            getAll: function () { return "GetContacts" + (self.FilterCategoryId() == 0 ? '' : '?$filter=CategoryId eq ' + self.FilterCategoryId()); },
             add: "PostContact",
             update: "PutContact",
             remove: "DeleteContact",
@@ -13,7 +13,7 @@ vm.contacts = new vm.baseViewModel({
 
         self.cat_api = "/api/contactscategories/";
         self.cat_options = {
-            getAll: "Get",
+            getAll: function () { return "Get"; },
             add: "Post",
             update: "Put",
             remove: "Delete"
@@ -85,8 +85,51 @@ vm.contacts = new vm.baseViewModel({
 
         // Handle Properties
         // =================
+            self.hover = ko.observable(new self.model());
+            self.FilterCategoryId = ko.observable(0);
+            self.Categories = ko.observableArray([]);
+            self.tabsNewCategoryName = ko.observable('');
+            self.tabsAddNewMode = ko.observable(false);
+            $.get(self.cat_api + self.cat_options.getAll(), function (data) {
+                self.Categories(data);
+            });
 
-            self.Categories = ko.observableArray(['Company', 'Artist', 'Venue', 'Service Provider', 'Other']).sort();
+            self.filterCategory = function (item) {
+                var selectedId = item != null && item.Id != null ? item.Id : 0;
+                self.FilterCategoryId(selectedId);
+
+                var $cats = $(event.srcElement).closest('.categories');
+                $cats.find('.selected').removeClass('selected');
+                if (selectedId == 0)
+                {
+                    $cats.find('.cat-all').addClass('selected');
+                }
+                else
+                {
+                    $cats.find('.cat-cts li').each(function () {
+                        if (ko.dataFor(this).Id == selectedId)
+                            $(this).addClass('selected');
+                    });
+                }
+
+                self.refresh();
+                return false;
+            };
+
+            self.tabsChangeAddMode = function (addMode) {
+                self.tabsAddNewMode(addMode);
+                self.tabsNewCategoryName('');
+            };
+
+            self.tabsSaveCategory = function () {
+                var catData = ko.toJS(ko.utils.unwrapObservable(new self.categoryModel()));
+                catData.Name = self.tabsNewCategoryName();
+
+                $.post(self.cat_api + self.cat_options.add, catData, function (data) {
+                    self.Categories.push(data);
+                    self.tabsChangeAddMode(false);
+                });
+            };
 
         // Companies autocomplete
         // ======================
@@ -145,7 +188,7 @@ vm.contacts = new vm.baseViewModel({
 
                     // Get company category id
                     $.ajax({
-                        url: viewModel.cat_api + viewModel.cat_options.getAll + "?$filter=Name%20eq%20'Company'",
+                        url: viewModel.cat_api + viewModel.cat_options.getAll() + "?$filter=Name%20eq%20'Company'",
                         async: false,
                         success: function (data) { compData.CategoryId = data[0].Id; },
                         error: lz.showError
