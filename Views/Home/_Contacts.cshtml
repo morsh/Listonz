@@ -21,37 +21,59 @@
                     <button data-bind="click: function () { tabsChangeAddMode(false) }">Cancel</button>
                 </li>
             </ul>
-            <div class="hover-profile" data-bind="if: hover().Id > 0" style="float:right;padding:10px;">
+
+            <div class="results">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Company</th>
+                            <th>Category</th>
+                        </tr>
+                    </thead>
+                    <tbody class="tr-highlight" data-bind="foreach: collection">
+                        <tr onmousemove="ko.contextFor(this).$parent.updateHover(ko.dataFor(this));">
+                            <td data-bind="text: FirstName + ' ' + (LastName || '')"></td>
+                            <td><span data-bind="if: Company != null"><span data-bind="    text: Company.FirstName"></span></span></td>
+                            <td><span data-bind="if: Category != null"><span data-bind="    text: Category.Name"></span></span></td>
+                            <td>
+                                <button class="btn btn-mini btn-edit" data-bind="click: $parent.edit" title="Edit Contact"></button>
+                                <button class="btn btn-mini btn-delete" data-bind="click: $parent.remove" title="Delete Contact"></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="hover-profile" data-bind="if: hover().Id > 0">
                 <div data-bind="with: hover()">
-                    <div class="float-left"><img data-bind="attr: { src: ProfilePicture }" /></div>
-                    <div data-bind="text: FirstName + ' ' + (LastName || '')"></div>
+                    <div class="float-left">
+                        <span data-bind="ifnot: ProfilePicture"><img src="~/Images/profile.jpg" width="70px" /></span>
+                        <span data-bind="if: ProfilePicture"><img data-bind="attr: { src: ProfilePicture }" src="" width="70px" /></span>
+                    </div>
+                    
+                    <div>
+                        <span data-bind="text: FirstName + ' ' + (LastName || '')"></span>
+                        <span data-bind="if: Category != null"><span data-bind="text: '(' + Category.Name + ')'"></span></span>
+                    </div>
+                    
+                    <div class="email" data-bind="if: Email">
+                        <a data-bind="attr: { href: 'mailto:' + Email }">
+                            <div class="float-left"><img src="~/Images/email.png" height="20" /></div>
+                            <div data-bind="text: Email" class="float-left"></div>
+                        </a>
+                    </div>
+                    <div class="rating">
+                        <div data-bind="rateit: { value: $parent.hoverRating, max: 5, step: 0.1 }"></div>
+                    </div>
+
                 </div>
             </div>
 
-            <table>
-                <thead>
-                    <tr>
-                        <th>Id</th>
-                        <th>Name</th>
-                        <th>Company</th>
-                        <th>Category</th>
-                    </tr>
-                </thead>
-                <tbody class="tr-highlight" data-bind="foreach: collection">
-                    <tr onmousemove="ko.contextFor(this).$parent.hover(ko.dataFor(this));">
-                        <td data-bind="text: Id"></td>
-                        <td data-bind="text: FirstName + ' ' + (LastName || '')"></td>
-                        <td><span data-bind="if: Company != null"><span data-bind="text: Company.FirstName"></span></span></td>
-                        <td><span data-bind="if: Category != null"><span data-bind="text: Category.Name"></span></span></td>
-                        <td>
-                            <button class="btn btn-mini btn-edit" data-bind="click: $parent.edit" title="Edit Contact"></button>
-                            <button class="btn btn-mini btn-delete" data-bind="click: $parent.remove" title="Delete Contact"></button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <input type="button" id="btnGetcontacts" value="Get contacts" data-bind="click: refresh" />
-            <input type="button" value="Add" data-bind="click: edit" />
+            <div class="clear-both">
+                <input type="button" id="btnGetcontacts" value="Get contacts" data-bind="click: refresh" />
+                <input type="button" value="Add" data-bind="click: edit" />
+            </div>
         </div>
         <div data-bind="if: showEditor" class="edit">
             <div data-bind=" { with: select(), jqValidation: validationContext } ">

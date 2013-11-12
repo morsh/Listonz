@@ -1,5 +1,5 @@
 ﻿html { background-color: #e2e2e2;margin: 0;padding: 0;}
-body {background-color: #fff;border-top: solid 10px #000;color: #333;font-size: .85em;font-family: "Segoe UI", Verdana, Helvetica, Sans-Serif;margin: 0;padding: 0;}
+body {background-color: #fff;border-top: solid 10px #000;color: #333;font-size: 12px;font-family: 'lucida grande', Verdana, Helvetica, Sans-Serif;margin: 0;padding: 0;}
 
 a {color: #333;outline: none;padding-left: 3px;padding-right: 3px;text-decoration: underline;}
 
@@ -9,8 +9,7 @@ a {color: #333;outline: none;padding-left: 3px;padding-right: 3px;text-decoratio
 
 img {border:none;}
 
-header, footer, hgroup,
-nav, section {display: block;}
+header, footer, hgroup, nav, section {display: block;}
 
 mark {background-color: #a6dbed;padding-left: 5px;padding-right: 5px;}
 
@@ -19,8 +18,7 @@ mark {background-color: #a6dbed;padding-left: 5px;padding-right: 5px;}
 .clear-both {clear:both}
 .clear-fix:after {content: ".";clear: both;display: block;height: 0;visibility: hidden;}
 
-h1, h2, h3,
-h4, h5, h6 {color: #000;margin-bottom: 0;padding-bottom: 0;white-space:nowrap;}
+h1, h2, h3,h4, h5, h6 {color: #000;margin-bottom: 0;padding-bottom: 0;white-space:nowrap;}
 
 h1 {font-size: 2em;}
 h2 {font-size: 1.75em;}
@@ -30,7 +28,7 @@ h5, h6 {font-size: 1em;}
 
     h5 a:link, h5 a:visited, h5 a:active {padding: 0;text-decoration: none;}
 
-.ie9-placeholder {color: #bababa;font-size: 1em; font-family: "Segoe UI", Verdana, Helvetica, Sans-Serif; position: absolute; overflow-x:hidden;top:1px;}
+.ie9-placeholder {color: #bababa;position: absolute; overflow-x:hidden;top:1px;}
 
 input::-webkit-input-placeholder, textarea::-webkit-input-placeholder { color:#666; }
 input:-moz-placeholder, textarea:-moz-placeholder { color:#666; }
@@ -73,38 +71,15 @@ footer {clear: both;background-color: #e2e2e2;font-size: .8em;height: 100px;}
 
 /* login
 ----------------------------------------------------------*/
-#login {
-    display: block;
-    font-size: .85em;
-    margin: 0 0 10px;
-    text-align: right;
-}
+#login {display: block;font-size: .85em;margin: 0 0 10px;text-align: right;}
 
-    #login a {
-        background-color: #d3dce0;
-        margin-left: 10px;
-        margin-right: 3px;
-        padding: 2px 3px;
-        text-decoration: none;
-    }
-
-    #login a.username {
-        background: none;
-        margin: 0;
-        padding: 0;
-        text-decoration: underline;
-    }
-
-    #login ul {
-        margin: 0;
-    }
-
-    #login li {
-        display: inline;
-        list-style: none;
-    }
+    #login a {background-color: #d3dce0;margin-left: 10px;margin-right: 3px;padding: 2px 3px;text-decoration: none;}
+    #login a.username {background: none;margin: 0;padding: 0;text-decoration: underline;}
+    #login ul {margin: 0;}
+    #login li {display: inline;list-style: none;}
 
     .view { display:none; }
+
 /* menu
 ----------------------------------------------------------*/
 ul#menu {font-size: 1.3em;font-weight: 600;margin: 0 0 5px;padding: 0;text-align: right;}
@@ -118,74 +93,32 @@ ul#menu {font-size: 1.3em;font-weight: 600;margin: 0 0 5px;padding: 0;text-align
 /* page elements
 ----------------------------------------------------------*/
 /* featured */
-.featured {
-    background-color: #fff;
-}
+.featured {background-color: #fff;}
 
-    .featured .content-wrapper {
-        background-color: #7ac0da;
-        background-image: -ms-linear-gradient(left, #7ac0da 0%, #a4d4e6 100%);
-        background-image: -o-linear-gradient(left, #7ac0da 0%, #a4d4e6 100%);
-        background-image: -webkit-gradient(linear, left top, right top, color-stop(0, #7ac0da), color-stop(1, #a4d4e6));
-        background-image: -webkit-linear-gradient(left, #7ac0da 0%, #a4d4e6 100%);
-        background-image: linear-gradient(left, #7ac0da 0%, #a4d4e6 100%);
-        color: #3e5667;
-        padding: 20px 40px 30px 40px;
-    }
+    .featured .content-wrapper {background-color: #7ac0da;background-image: -ms-linear-gradient(left, #7ac0da 0%, #a4d4e6 100%);background-image: -o-linear-gradient(left, #7ac0da 0%, #a4d4e6 100%);background-image: -webkit-gradient(linear, left top, right top, color-stop(0, #7ac0da), color-stop(1, #a4d4e6));background-image: -webkit-linear-gradient(left, #7ac0da 0%, #a4d4e6 100%);background-image: linear-gradient(left, #7ac0da 0%, #a4d4e6 100%);color: #3e5667;padding: 20px 40px 30px 40px;}
 
-        .featured hgroup.title h1, .featured hgroup.title h2 {
-            color: #fff;
-        }
+        .featured hgroup.title h1, .featured hgroup.title h2 {color: #fff;}
 
-        .featured p {
-            font-size: 1.1em;
-        }
+        .featured p {font-size: 1.1em;}
 
 /* page titles */
-hgroup.title {
-    margin-bottom: 10px;
-}
+hgroup.title {margin-bottom: 10px;}
 
-hgroup.title h1, hgroup.title h2 {
-    display: inline;
-}
+hgroup.title h1, hgroup.title h2 {display: inline;}
 
-hgroup.title h2 {
-    font-weight: normal;
-    margin-left: 3px;
-}
+hgroup.title h2 {font-weight: normal;margin-left: 3px;}
 
 /* features */
-section.feature {
-    width: 300px;
-    float: left;
-    padding: 10px;
-}
+section.feature {width: 300px;float: left;padding: 10px;}
 
 /* content */
-article {
-    float: left;
-    width: 70%;
-}
+article {float: left;width: 70%;}
 
-aside {
-    float: right;
-    width: 25%;
-}
+aside {float: right;width: 25%;}
+    aside ul {list-style: none;padding: 0;}
+        aside ul li {background: url("../Images/bullet.png") no-repeat 0 50%;padding: 2px 0 2px 20px;}
 
-    aside ul {
-        list-style: none;
-        padding: 0;
-    }
-
-        aside ul li {
-            background: url("../Images/bullet.png") no-repeat 0 50%;
-            padding: 2px 0 2px 20px;
-        }
-
-.label {
-    font-weight: 700;
-}
+.label {font-weight: 700;}
 
 /* narrow page */
 .narrow {width: 450px;margin-left: auto;margin-right: auto;border:1px dashed #ffea00;padding: 10px;}
@@ -591,3 +524,7 @@ tr.pager td {padding: 0 0.25em 0 0;}
     #tabContacts .categories .selected {background:red;}
     #tabContacts .categories .cat-add input {width:100px; padding:0;margin:0;}
     #tabContacts .categories .cat-add button {padding:0;margin:0;}
+
+#tabContacts .results {float:left;}
+#tabContacts .hover-profile {float:left;width:300px; height:300px;border:solid 1px #c7d1d6;}
+    #tabContacts .hover-profile > div > div {padding:7px;}

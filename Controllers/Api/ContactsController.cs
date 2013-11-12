@@ -33,47 +33,60 @@ namespace Listonz.Controllers.Api
     {
         private UsersContext db = new UsersContext();
 
-        private void EnsureData(Contact contact)
+        private void EnsureData(Contact contact, bool dontstop = false)
         {
-            contact.UserId = LZ.CurrentUserID;
-            if (contact.UserId == null || contact.UserId.Value != LZ.CurrentUserID)
-                throw new Exception("A user can only update it's own data");
-
-            contact.User = contact.UserId != null ? db.UserProfiles.FirstOrDefault(c => c.UserId == contact.UserId) : null;
-
-            contact.Category = contact.CategoryId != null ? db.Categories.FirstOrDefault(c => c.Id == contact.CategoryId) : null;
-            
-            contact.Company = contact.CompanyId != null ? db.Contacts.FirstOrDefault(c => c.Id == contact.CompanyId) : null;
-            if ((contact.Category != null && contact.Category.Name == "Company") || 
-                contact.Company == null || contact.Company.CompanyId != null)
+            try
             {
-                contact.CompanyId = null;
-                contact.Company = null;
+                contact.UserId = LZ.CurrentUserID;
+                if (contact.UserId == null || contact.UserId.Value != LZ.CurrentUserID)
+                    throw new Exception("A user can only update it's own data");
+
+                contact.User = contact.UserId != null ? db.UserProfiles.FirstOrDefault(c => c.UserId == contact.UserId) : null;
+
+                contact.Category = contact.CategoryId != null ? db.Categories.FirstOrDefault(c => c.Id == contact.CategoryId) : null;
+
+                contact.Company = contact.CompanyId != null ? db.Contacts.FirstOrDefault(c => c.Id == contact.CompanyId) : null;
+
+                if (dontstop) return;
+
+                if ((contact.Category != null && contact.Category.Name == "Company") ||
+                    contact.Company == null || contact.Company.CompanyId != null)
+                {
+                    contact.CompanyId = null;
+                    contact.Company = null;
+                }
+                contact.LastUpdate = DateTime.Now;
             }
-            contact.LastUpdate = DateTime.Now;
+            catch (Exception ex)
+            {
+                if (dontstop) throw;
+            }
+        }
+
+        private IQueryable<Contact> All()
+        {
+            var userID = LZ.CurrentUserID;
+            return db.Contacts
+                .Where(c => c.UserId == userID)
+                .Include(c => c.Category)
+                .Include(c => c.Company);
         }
 
         // GET api/Contact
         [Queryable]
         public IEnumerable<Contact> GetContacts()
         {
-            var userID = LZ.CurrentUserID;
-            return db.Contacts
-                .Where(c => c.UserId == userID)
-                .Include(c => c.Category)
-                .Include(c => c.Company)
-                .AsEnumerable();
+            return All().AsEnumerable();
         }
 
         // GET api/Contact/5
         public Contact GetContact(int id)
         {
-            var contact = db.Contacts.Find(id);
+            var contact = All().Where(c => c.Id == id).SingleOrDefault();
             if (contact == null || contact.UserId != LZ.CurrentUserID)
             {
                 throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
             }
-
             return contact;
         }
 
@@ -92,6 +105,29 @@ namespace Listonz.Controllers.Api
 
             EnsureData(contact);
             db.Entry(contact).State = EntityState.Modified;
+
+            try
+            {
+                db.SaveChanges();
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, ex);
+            }
+
+            return Request.CreateResponse(HttpStatusCode.OK, contact);
+        }
+
+        [HttpPost]
+        public HttpResponseMessage UpdateRating(int id, double? newRating)
+        {
+            var contact = GetContact(id);
+            if (id != contact.Id || contact.UserId != LZ.CurrentUserID)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest);
+            }
+
+            contact.Rating = newRating;
 
             try
             {

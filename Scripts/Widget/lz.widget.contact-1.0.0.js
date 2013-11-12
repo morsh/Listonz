@@ -8,7 +8,9 @@ vm.contacts = new vm.baseViewModel({
             add: "PostContact",
             update: "PutContact",
             remove: "DeleteContact",
-            removeConfirm: "Are you sure you want to delete this contact?"
+            removeConfirm: "Are you sure you want to delete this contact?",
+
+            updateRating: 'UpdateRating'
         };
 
         self.cat_api = "/api/contactscategories/";
@@ -86,6 +88,32 @@ vm.contacts = new vm.baseViewModel({
         // Handle Properties
         // =================
             self.hover = ko.observable(new self.model());
+            self.hoverRating = ko.observable();
+            var stopEvents = false;
+            self.updateHover = function (data) {
+                stopEvents = true;
+                self.hover(data);
+                self.hoverRating(self.hover().Rating);
+                stopEvents = false;
+            };
+            self.hoverRating.subscribe(function () {
+                if (!stopEvents) {
+                    var postData = {
+                        id: self.hover().Id,
+                        newRating: self.hoverRating()
+                    };
+                    $.post(self.api + self.options.updateRating + "?id=" + postData.id + "&newRating=" + postData.newRating,
+                        { postData: postData },
+                        function (data) {
+                            if (arguments.length > 2 && arguments[2] != null && arguments[2].responseText != '')
+                                postData = JSON.parse(arguments[2].responseText)
+                            for (var i = 0, j = self.collection().length; i < j; i++)
+                                if (self.collection()[i].Id == postData.Id)
+                                    self.collection.replace(self.collection()[i], postData);
+                        });
+                }
+            });
+
             self.FilterCategoryId = ko.observable(0);
             self.Categories = ko.observableArray([]);
             self.tabsNewCategoryName = ko.observable('');
