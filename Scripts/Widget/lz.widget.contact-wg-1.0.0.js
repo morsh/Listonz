@@ -1,10 +1,10 @@
 ﻿var vm = namespace("lz.viewModel");
 
-vm.contacts = new vm.baseViewModel({
+vm.contactsWG = new vm.baseViewModel({
     api: function (self) {
         self.api = "/api/contacts/";
         self.options = {
-            getAll: function () { return "GetContacts" + (self.categoryId() == 0 ? '' : '?$filter=CategoryId eq ' + self.categoryId()); },
+            getAll: function () { return "GetContacts?$top=3" + (self.categoryId() == 0 ? '' : '&$filter=CategoryId eq ' + self.categoryId()); },
             add: "PostContact",
             update: "PutContact",
             remove: "DeleteContact",
@@ -86,7 +86,7 @@ vm.contacts = new vm.baseViewModel({
 
         var oldShowEditor = false;
         self.showEditor.subscribe(function (newValue) {
-            if (!oldShowEditor && !newValue && self.categoryId() != 0)
+            if (!oldShowEditor && self.categoryId() != 0)
                 self.categoryId(0);
 
             oldShowEditor = newValue;
@@ -325,7 +325,6 @@ vm.contacts = new vm.baseViewModel({
                 if (selectedItem != null) {
                     $(element).val(selectedItem.n).data('item', selectedItem);
                     self.selectedCountry(selectedItem.i2);
-                    viewModel.Country(selectedItem.n);
                 }
             };
 

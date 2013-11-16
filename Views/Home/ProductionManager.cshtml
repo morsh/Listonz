@@ -19,7 +19,8 @@
         @Html.Partial("_Contacts")
     </div>
     <div id="tabEvents">
-        Hi there!
+        <label>Contacts Widget:</label>
+        @Html.Partial("_Contacts_WG")
     </div>
 </section>
 
@@ -35,6 +36,7 @@
     <script src="~/Scripts/moment-with-langs.min.js"></script>
     <script src="https://www.google.com/jsapi" type="text/javascript"></script>
     <script src="~/Scripts/Widget/lz.widget.contact-1.0.0.js"></script>
+    <script src="~/Scripts/Widget/lz.widget.contact-wg-1.0.0.js"></script>
     
     @Styles.Render("~/Content/themes/base/css")
 

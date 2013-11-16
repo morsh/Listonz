@@ -191,7 +191,8 @@ vm.baseViewModel = function (extend) {
 
 $.ajaxSetup({
     error: function (xhr, status, error) {
-        alert("An AJAX error occured: " + status + "\nError: " + error);
+        if (console && console.log)
+            console.log("An AJAX error occured: " + status + "\nError: " + error);
     }
 });
 
@@ -474,14 +475,21 @@ $(function () {
 
 
             var currentTabID = $(this).attr('href');
-            var $view = $(currentTabID + ':visible .vm-view');
+            if (currentTabID != window.location.hash.replace('#/', '#tab')) {
+                window.location = currentTabID.replace('#tab', '#/');
+            }
+            else {
+                var $view = $(currentTabID + ':visible .vm-view');
 
-            var viewModel = ko.dataFor($view[0]);
-            var showEditor = viewModel.showEditor();
-            if ($view.length > 0)
-                viewModel.showEditor(false);
-            if (!showEditor)
-                viewModel.showEditor.valueHasMutated();
+                if ($view[0]) {
+                    var viewModel = ko.dataFor($view[0]);
+                    var showEditor = viewModel.showEditor();
+                    if ($view.length > 0)
+                        viewModel.showEditor(false);
+                    if (!showEditor)
+                        viewModel.showEditor.valueHasMutated();
+                }
+            }
         });
 
     // Binding all view models
@@ -489,5 +497,26 @@ $(function () {
 
     // Placeholder fix for ie9
     lz.fixPlaceholder();
+
+    var app = $.sammy('.tabs', function () {
+
+        function showView(viewName) {
+            //$(".view").hide().find('[data-hasqtip]');
+            $('.tabs>ul>li>a[href=#tab' + viewName + ']').click();
+        }
+        
+        this.get("#/Contacts", function (context) {
+            showView('Contacts');
+        });
+
+        this.get("#/Events", function (context) {
+            showView('Events');
+        });
+
+    });
+
+    $(function () {
+        app.run('#/Contacts');
+    });
 });
 

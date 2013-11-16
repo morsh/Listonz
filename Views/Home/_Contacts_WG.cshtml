@@ -1,0 +1,23 @@
+﻿<div data-bind="with: contactsWG">
+    <div data-bind="showHide: loaded" class="vm-view vm-contacts">
+         <div class="results">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Company</th>
+                        <th>Category</th>
+                    </tr>
+                </thead>
+                <tbody class="tr-highlight" data-bind="foreach: collection">
+                    <tr>
+                        <td data-bind="text: FirstName + ' ' + (LastName || '')"></td>
+                        <td><span data-bind="if: Company != null"><span data-bind="    text: Company.FirstName"></span></span></td>
+                        <td><span data-bind="if: Category != null"><span data-bind="    text: Category.Name"></span></span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <a href="#/Contacts">More...</a>
+    </div>
+</div>

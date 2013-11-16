@@ -9,7 +9,7 @@
                     <ul data-bind="foreach: Categories">
                         <li data-bind="attr: { 'class': $parent.categoryId() == Id ? 'selected' : '' }">
                             <a href="#" data-bind="click: function () { $parent.categoryId(Id) }"><span data-bind="    text: Name"></span></a>
-                            <div class="remove"><a href="#" data-bind="click: $parent.deleteCategory">X</a></div>
+                            <div class="remove" data-bind="if: UserId != null"><a href="#" data-bind="click: $parent.deleteCategory">X</a></div>
                         </li>
                     </ul>
                 </li>
@@ -68,6 +68,15 @@
                         <div data-bind="rateit: { value: $parent.hoverRating, max: 5, step: 0.1 }"></div>
                     </div>
 
+                    <div class="phone" data-bind="if: PhoneNumber">
+                        <div data-bind="text: 'Phone: ' + PhoneNumber"></div>
+                    </div>
+                    <div class="phone" data-bind="if: MobileNumber">
+                        <div data-bind="text: 'Mobile: ' + MobileNumber"></div>
+                    </div>
+                    <div class="phone" data-bind="if: FaxNumber">
+                        <div data-bind="text: 'Fax: ' + FaxNumber"></div>
+                    </div>
                 </div>
             </div>
 
@@ -124,13 +133,13 @@
                             <hidden data-bind="value: CompanyId" value="" ></hidden>
                             <input type="text" placeholder="Company" onclick="if ($(this).val() == '') $(this).autocomplete('search', '');" data-bind="
                                 value: $parent.EditCompanyName,
-                                enable: Category != undefined && Category.Name != 'Company',
+                                enable: CategoryId() == undefined || CategoryId() == 0 || Category.Name() != 'Company',
                                 valueUpdate: 'afterkeydown',
                                 autocomplete_select: 'UpdateCompany',
                                 autocomplete_render: 'renderCompany',
                                 autoComplete: $parent.api + $parent.options.getAll() + '?$filter=substringof(\'REP_URL\',FirstName) and Category/Name eq \'Company\''" />
                             <div class="add-choice" data-bind="
-                                showHide: (CompanyId() == undefined || CompanyId() == '') && $parent.EditCompanyName() != '' && $parent.EditCompanyName() != undefined,
+                                showHide: (CompanyId() == undefined || CompanyId() == '0') && $parent.EditCompanyName() != '' && $parent.EditCompanyName() != undefined,
                                 click: $parent.AddNewCompany ">Add</div>
                             <div class="add-form" data-bind="showHide: $parent.NewCompany">
                                  <ul class="float-left" data-bind="if: $parent.NewCompany">

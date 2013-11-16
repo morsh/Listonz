@@ -45,7 +45,6 @@ namespace Listonz.Controllers.Api
 
                 contact.Category = contact.CategoryId != null ? db.Categories.FirstOrDefault(c => c.Id == contact.CategoryId) : null;
 
-                contact.Company = contact.CompanyId != null ? db.Contacts.FirstOrDefault(c => c.Id == contact.CompanyId) : null;
 
                 if (dontstop) return;
 
@@ -54,6 +53,10 @@ namespace Listonz.Controllers.Api
                 {
                     contact.CompanyId = null;
                     contact.Company = null;
+                }
+                else
+                {
+                    contact.Company = contact.CompanyId != null ? db.Contacts.FirstOrDefault(c => c.Id == contact.CompanyId) : null;
                 }
                 contact.LastUpdate = DateTime.Now;
             }
