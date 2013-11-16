@@ -47,6 +47,7 @@ namespace Listonz.Models
         public virtual UserProfile User { get; set; }
 
         public string ProfilePicture { get; set; }
+        public string SocialData { get; set; }
 
         public DateTime? LastUpdate { get; set; }
     }

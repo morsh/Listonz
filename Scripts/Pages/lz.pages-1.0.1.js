@@ -155,11 +155,17 @@ vm.baseViewModel = function (extend) {
 
     self.remove = function (item) {
         if (confirm(self.options.removeConfirm)) {
+            var itemToRemove = ko.utils.unwrapObservable(ko.toJS(item));
             $.ajax({
-                url: self.api + self.options.remove + "?id=" + item.Id,
+                url: self.api + self.options.remove + "?id=" + itemToRemove.Id,
                 type: "DELETE",
                 success: function (data) {
-                    self.collection.remove(item);
+
+                    for (var i = 0, j = self.collection().length; i < j; i++)
+                        if (self.collection()[i].Id == itemToRemove.Id)
+                            self.collection.remove(self.collection()[i]);
+
+                    self.showEditor(false);
                 },
                 error: lz.showError
             });
@@ -470,8 +476,12 @@ $(function () {
             var currentTabID = $(this).attr('href');
             var $view = $(currentTabID + ':visible .vm-view');
 
+            var viewModel = ko.dataFor($view[0]);
+            var showEditor = viewModel.showEditor();
             if ($view.length > 0)
-                ko.dataFor($view[0]).showEditor(false);
+                viewModel.showEditor(false);
+            if (!showEditor)
+                viewModel.showEditor.valueHasMutated();
         });
 
     // Binding all view models

@@ -2,13 +2,14 @@
     <div data-bind="showHide: loaded" class="vm-view vm-contacts">
         <div data-bind="ifnot: showEditor()">
             <ul class="categories">
-                <li class="cat-all selected">
-                    <a href="#" data-bind="click: filterCategory"><span>All Contacts</span></a>
+                <li class="cat-all" data-bind="attr: { 'class': categoryId() == 0 ? 'selected' : '' }">
+                    <a href="#" data-bind="click: function () { categoryId(0) }"><span>All Contacts</span></a>
                 </li>
                 <li class="cat-cts">
                     <ul data-bind="foreach: Categories">
-                        <li>
-                            <a href="#" data-bind="click: $parent.filterCategory"><span data-bind="text: Name"></span></a>
+                        <li data-bind="attr: { 'class': $parent.categoryId() == Id ? 'selected' : '' }">
+                            <a href="#" data-bind="click: function () { $parent.categoryId(Id) }"><span data-bind="    text: Name"></span></a>
+                            <div class="remove"><a href="#" data-bind="click: $parent.deleteCategory">X</a></div>
                         </li>
                     </ul>
                 </li>
@@ -121,7 +122,7 @@
                     <li class="company">
                         <span class="rel">
                             <hidden data-bind="value: CompanyId" value="" ></hidden>
-                            <input type="text" placeholder="Company" data-bind="
+                            <input type="text" placeholder="Company" onclick="if ($(this).val() == '') $(this).autocomplete('search', '');" data-bind="
                                 value: $parent.EditCompanyName,
                                 enable: Category != undefined && Category.Name != 'Company',
                                 valueUpdate: 'afterkeydown',
@@ -174,7 +175,7 @@
                         <span><input type="text" data-bind="value: Street" placeholder="Street" /></span>
                     </li>
                     <li>
-                        <span><textarea data-bind="value: Notes" placeholder="Notes" data-required="true"></textarea></span>
+                        <span><textarea data-bind="value: Notes" placeholder="Notes"></textarea></span>
                     </li>
                 </ul>
                 <ul class="float-right">

@@ -4,7 +4,7 @@ vm.contacts = new vm.baseViewModel({
     api: function (self) {
         self.api = "/api/contacts/";
         self.options = {
-            getAll: function () { return "GetContacts" + (self.FilterCategoryId() == 0 ? '' : '?$filter=CategoryId eq ' + self.FilterCategoryId()); },
+            getAll: function () { return "GetContacts" + (self.categoryId() == 0 ? '' : '?$filter=CategoryId eq ' + self.categoryId()); },
             add: "PostContact",
             update: "PutContact",
             remove: "DeleteContact",
@@ -18,7 +18,8 @@ vm.contacts = new vm.baseViewModel({
             getAll: function () { return "Get"; },
             add: "Post",
             update: "Put",
-            remove: "Delete"
+            remove: "Delete",
+            removeConfirm: "Are you sure you want to delete this category?"
         };
 
     },
@@ -82,6 +83,14 @@ vm.contacts = new vm.baseViewModel({
                 self.EditCategoryName('');
         });
         //self.model.Company.subscribe(updateImages);
+
+        var oldShowEditor = false;
+        self.showEditor.subscribe(function (newValue) {
+            if (!oldShowEditor && self.categoryId() != 0)
+                self.categoryId(0);
+
+            oldShowEditor = newValue;
+        });
     },
     extend: function (self) {
 
@@ -114,7 +123,6 @@ vm.contacts = new vm.baseViewModel({
                 }
             });
 
-            self.FilterCategoryId = ko.observable(0);
             self.Categories = ko.observableArray([]);
             self.tabsNewCategoryName = ko.observable('');
             self.tabsAddNewMode = ko.observable(false);
@@ -122,27 +130,10 @@ vm.contacts = new vm.baseViewModel({
                 self.Categories(data);
             });
 
-            self.filterCategory = function (item) {
-                var selectedId = item != null && item.Id != null ? item.Id : 0;
-                self.FilterCategoryId(selectedId);
-
-                var $cats = $(event.srcElement).closest('.categories');
-                $cats.find('.selected').removeClass('selected');
-                if (selectedId == 0)
-                {
-                    $cats.find('.cat-all').addClass('selected');
-                }
-                else
-                {
-                    $cats.find('.cat-cts li').each(function () {
-                        if (ko.dataFor(this).Id == selectedId)
-                            $(this).addClass('selected');
-                    });
-                }
-
+            self.categoryId = ko.observable(0);
+            self.categoryId.subscribe(function () {
                 self.refresh();
-                return false;
-            };
+            });
 
             self.tabsChangeAddMode = function (addMode) {
                 self.tabsAddNewMode(addMode);
@@ -293,6 +284,29 @@ vm.contacts = new vm.baseViewModel({
                     // Setting new id in company Id field
                     ko.dataFor($('.category hidden[data-bind*=CategoryId]')[0]).CategoryId(data.Id);
                 });
+            };
+            self.deleteCategory = function (item) {
+
+                if (confirm(self.cat_options.removeConfirm)) {
+                    var isSelected = $(event.srcElement).closest('li').hasClass('selected');
+                    var itemToRemove = ko.utils.unwrapObservable(ko.toJS(item));
+                    $.ajax({
+                        url: self.cat_api + self.cat_options.remove + "?id=" + itemToRemove.Id,
+                        type: "DELETE",
+                        success: function (data) {
+
+                            for (var i = 0, j = self.Categories().length; i < j; i++)
+                                if (self.Categories()[i].Id == itemToRemove.Id)
+                                    self.Categories.remove(self.Categories()[i]);
+
+                            if (isSelected) {
+                                self.categoryId(0);
+                                self.categoryId.valueHasMutated();
+                            }
+                        },
+                        error: lz.showError
+                    });
+                }
             };
             self.cancelCategory = function () {
                 var viewModel = ko.contextFor(event.srcElement).$parent;

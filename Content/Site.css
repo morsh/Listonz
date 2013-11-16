@@ -524,6 +524,8 @@ tr.pager td {padding: 0 0.25em 0 0;}
     #tabContacts .categories .selected {background:red;}
     #tabContacts .categories .cat-add input {width:100px; padding:0;margin:0;}
     #tabContacts .categories .cat-add button {padding:0;margin:0;}
+    #tabContacts .categories .remove {border: 1px solid red; margin-top: -30px;background:#fff; position: absolute;display:none;}
+    #tabContacts .categories .cat-cts li:hover .remove {display:block;}
 
 #tabContacts .results {float:left;}
 #tabContacts .hover-profile {float:left;width:300px; height:300px;border:solid 1px #c7d1d6;}
