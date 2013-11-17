@@ -46,8 +46,8 @@
                 </table>
             </div>
 
-            <div class="hover-profile" data-bind="if: hover().Id > 0">
-                <div data-bind="with: hover()">
+            <div class="hover-profile" data-bind="with: hover()">
+                <div data-bind="if: Id > 0">
                     <div class="float-left">
                         <span data-bind="ifnot: ProfilePicture"><img src="~/Images/profile.jpg" width="70px" /></span>
                         <span data-bind="if: ProfilePicture"><img data-bind="attr: { src: ProfilePicture }" src="" width="70px" /></span>
@@ -77,6 +77,9 @@
                     <div class="phone" data-bind="if: FaxNumber">
                         <div data-bind="text: 'Fax: ' + FaxNumber"></div>
                     </div>
+                </div>
+                <div data-bind="ifnot: Id > 0">
+                    Hover on a contact to preview his\her details
                 </div>
             </div>
 
@@ -133,11 +136,11 @@
                             <hidden data-bind="value: CompanyId" value="" ></hidden>
                             <input type="text" placeholder="Company" onclick="if ($(this).val() == '') $(this).autocomplete('search', '');" data-bind="
                                 value: $parent.EditCompanyName,
-                                enable: CategoryId() == undefined || CategoryId() == 0 || Category.Name() != 'Company',
+                                enable: !$parent.isCompany(),
                                 valueUpdate: 'afterkeydown',
                                 autocomplete_select: 'UpdateCompany',
                                 autocomplete_render: 'renderCompany',
-                                autoComplete: $parent.api + $parent.options.getAll() + '?$filter=substringof(\'REP_URL\',FirstName) and Category/Name eq \'Company\''" />
+                                autoComplete: $parent.api + $parent.options.getAll(true) + '?$filter=substringof(\'REP_URL\',FirstName) and Category/Name eq \'Company\''" />
                             <div class="add-choice" data-bind="
                                 showHide: (CompanyId() == undefined || CompanyId() == '0') && $parent.EditCompanyName() != '' && $parent.EditCompanyName() != undefined,
                                 click: $parent.AddNewCompany ">Add</div>

@@ -35,9 +35,15 @@ vm.baseViewModel = function (extend) {
     vm.viewModelsToLoad(vm.viewModelsToLoad() + 1);
 
     // View model variables
+    // ======================
+
+    // Is current module loaded
     self.loaded = ko.observable(false);
+    // Collection of all current entities
     self.collection = ko.observableArray([]);
+    // Is edit mode in new mode
     self.isNew = ko.observable(true);
+    // Are we asking for a deletion
     self.isDelete = ko.observable(false);
 
     self.showEditor = ko.observable(false);
@@ -62,6 +68,9 @@ vm.baseViewModel = function (extend) {
     });
 
     // view model methods
+    //=====================
+
+    // Refresh the module data collection
     self.refresh = function () {
         self.collection.removeAll();
         $.getJSON(self.api + self.options.getAll(), function (data) {
@@ -74,6 +83,7 @@ vm.baseViewModel = function (extend) {
         });
     }
 
+    // Select a single entity in the collection
     self.select = ko.dependentObservable(function () {
         var selected = self.selected();
         var result = ko.utils.arrayFilter(self.collection(), function (item) {
@@ -88,6 +98,7 @@ vm.baseViewModel = function (extend) {
         };
     }, self);
 
+    // Check item for validity
     self.isItemValid = function (item) {
         // Check for validation rules
         var valid = true;
@@ -97,6 +108,7 @@ vm.baseViewModel = function (extend) {
         return valid;
     };
 
+    // Save new or edited entity back into collection
     self.save = function (item) {
 
         if (self.startSave()) return;
@@ -140,6 +152,7 @@ vm.baseViewModel = function (extend) {
         }, 100);
     };
 
+    // Enter into edit mode with given entity
     self.edit = function (data) {
         var d;
         if (data && !isNaN(data.Id) && data.Id != 0) {
@@ -153,6 +166,7 @@ vm.baseViewModel = function (extend) {
         self.showEditor(true);
     };
 
+    // Delete given entity
     self.remove = function (item) {
         if (confirm(self.options.removeConfirm)) {
             var itemToRemove = ko.utils.unwrapObservable(ko.toJS(item));
@@ -172,6 +186,7 @@ vm.baseViewModel = function (extend) {
         }
     };
 
+    // Validate form
     self.validate = function () {
         if (!self.isValid()) {
             self.errors.showAllMessages();
@@ -182,6 +197,7 @@ vm.baseViewModel = function (extend) {
         return true;
     };
 
+    // Call extended method that are bound to the module
     extend.view(self);
 
     self.refresh();

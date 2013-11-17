@@ -41,7 +41,7 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder { color:#666; }
 .rel {position:relative;}
 [data-required] {background:url(/images/required.png) right top no-repeat; }
 select[data-required] {background-position-x:170px; }
-.add-choice {display:none;position:absolute; margin: -36px 0 0 168px; padding: 5px 6px 4px; border: #08b2fe 1px solid; color: #08b2fe; background:#fff;cursor:pointer;}
+.add-choice {display:none;position:absolute; margin: -33px 0 0 172px; padding: 4px 6px 4px; border: #08b2fe 1px solid; color: #08b2fe; background:#fff;cursor:pointer;}
 .add-form {position:absolute;border: #e2e2e2 1px solid;margin:-7px 0;background:#fff;}
 
 /* main layout
@@ -218,26 +218,11 @@ textarea {font-family: inherit;height: 59px;}
     }
 
 /* info and errors */
-.message-info {
-    border: 1px solid;
-    clear: both;
-    padding: 10px 20px;
-}
+.message-info {border: 1px solid;clear: both;padding: 10px 20px;}
 
-.message-error {
-    clear: both;
-    color: #e80c4d;
-    font-size: 1.1em;
-    font-weight: bold;
-    margin: 20px 0 10px 0;
-}
+.message-error {clear: both;color: #e80c4d;font-size: 1.1em;font-weight: bold;margin: 20px 0 10px 0;}
 
-.message-success {
-    color: #7ac0da;
-    font-size: 1.3em;
-    font-weight: bold;
-    margin: 20px 0 10px 0;
-}
+.message-success {color: #7ac0da;font-size: 1.3em;font-weight: bold;margin: 20px 0 10px 0;}
 
 .error {color: #e80c4d;border:1px solid #e80c4d;}
 
@@ -473,6 +458,9 @@ tr.pager td {padding: 0 0.25em 0 0;}
     footer {text-align: center;height: auto;padding: 10px 0;}
 
         footer p {margin: 0;}
+
+.add-choice {margin: -33px 0 0 162px;}
+
 }
 
 /* View Model

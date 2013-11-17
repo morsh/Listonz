@@ -4,7 +4,7 @@ vm.contacts = new vm.baseViewModel({
     api: function (self) {
         self.api = "/api/contacts/";
         self.options = {
-            getAll: function () { return "GetContacts" + (self.categoryId() == 0 ? '' : '?$filter=CategoryId eq ' + self.categoryId()); },
+            getAll: function (clear) { return "GetContacts" + (self.categoryId() == 0 || clear ? '' : '?$filter=CategoryId eq ' + self.categoryId()); },
             add: "PostContact",
             update: "PutContact",
             remove: "DeleteContact",
@@ -57,10 +57,6 @@ vm.contacts = new vm.baseViewModel({
             this.DrivingLisence = ko.observable('');
             this.Rating = ko.observable(0);
             this.LastUpdate = ko.observable('').extend({ date: true });
-
-            this.isCompany = ko.computed(function () {
-                return this.Category == "Company";
-            }, this);
         }
 
         self.categoryModel = function () {
@@ -88,6 +84,14 @@ vm.contacts = new vm.baseViewModel({
         self.showEditor.subscribe(function (newValue) {
             if (!oldShowEditor && !newValue && self.categoryId() != 0)
                 self.categoryId(0);
+
+            if (newValue && self.categoryId() != 0 && self.isNew()) {
+                for (var i = 0, j = self.Categories().length; i < j; i++)
+                    if (self.Categories()[i].Id == self.categoryId()) {
+                        self.select().CategoryId(self.categoryId());
+                        self.EditCategoryName(self.Categories()[i].Name);
+                    }
+            }
 
             oldShowEditor = newValue;
         });
@@ -243,6 +247,9 @@ vm.contacts = new vm.baseViewModel({
                     $(element).val(selectedItem.Name);
                 viewModel.CategoryId(selectedItem ? selectedItem.Id : null);
                 viewModel.Category = null;
+            };
+            self.isCompany = function () {
+                return self.select().CategoryId == 2 || self.select().CategoryId() == 2;
             };
 
             // render the company item for each company in the autocomplete list
