@@ -57,6 +57,8 @@ vm.contacts = new vm.baseViewModel({
             this.DrivingLisence = ko.observable('');
             this.Rating = ko.observable(0);
             this.LastUpdate = ko.observable('').extend({ date: true });
+
+            this.SocialData = ko.observable('');
         }
 
         self.categoryModel = function () {
@@ -250,6 +252,12 @@ vm.contacts = new vm.baseViewModel({
             };
             self.isCompany = function () {
                 return self.select().CategoryId == 2 || self.select().CategoryId() == 2;
+            };
+            self.Social = function () {
+                return JSON.parse(self.select().SocialData() || "{}") || {};
+            };
+            self.HSocial = function () {
+                return JSON.parse(self.hover().SocialData || "{}") || {};
             };
 
             // render the company item for each company in the autocomplete list
@@ -449,5 +457,31 @@ vm.contacts = new vm.baseViewModel({
     }
 });
 
+$(function () {
+
+    $(".vm-contacts").on("click", ".head .social .soc-link", function () {
+        var data = ko.dataFor(this);
+        var socialData = JSON.parse(data.SocialData()) || {};
+        var $el = $(this);
+        var social = $el.attr('social');
+
+        $("#social-dialog #social-url").val(socialData[social]);
+        var spcialDialogOpts = {
+            modal: true,
+            buttons: {
+                "Ok": function(){
+                    socialData[social] = $("#social-dialog #social-url").val();
+                    data.SocialData(JSON.stringify(socialData));
+
+                    $("#social-dialog").dialog("close");
+                },
+                "Cancel": function () { $("#social-dialog").dialog("close"); }
+            },
+            autoOpen: true
+        };
+
+        $('#social-dialog').dialog(spcialDialogOpts);
+    });
+});
 // TODO: google images web service should be loaded dynamically into the page
 //google.load('search', '1');

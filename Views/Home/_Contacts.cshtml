@@ -35,8 +35,8 @@
                     <tbody class="tr-highlight" data-bind="foreach: collection">
                         <tr onmousemove="ko.contextFor(this).$parent.updateHover(ko.dataFor(this));">
                             <td data-bind="text: FirstName + ' ' + (LastName || '')"></td>
-                            <td><span data-bind="if: Company != null"><span data-bind="    text: Company.FirstName"></span></span></td>
-                            <td><span data-bind="if: Category != null"><span data-bind="    text: Category.Name"></span></span></td>
+                            <td><span data-bind="if: Company != null"><span data-bind="text: Company.FirstName"></span></span></td>
+                            <td><span data-bind="if: Category != null"><span data-bind="text: Category.Name"></span></span></td>
                             <td>
                                 <button class="btn btn-mini btn-edit" data-bind="click: $parent.edit" title="Edit Contact"></button>
                                 <button class="btn btn-mini btn-delete" data-bind="click: $parent.remove" title="Delete Contact"></button>
@@ -66,6 +66,22 @@
                     </div>
                     <div class="rating">
                         <div data-bind="rateit: { value: $parent.hoverRating, max: 5, step: 0.1 }"></div>
+                    </div>
+
+                    <div class="social">
+                        <a class="on" data-bind="if: $parent.HSocial().facebook || '' != '', attr: { 'href': $parent.HSocial().facebook } " target="_blank">
+                            <div class="soc-link facebook" title="Facebook Profile Link"></div>
+                        </a>
+                        <a class="on" data-bind="if: $parent.HSocial().linkedin || '' != '', attr: { 'href': $parent.HSocial().linkedin } " target="_blank">
+                            <div class="soc-link linkedin" title="Linkedin Profile Link"></div>
+                        </a>
+                        <a class="on" data-bind="if: $parent.HSocial().twitter || '' != '', attr: { 'href': $parent.HSocial().twitter } " target="_blank">
+                            <div class="soc-link twitter" title="Twitter Profile Link"></div>
+                        </a>
+                        <div id="social-dialog" class="dialog" title="Input a new address">
+                          <p id="social-title"></p>
+                          <input type="text" id="social-url" value="" />
+                        </div>
                     </div>
 
                     <div class="phone" data-bind="if: PhoneNumber">
@@ -122,6 +138,21 @@
                     </div>
                     <div class="rating">
                         <div data-bind="rateit: { value: Rating, max: 5, step: 0.1 }"></div>
+                    </div>
+                    <div class="social">
+                        <span data-bind="attr: { 'class': $parent.Social().facebook || '' != '' ? 'on' : 'off' } ">
+                            <div class="soc-link facebook" title="Facebook Profile Link" social="facebook"></div>
+                        </span>
+                        <span data-bind="attr: { 'class': $parent.Social().linkedin || '' != '' ? 'on' : 'off' } ">
+                            <div class="soc-link linkedin" title="Linkedin Profile Link" social="linkedin"></div>
+                        </span>
+                        <span data-bind="attr: { 'class': $parent.Social().twitter || '' != '' ? 'on' : 'off' } ">
+                            <div class="soc-link twitter" title="Twitter Profile Link" social="twitter"></div>
+                        </span>
+                        <div id="social-dialog" class="dialog" title="Input a new address">
+                          <p id="social-title"></p>
+                          <input type="text" id="social-url" value="" />
+                        </div>
                     </div>
                 </section>
                 <ul class="float-left">

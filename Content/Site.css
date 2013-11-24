@@ -482,6 +482,15 @@ tr.pager td {padding: 0 0.25em 0 0;}
     .vm-view .edit .head .email div { padding:3px; }
     .vm-view .edit .head .email a:hover {background:none;}
 
+    .vm-view .social .soc-link {width:16px;height:16px;display:inline-block;cursor:pointer;}
+    .vm-view .social .facebook {background:#333;}
+    .vm-view .social .on .facebook {background:#2745f8;}
+    .vm-view .social .linkedin {background:#666;}
+    .vm-view .social .on .linkedin {background:#0fe51a;}
+    .vm-view .social .twitter {background:#c7d1d6;}
+    .vm-view .social .on .twitter {background:#08b2fe;}
+    .vm-view .social a { text-decoration:none;}
+
     #body .ui-tabs .ui-tabs-nav li.ui-tabs-selected a { cursor: pointer; }
 
 .btn-mini { background: transparent url(none) scroll no-repeat top center; width:22px; height:22px;border:none; }

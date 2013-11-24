@@ -61,6 +61,10 @@ vm.contactsWG = new vm.baseViewModel({
             this.isCompany = ko.computed(function () {
                 return this.Category == "Company";
             }, this);
+
+            this.FB = ko.computed(function () {
+                return true;
+            }, this);
         }
 
         self.categoryModel = function () {
