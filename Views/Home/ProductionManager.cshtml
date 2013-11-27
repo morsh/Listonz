@@ -12,13 +12,13 @@
 </div>
 <section style="display:none;" class="tabs" data-bind="showHide: allloaded()">
     <ul>
-        <li><a href="#tabContacts">Contacts</a></li>
-        <li><a href="#tabEvents">Events</a></li>
+        <li><a href="#tabContacts" tabTrigger="#/Contacts" tabSubPath="#tabContacts .vm-view" tabDefault="true">Contacts</a></li>
+        <li><a href="#tabEvents" tabTrigger="#/Events" tabSubPath="#tabEvents .vm-view">Events</a></li>
     </ul>
-    <div id="tabContacts">
+    <div id="tabContacts" class="lz-tab">
         @Html.Partial("_Contacts")
     </div>
-    <div id="tabEvents">
+    <div id="tabEvents" class="lz-tab">
         <label>Contacts Widget:</label>
         @Html.Partial("_Contacts_WG")
     </div>
@@ -27,7 +27,7 @@
 
 @section Scripts 
 {
-    <script src="~/Scripts/jquery-ui-1.8.24.min.js"></script>
+    <script src="~/Scripts/jquery-ui-1.10.3.min.js"></script>
     <script src="~/Scripts/knockout.mapping-latest.debug.js"></script>
     <script src="~/Scripts/jquery.validator.js"></script>
     <script src="~/Scripts/jquery.validator.knockout.js"></script>

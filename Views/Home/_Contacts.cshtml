@@ -8,7 +8,7 @@
                 <li class="cat-cts">
                     <ul data-bind="foreach: Categories">
                         <li data-bind="attr: { 'class': $parent.categoryId() == Id ? 'selected' : '' }">
-                            <a href="#" data-bind="click: function () { $parent.categoryId(Id) }"><span data-bind="    text: Name"></span></a>
+                            <a href="#" data-bind="click: function () { $parent.categoryId(Id) }"><span data-bind=" text: Name"></span></a>
                             <div class="remove" data-bind="if: UserId != null"><a href="#" data-bind="click: $parent.deleteCategory">X</a></div>
                         </li>
                     </ul>
@@ -153,6 +153,18 @@
                           <p id="social-title"></p>
                           <input type="text" id="social-url" value="" />
                         </div>
+                        <!--div>
+                            <input data-bind="
+                                    value: SocialData,
+                                    qtip: '#socialHover',
+                                    qtipType: 'Form'" social="facebook" />
+                        </!--div>
+                        <div id="socialHover" class="dialog" social="facebook">
+                            <label for="text">Text here:</label>
+                            <input type="text" name="text" value="start" />
+                            <a href="#" data-bind="click: $parent.UpdateSocial">OK</a>
+                            <a href="#" data-bind="click: $parent.CancelForm">Cancel</a>
+                        </div-->
                     </div>
                 </section>
                 <ul class="float-left">

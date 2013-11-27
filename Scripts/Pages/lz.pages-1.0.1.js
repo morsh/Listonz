@@ -49,6 +49,7 @@ vm.baseViewModel = function (extend) {
     self.showEditor = ko.observable(false);
     self.startSave = ko.observable();
 
+    self.selectedID = ko.observable(-1);
     self.selected = ko.observable(new self.model());
     self.cancelEdit = function () { self.showEditor(false); };
 
@@ -63,8 +64,10 @@ vm.baseViewModel = function (extend) {
     // Display a summasry of validation messages
     self.validationErrors = ko.observableArray([]);
     self.showEditor.subscribe(function () {
-        if (!self.showEditor())
+        if (!self.showEditor()) {
             self.validationErrors([]);
+            lz.sammy.quietRoute(lz.sammy.path);
+        }
     });
 
     // view model methods
@@ -75,6 +78,12 @@ vm.baseViewModel = function (extend) {
         self.collection.removeAll();
         $.getJSON(self.api + self.options.getAll(), function (data) {
             self.collection(data);
+
+            if (self.selectedID() >= 0) {
+                self.edit(self.selectedID());
+            }
+
+            self.selectedID(-1);
             self.loaded(true);
             vm.viewModelsToLoad(vm.viewModelsToLoad() - 1);
 
@@ -154,14 +163,30 @@ vm.baseViewModel = function (extend) {
 
     // Enter into edit mode with given entity
     self.edit = function (data) {
-        var d;
+        var d = null;
+        var itemID = 0;
         if (data && !isNaN(data.Id) && data.Id != 0) {
             d = data;
+            itemID = d.Id;
             self.isNew(false);
+        } else if (data && !isNaN(data) && data != 0) {
+
+            for (var i = 0; i < self.collection().length; i++)
+                if (self.collection()[i].Id == data) {
+                    d = self.collection()[i];
+                    itemID = d.Id;
+                    self.isNew(false);
+                }
+
+            // TODO: if no contact was found, give a proper message
+            if (d == null) { return };
         } else {
             d = new self.model();
             self.isNew(true);
         };
+
+        lz.sammy.quietRoute(lz.sammy.path + "/" + itemID);
+        
         self.selected(d);
         self.showEditor(true);
     };
@@ -176,8 +201,10 @@ vm.baseViewModel = function (extend) {
                 success: function (data) {
 
                     for (var i = 0, j = self.collection().length; i < j; i++)
-                        if (self.collection()[i].Id == itemToRemove.Id)
+                        if (self.collection()[i].Id == itemToRemove.Id) {
                             self.collection.remove(self.collection()[i]);
+                            break;
+                        }
 
                     self.showEditor(false);
                 },
@@ -348,6 +375,57 @@ ko.bindingHandlers.rv = {
     update: ko.bindingHandlers.value.update
 };
 
+ko.bindingHandlers.qtip = {
+    init: function (element, valueAccessor, allBindingsAccessor) {
+        //initialize datepicker with some optional options
+        var options = allBindingsAccessor().qtipOptions || {},
+            content = valueAccessor() || '',
+            position = allBindingsAccessor().qtipPosition || {
+                my: "bottom center",
+                at: "top center",
+            },
+            type = allBindingsAccessor().qtipType || 'Tooltip', // 'Tooltip', 'Form'
+            $el = $(element);
+
+        if ($(content).length > 0) {
+            content = $(content);
+            content.data('koContext', ko.contextFor($el[0]))
+        }
+
+        options.content = content;
+        options.position = position;
+
+        if (type == 'Form') {
+            options.show = 'click';
+            options.hide = 'unfocus click';
+        }
+
+        $el.qtip(options);
+
+        //handle the field changing
+        //ko.utils.registerEventHandler(element, "change", function () {
+        //    var observable = valueAccessor();
+        //    observable($el.datepicker("getDate"));
+        //});
+
+        //handle disposal (if KO removes by the template binding)
+        //ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
+        //    $el.datepicker("destroy");
+        //});
+
+    },
+    update: function (element, valueAccessor) {
+        var value = ko.utils.unwrapObservable(valueAccessor()),
+            $el = $(element);
+
+        var current = $el.datepicker("getDate");
+
+        if (value - current !== 0) {
+            $el.datepicker("setDate", new Date(moment(value).format()));
+        }
+    }
+};
+
 ko.bindingHandlers.autoComplete = {
     init: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
 
@@ -421,7 +499,7 @@ ko.bindingHandlers.autoComplete = {
         })
 
         if (renderItem && typeof (bindingContext.$parent[renderItem]) == 'function')
-            autoComp.data("autocomplete")._renderItem = bindingContext.$parent[renderItem];
+            autoComp.data("ui-autocomplete")._renderItem = bindingContext.$parent[renderItem];
     }
 };
 
@@ -460,6 +538,7 @@ ko.bindingHandlers.datepicker = {
 
 
 // Page load methods
+lz.sammy = null;
 $(function () {
 
     // Fixing loader location on screen
@@ -514,25 +593,71 @@ $(function () {
     // Placeholder fix for ie9
     lz.fixPlaceholder();
 
-    var app = $.sammy('.tabs', function () {
+    lz.sammy = $.sammy('.tabs', function () {
 
-        function showView(viewName) {
-            //$(".view").hide().find('[data-hasqtip]');
-            $('.tabs>ul>li>a[href=#tab' + viewName + ']').click();
+        var sammy = this;
+        sammy.quiet = false; //set quiet to false by default
+
+        //I set quiet to true before running a route
+        sammy.quietRoute = function (location) {
+            sammy.quiet = true;
+            sammy.setLocation(location);
         }
-        
-        this.get("#/Contacts", function (context) {
-            showView('Contacts');
+
+        //I'm called after every route to reset quiet to false
+        sammy.after(function () {
+            sammy.quiet = false;
         });
 
-        this.get("#/Events", function (context) {
-            showView('Events');
-        });
+        sammy.path = '';
+        sammy.subPath = '';
+        function showView(tabElement, contextPath, itemID) {
+            var savePath = sammy.path;
+            var saveSubPath = sammy.subPath;
+            try {
+                $(tabElement).trigger('click');
 
+                // Getting ko context
+                if (contextPath) {
+                    var selectedTab = $(contextPath);
+                    var koContext = ko.contextFor(selectedTab[0]);
+                    koContext.$data.selectedID(itemID || null);
+                    koContext.$data.refresh();
+                }
+            }
+            finally {
+                sammy.quietRoute(savePath + (saveSubPath ? '/' + saveSubPath : ''));
+            }
+        }
+
+        $('[tabTrigger]').each(function () {
+            var $el = $(this);
+            var triggerPath = $el.attr('tabTrigger');
+            var contextPath = $el.attr('tabSubPath');
+
+            sammy.get(triggerPath, function (context) {
+                sammy.path = triggerPath;
+                sammy.subPath = '';
+                if (sammy.quiet) return;
+                showView($el);
+            });
+
+            if (contextPath)
+                sammy.get("#/Contacts/:ItemID", function (context) {
+                    sammy.path = triggerPath;
+                    sammy.subPath = context.params.ItemID;
+                    if (sammy.quiet) return;
+                    showView($el, contextPath, context.params.ItemID);
+                });
+        });
     });
 
     $(function () {
-        app.run('#/Contacts');
+        try {
+            var defaultPath = $('[tabDefault]').first().attr('tabTrigger');
+            lz.sammy.run(defaultPath);
+        }
+        catch (e) { }
     });
 });
 

@@ -29,6 +29,7 @@ namespace Listonz.Controllers.Api
         public string name { get; set; }
         public string abb { get; set; }
     }
+
     public class ContactsController : ApiController
     {
         private UsersContext db = new UsersContext();

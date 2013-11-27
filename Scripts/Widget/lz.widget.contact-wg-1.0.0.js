@@ -4,7 +4,7 @@ vm.contactsWG = new vm.baseViewModel({
     api: function (self) {
         self.api = "/api/contacts/";
         self.options = {
-            getAll: function () { return "GetContacts?$top=3" + (self.categoryId() == 0 ? '' : '&$filter=CategoryId eq ' + self.categoryId()); },
+            getAll: function () { return "GetContacts?$top=3" + (self.categoryId() == 0 ? '' : '&$filter=CategoryId eq ' + self.categoryId()) + '&$orderby=LastUpdate%20desc'; },
             add: "PostContact",
             update: "PutContact",
             remove: "DeleteContact",

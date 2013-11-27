@@ -94,8 +94,8 @@ C:\Users\mor\documents\visual studio 2012\Projects\Listonz\Listonz\obj\Debug\Lis
 C:\Users\mor\Documents\Visual Studio 2012\Projects\Listonz\Listonz\bin\Facebook.dll
 C:\Users\mor\Documents\Visual Studio 2012\Projects\Listonz\Listonz\bin\Facebook.xml
 C:\Users\mor\Documents\Visual Studio 2012\Projects\Listonz\Listonz\obj\Debug\Listonz.Migrations.AddProfilePicture.resources
-C:\Users\mor\documents\visual studio 2012\Projects\Listonz\Listonz\obj\Debug\Listonz.csprojResolveAssemblyReference.cache
 C:\Users\mor\documents\visual studio 2012\Projects\Listonz\Listonz\obj\Debug\Listonz.Migrations.AddCategories.resources
 C:\Users\mor\documents\visual studio 2012\Projects\Listonz\Listonz\obj\Debug\Listonz.Migrations.CategoryLookup.resources
 C:\Users\mor\documents\visual studio 2012\Projects\Listonz\Listonz\obj\Debug\Listonz.Migrations.AddUserID.resources
 C:\Users\mor\Documents\Visual Studio 2012\Projects\Listonz\Listonz\obj\Debug\Listonz.Migrations.SocialColumn.resources
+C:\Users\mor\Documents\Visual Studio 2012\Projects\Listonz\Listonz\obj\Debug\Listonz.csprojResolveAssemblyReference.cache

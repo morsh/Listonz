@@ -66,38 +66,6 @@ vm.contacts = new vm.baseViewModel({
             this.Name = ko.observable('');
         };
     },
-    view: function (self) {
-
-        self.showEditor.subscribe(self.updateImages);
-        self.showEditor.subscribe(function () {
-            if (self.selected().Company != null)
-                self.EditCompanyName(self.selected().Company.FirstName);
-            else
-                self.EditCompanyName('');
-
-            if (self.selected().Category != null)
-                self.EditCategoryName(self.selected().Category.Name);
-            else
-                self.EditCategoryName('');
-        });
-        //self.model.Company.subscribe(updateImages);
-
-        var oldShowEditor = false;
-        self.showEditor.subscribe(function (newValue) {
-            if (!oldShowEditor && !newValue && self.categoryId() != 0)
-                self.categoryId(0);
-
-            if (newValue && self.categoryId() != 0 && self.isNew()) {
-                for (var i = 0, j = self.Categories().length; i < j; i++)
-                    if (self.Categories()[i].Id == self.categoryId()) {
-                        self.select().CategoryId(self.categoryId());
-                        self.EditCategoryName(self.Categories()[i].Name);
-                    }
-            }
-
-            oldShowEditor = newValue;
-        });
-    },
     extend: function (self) {
 
         // Handle Properties
@@ -255,6 +223,20 @@ vm.contacts = new vm.baseViewModel({
             };
             self.Social = function () {
                 return JSON.parse(self.select().SocialData() || "{}") || {};
+            };
+            self.UpdateSocial = function () {
+                var $el = $(event.srcElement);
+                var $dialog = $el.closest('.dialog');
+                var sourceElement = $dialog.data('sourceElement');
+                var data = ko.dataFor(sourceElement);
+                var social = sourceElement.social;
+                // $(event.srcElement).closest('.qtip').data('qtip').options.position.target[0].tagName
+                var socialData = JSON.parse(data.SocialData()) || {};
+                socialData[social] = $("#social-dialog #social-url").val();
+                data.SocialData(JSON.stringify(socialData));
+            };
+            self.CancelForm = function () {
+                alert(9);
             };
             self.HSocial = function () {
                 return JSON.parse(self.hover().SocialData || "{}") || {};
@@ -454,11 +436,62 @@ vm.contacts = new vm.baseViewModel({
                 close: function () { }
             });
         };
+    },
+
+    // Bind actions after the view model base was initialized
+    view: function (self) {
+
+        // Saving old value to moniture consequent clicks on a tab
+        var oldShowEditor = false;
+
+        // Perform following actions each time the edit mode changes (revealing and removing items from the view)
+        self.showEditor.subscribe(function (newValue) {
+
+            // Update images (on every change??)
+            self.updateImages();
+
+            // Update company and category names to match the ones from the selected contact
+            if (self.selected().Company != null)
+                self.EditCompanyName(self.selected().Company.FirstName);
+            else
+                self.EditCompanyName('');
+
+            if (self.selected().Category != null)
+                self.EditCategoryName(self.selected().Category.Name);
+            else
+                self.EditCategoryName('');
+
+            // Empty the selected hover element
+            self.hover(new self.model());
+
+            // Clicking twice on "Contacts" will force the category back to "All"
+            if (!oldShowEditor && !newValue && self.categoryId() != 0)
+                self.categoryId(0);
+
+            // When adding new contact under category, set the default category to selected one
+            if (newValue && self.categoryId() != 0 && self.isNew()) {
+                for (var i = 0, j = self.Categories().length; i < j; i++)
+                    if (self.Categories()[i].Id == self.categoryId()) {
+                        self.select().CategoryId(self.categoryId());
+                        self.EditCategoryName(self.Categories()[i].Name);
+                    }
+            }
+
+            // Saving current showEditor value
+            oldShowEditor = newValue;
+        });
+
+        // When the collection chagnes, remove the last previed contact
+        self.collection.subscribe(function () {
+            self.hover(new self.model());
+        });
+        //self.model.Company.subscribe(updateImages);
     }
 });
 
 $(function () {
 
+    // When clicking on social links, enable changing the links (in edit mode)
     $(".vm-contacts").on("click", ".head .social .soc-link", function () {
         var data = ko.dataFor(this);
         var socialData = JSON.parse(data.SocialData()) || {};
