@@ -426,6 +426,23 @@ ko.bindingHandlers.qtip = {
     }
 };
 
+ko.bindingHandlers.toggleClass = {
+    toggleFunc: function (element, valueAccessor, allBindingsAccessor) {
+        var toggleIf = valueAccessor() || '',
+            className = allBindingsAccessor().toggleClassName,
+            $el = $(element);
+
+        if (toggleIf) $el.addClass(className);
+        else $el.removeClass(className);
+    },
+    init: function (element, valueAccessor, allBindingsAccessor) {
+        ko.bindingHandlers.toggleClass.toggleFunc(element, valueAccessor, allBindingsAccessor);
+    },
+    update: function (element, valueAccessor, allBindingsAccessor) {
+        ko.bindingHandlers.toggleClass.toggleFunc(element, valueAccessor, allBindingsAccessor);
+    }
+};
+
 ko.bindingHandlers.autoComplete = {
     init: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
 
@@ -433,9 +450,10 @@ ko.bindingHandlers.autoComplete = {
         var updateValue = allBindingsAccessor().autocomplete_select;
         var renderItem = allBindingsAccessor().autocomplete_render;
         var cacheFilter = allBindingsAccessor().autocomplete_cache || false;
+        var $el = $(element);
 
         var updateFunction = function (selectedItem, setTimeout) {
-            $(element).data('selected', selectedItem);
+            $el.data('selected', selectedItem);
             if (updateValue && typeof (bindingContext.$parent[updateValue]) == 'function')
                 bindingContext.$parent[updateValue](element, selectedItem, viewModel);
 
@@ -463,7 +481,7 @@ ko.bindingHandlers.autoComplete = {
                     return filterFunction(item, s);
             });
         };
-        var autoComp = $(element).autocomplete({
+        var autoComp = $el.autocomplete({
             minLength: 0,
             autoFocus: false,
             source: function (request, response) {
@@ -500,14 +518,21 @@ ko.bindingHandlers.autoComplete = {
 
         if (renderItem && typeof (bindingContext.$parent[renderItem]) == 'function')
             autoComp.data("ui-autocomplete")._renderItem = bindingContext.$parent[renderItem];
+
+        //handle disposal (if KO removes by the template binding)
+        ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
+            $el.autocomplete("destroy");
+        });
     }
 };
 
 ko.bindingHandlers.datepicker = {
     init: function (element, valueAccessor, allBindingsAccessor) {
         //initialize datepicker with some optional options
-        var options = allBindingsAccessor().datepickerOptions || { "dateFormat": 'dd/mm/yy' },
+        var options = allBindingsAccessor().datepickerOptions || { },
             $el = $(element);
+
+        options.dateFormat = options.dateFormat || 'dd/mm/yy';
 
         $el.datepicker(options);
 
@@ -534,6 +559,36 @@ ko.bindingHandlers.datepicker = {
         }
     }
 };
+
+ko.bindingHandlers.chars = {
+    init: function (element, valueAccessor, allBindingsAccessor) {
+        //initialize datepicker with some optional options
+        var type = valueAccessor() || '',
+            $el = $(element);
+
+        var patterns = [];
+        patterns['phone'] = { match: /^[0-9-+]*$/g, replace: /[^0-9-+]/g }; // filtering digits, -, +
+
+        //handle the field changing
+        ko.utils.registerEventHandler(element, "change keypress input", function () {
+            var e = event;
+            var pattern = patterns['phone'];
+            var key = 0;
+            if (e != null) e.charCode ? e.charCode : e.keyCode ? e.keyCode : 0;
+            if (key != 0) {
+                var char = String.fromCharCode(key);
+                if (isNaN(char) && char != '-' && char != '+') return false;
+            }
+            else {
+                if (!pattern.match.test($el.val())) {
+                    // Filter non-digits from input value.
+                    $el.val($el.val().replace(pattern.replace, ''));
+                }
+            }
+        });
+    }
+};
+
 /************************************************/
 
 

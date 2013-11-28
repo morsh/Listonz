@@ -1,6 +1,11 @@
 ﻿<div data-bind="with: contacts">
     <div data-bind="showHide: loaded" class="vm-view vm-contacts">
         <div data-bind="ifnot: showEditor()">
+
+            <div class="clear-both">
+                <input type="button" value="Add" data-bind="click: edit" />
+            </div>
+
             <ul class="categories">
                 <li class="cat-all" data-bind="attr: { 'class': categoryId() == 0 ? 'selected' : '' }">
                     <a href="#" data-bind="click: function () { categoryId(0) }"><span>All Contacts</span></a>
@@ -9,7 +14,7 @@
                     <ul data-bind="foreach: Categories">
                         <li data-bind="attr: { 'class': $parent.categoryId() == Id ? 'selected' : '' }">
                             <a href="#" data-bind="click: function () { $parent.categoryId(Id) }"><span data-bind=" text: Name"></span></a>
-                            <div class="remove" data-bind="if: UserId != null"><a href="#" data-bind="click: $parent.deleteCategory">X</a></div>
+                            <div class="remove" data-bind="if: UserId != null"><a href="#" data-bind="click: $parent.deleteCategory"><span class="ui-icon ui-icon-close"></span></a></div>
                         </li>
                     </ul>
                 </li>
@@ -23,34 +28,59 @@
                 </li>
             </ul>
 
-            <div class="results">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Company</th>
-                            <th>Category</th>
-                        </tr>
-                    </thead>
-                    <tbody class="tr-highlight" data-bind="foreach: collection">
-                        <tr onmousemove="ko.contextFor(this).$parent.updateHover(ko.dataFor(this));">
-                            <td data-bind="text: FirstName + ' ' + (LastName || '')"></td>
-                            <td><span data-bind="if: Company != null"><span data-bind="text: Company.FirstName"></span></span></td>
-                            <td><span data-bind="if: Category != null"><span data-bind="text: Category.Name"></span></span></td>
-                            <td>
-                                <button class="btn btn-mini btn-edit" data-bind="click: $parent.edit" title="Edit Contact"></button>
-                                <button class="btn btn-mini btn-delete" data-bind="click: $parent.remove" title="Delete Contact"></button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+            <style>
+/*Framework*/
+.Resize{resize:both;}
+.Container {width:60%;float:left;display:inline-block;}
+.Scrollable{position:relative;width:60%;}
+    .Scrollable .ScrollArea{/*Make this box scroll*/overflow:auto;direction:rtl;padding-left:5px;}
+    .Scrollable .ScrollArea > table {/*Make this box scroll*/direction:ltr;margin-top:-10px;width:100%;margin-top:5px;}
+    .Scrollable .Fixable .fix{position:absolute;margin:3px 0 3px 0; /*Escape the scrolling context*/}
+/*App Specific*/
+    .Scrollable .ScrollArea{/*Give it a fixed size so it can scroll. Could also set using JS*/height:283px;}
+    .Scrollable table{table-layout:fixed;}
+    .Scrollable{/*Leave room for the header area*/padding-top:1.5em;/*TODO: Set a background image to make it look like there's a fixed row*/}
+
+    .Scrollable thead .fix{
+    /*Move above the scroll area into the fake header*/
+        top:0; /*Must absolutely position the top to avoid bugs in Firefox and IE6*/
+        height:1.5em;
+        line-height:1.5em;
+    }
+
+            </style>
+
+            <div class="Container" data-bind="toggleClass: collection().length > 9, toggleClassName: 'Scrollable'">
+                <div class="results ScrollArea">
+                    <table>
+                        <thead>
+                            <tr class='Fixable'>
+                                <th><span class=fix>Name</span></th>
+                                <th><span class=fix>Company</span></th>
+                                <th><span class=fix>Category</span></th>
+                                <th width="60px"></th>
+                            </tr>
+                        </thead>
+                        <tbody class="tr-highlight" data-bind="foreach: collection">
+                            <tr onmousemove="ko.contextFor(this).$parent.updateHover(ko.dataFor(this));">
+                                <td data-bind="text: FirstName + ' ' + (LastName || '')"></td>
+                                <td><span data-bind="if: Company != null"><span data-bind="text: Company.FirstName"></span></span></td>
+                                <td><span data-bind="if: Category != null"><span data-bind="text: Category.Name"></span></span></td>
+                                <td>
+                                    <button class="btn btn-mini btn-edit" data-bind="click: $parent.edit" title="Edit Contact"></button>
+                                    <button class="btn btn-mini btn-delete" data-bind="click: $parent.remove" title="Delete Contact"></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
             <div class="hover-profile" data-bind="with: hover()">
                 <div data-bind="if: Id > 0">
-                    <div class="float-left">
-                        <span data-bind="ifnot: ProfilePicture"><img src="~/Images/profile.jpg" width="70px" /></span>
-                        <span data-bind="if: ProfilePicture"><img data-bind="attr: { src: ProfilePicture }" src="" width="70px" /></span>
+                    <div class="float-left prf-pic">
+                        <span data-bind="ifnot: ProfilePicture"><img src="~/Images/profile.jpg" /></span>
+                        <span data-bind="if: ProfilePicture"><img data-bind="attr: { src: ProfilePicture }" src="" /></span>
                     </div>
                     
                     <div>
@@ -98,18 +128,13 @@
                     Hover on a contact to preview his\her details
                 </div>
             </div>
-
-            <div class="clear-both">
-                <input type="button" id="btnGetcontacts" value="Get contacts" data-bind="click: refresh" />
-                <input type="button" value="Add" data-bind="click: edit" />
-            </div>
         </div>
         <div data-bind="if: showEditor" class="edit">
             <div data-bind=" { with: select(), jqValidation: validationContext } ">
                 <section class="head">
                     <div class="prf-pic" onclick="vm.contacts.changePicture();">
-                        <span data-bind="ifnot: ProfilePicture"><img src="~/Images/profile.jpg" width="70px" /></span>
-                        <span data-bind="if: ProfilePicture"><img data-bind=" attr: { src: ProfilePicture }" src="" width="70px" /></span>
+                        <span data-bind="ifnot: ProfilePicture"><img src="~/Images/profile.jpg" /></span>
+                        <span data-bind="if: ProfilePicture"><img data-bind=" attr: { src: ProfilePicture }" src="" /></span>
                         <div class="pic-edit">Change</div>
 
                         <!-- Url enter dialog -->
@@ -265,19 +290,27 @@
                                 data-bind="value: Email"
                                 placeholder="Email"
                                 data-required="true"
-                                data-email="true" /></span>
+                                data-email="true"
+                                maxlength="265" /></span>
                     </li>
                     <li>
-                        <span><input type="tel" data-bind="value: PhoneNumber" placeholder="Phone Number" data-phone="true" data-validate="true" /></span>
+                        <span><input type="tel" data-bind="value: PhoneNumber, chars: 'phone'" placeholder="Phone Number" data-phone="true" data-validate="true" maxlength="20" /></span>
                     </li>
                     <li>
-                        <span><input type="text" data-bind="value: MobileNumber" placeholder="Mobile Number" data-phone="true" data-validate="true" /></span>
+                        <span><input type="text" data-bind="value: MobileNumber, chars: 'phone'" placeholder="Mobile Number" data-phone="true" data-validate="true" maxlength="20" /></span>
                     </li>
                     <li>
-                        <span><input type="text" data-bind="value: FaxNumber" placeholder="Fax Number" data-phone="true" data-validate="true" /></span>
+                        <span><input type="text" data-bind="value: FaxNumber, chars: 'phone'" placeholder="Fax Number" data-phone="true" data-validate="true" maxlength="20" /></span>
                     </li>
                     <li>
-                        <span><input type="text" data-bind="datepicker: Birthday" placeholder="Birthday" data-date="true" data-validate="true" /></span>
+                        <span><input type="text" placeholder="Birthday" data-date="true" data-validate="true" data-bind="
+    datepicker: Birthday,
+    datepickerOptions: { 
+        changeMonth: true,
+        changeYear: true,
+        yearRange: '-100:+0',
+        showOtherMonths: true,
+        selectOtherMonths: true }"  /></span>
                     </li>
                     <li class="chk-height">
                         <input type="checkbox" data-bind="checked: Single" />
