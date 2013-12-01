@@ -496,9 +496,12 @@ tr.pager td {padding: 0 0.25em 0 0;}
 .ui-autocomplete li table { width:300px;}
 .ui-autocomplete li table td { padding:0;  }
 .ui-autocomplete li img {width:30px; height:30px;}
-.ui-menu .ui-menu-item a { }
-.ui-menu .ui-menu-item a div { padding-right: 15px; }
-.ui-menu .ac-big a {display:inline-block;height:auto;height: 55px;}
+
+
+.ui-menu .ui-menu-item a,
+.ui-menu .ui-menu-item a:hover {text-decoration:none;width:99%;padding:0;margin:0;display:inline-block;}
+.ui-menu .ac-big a div { padding-right: 15px;}
+.ui-menu .ac-big a {height: 55px;}
 /* Contacts View Model
     ----------------------------------------------------------*/
 #tabContacts .categories {width: 100%; display: inline-block;padding:0;margin:0;}
@@ -512,6 +515,8 @@ tr.pager td {padding: 0 0.25em 0 0;}
     #tabContacts .categories .remove { margin-top: -30px; position: absolute;display:none;}
     #tabContacts .categories .cat-cts li:hover .remove {display:block;}
     #tabContacts .categories .cat-cts li:hover .remove a {background:#c7d1d6;float:left;padding:1px;}
+
+#body .ui-tabs .ui-tabs-nav li.ui-tabs-active a {cursor:pointer;}
 
 .results td {white-space:nowrap;text-overflow:ellipsis;overflow:hidden; }
 #tabContacts .results {float:left;}

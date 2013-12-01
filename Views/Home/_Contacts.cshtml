@@ -18,7 +18,7 @@
                         </li>
                     </ul>
                 </li>
-                <li class="cat-new" data-bind="ifnot: tabsAddNewMode">
+                <li class="cat-new" data-bind="if: !tabsAddNewMode() && Categories().length < 8">
                     <a href="#" data-bind="click: function () { tabsChangeAddMode(true) }"><span>Add +</span></a>
                 </li>
                 <li class="cat-add" data-bind="if: tabsAddNewMode">
@@ -95,7 +95,7 @@
                         </a>
                     </div>
                     <div class="rating">
-                        <div data-bind="rateit: { value: $parent.hoverRating, max: 5, step: 0.1 }"></div>
+                        <div data-bind="rateit: { value: $parent.hoverRating, max: 5, step: 0.1, readonly: true }"></div>
                     </div>
 
                     <div class="social">

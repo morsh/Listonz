@@ -690,6 +690,17 @@ $(function () {
             var triggerPath = $el.attr('tabTrigger');
             var contextPath = $el.attr('tabSubPath');
 
+            $el.mousedown(function () {
+                if ($(this).parent().hasClass('ui-tabs-active'))
+                    try
+                    {
+                        var tabSubPath = $(this).attr('tabsubpath');
+                        var ctx = ko.dataFor($(tabSubPath)[0]);
+                        ctx.refresh();
+                    }
+                    catch (e) { }
+            });
+
             sammy.get(triggerPath, function (context) {
                 sammy.path = triggerPath;
                 sammy.subPath = '';
