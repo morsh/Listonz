@@ -497,11 +497,11 @@ tr.pager td {padding: 0 0.25em 0 0;}
 .ui-autocomplete li table td { padding:0;  }
 .ui-autocomplete li img {width:30px; height:30px;}
 
-
 .ui-menu .ui-menu-item a,
 .ui-menu .ui-menu-item a:hover {text-decoration:none;width:99%;padding:0;margin:0;display:inline-block;}
 .ui-menu .ac-big a div { padding-right: 15px;}
 .ui-menu .ac-big a {height: 55px;}
+
 /* Contacts View Model
     ----------------------------------------------------------*/
 #tabContacts .categories {width: 100%; display: inline-block;padding:0;margin:0;}

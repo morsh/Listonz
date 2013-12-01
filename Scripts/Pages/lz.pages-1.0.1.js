@@ -385,6 +385,7 @@ ko.bindingHandlers.qtip = {
                 at: "top center",
             },
             type = allBindingsAccessor().qtipType || 'Tooltip', // 'Tooltip', 'Form'
+            onShow = allBindingsAccessor().qtipOnShow || null,
             $el = $(element);
 
         if ($(content).length > 0) {
@@ -394,6 +395,8 @@ ko.bindingHandlers.qtip = {
 
         options.content = content;
         options.position = position;
+
+        if (onShow) { options.events = options.events || {}; options.events.show = onShow; }
 
         if (type == 'Form') {
             options.show = 'click';

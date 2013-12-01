@@ -28,7 +28,7 @@ namespace Listonz.Models
         public string MobileNumber { get; set; }
         public string FaxNumber { get; set; }
         public string Birthday { get; set; }
-        public bool? Single { get; set; }
+        public string Single { get; set; }
         public string SocialSecurity { get; set; }
         public string DrivingLisence { get; set; }
 

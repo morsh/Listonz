@@ -166,30 +166,35 @@
                     </div>
                     <div class="social">
                         <span data-bind="attr: { 'class': $parent.Social().facebook || '' != '' ? 'on' : 'off' } ">
-                            <div class="soc-link facebook" title="Facebook Profile Link" social="facebook"></div>
-                        </span>
-                        <span data-bind="attr: { 'class': $parent.Social().linkedin || '' != '' ? 'on' : 'off' } ">
-                            <div class="soc-link linkedin" title="Linkedin Profile Link" social="linkedin"></div>
-                        </span>
-                        <span data-bind="attr: { 'class': $parent.Social().twitter || '' != '' ? 'on' : 'off' } ">
-                            <div class="soc-link twitter" title="Twitter Profile Link" social="twitter"></div>
-                        </span>
-                        <div id="social-dialog" class="dialog" title="Input a new address">
-                          <p id="social-title"></p>
-                          <input type="text" id="social-url" value="" />
-                        </div>
-                        <!--div>
-                            <input data-bind="
+                            <div class="soc-link facebook" title="Facebook Profile Link" social="facebook"
+                                data-bind="
                                     value: SocialData,
                                     qtip: '#socialHover',
-                                    qtipType: 'Form'" social="facebook" />
-                        </!--div>
+                                    qtipType: 'Form',
+                                    qtipOnShow: $parent.SetSocial"></div>
+                        </span>
+                        <span data-bind="attr: { 'class': $parent.Social().linkedin || '' != '' ? 'on' : 'off' } ">
+                            <div class="soc-link linkedin" title="Linkedin Profile Link" social="linkedin"
+                                data-bind="
+                                    value: SocialData,
+                                    qtip: '#socialHover',
+                                    qtipType: 'Form',
+                                    qtipOnShow: $parent.SetSocial"></div>
+                        </span>
+                        <span data-bind="attr: { 'class': $parent.Social().twitter || '' != '' ? 'on' : 'off' } ">
+                            <div class="soc-link twitter" title="Twitter Profile Link" social="twitter"
+                                data-bind="
+                                    value: SocialData,
+                                    qtip: '#socialHover',
+                                    qtipType: 'Form',
+                                    qtipOnShow: $parent.SetSocial"></div>
+                        </span>
                         <div id="socialHover" class="dialog" social="facebook">
-                            <label for="text">Text here:</label>
-                            <input type="text" name="text" value="start" />
+                            <label for="social-url">Text here:</label>
+                            <input type="text" id="social-url" name="social-url" value="start" />
                             <a href="#" data-bind="click: $parent.UpdateSocial">OK</a>
                             <a href="#" data-bind="click: $parent.CancelForm">Cancel</a>
-                        </div-->
+                        </div>
                     </div>
                 </section>
                 <ul class="float-left">
@@ -313,8 +318,9 @@
         selectOtherMonths: true }"  /></span>
                     </li>
                     <li class="chk-height">
-                        <input type="checkbox" data-bind="checked: Single" />
-                        <label onclick="$(this).prev().click()">Single</label>
+                        <span>
+                            <select data-bind="options: [ 'Single', 'Married', 'Divorced', 'Other' ], value: Single" ></select></span>
+                        <!--label onclick="$(this).prev().click()">Single</!--label-->
                     </li>
                     <li>
                         <span>

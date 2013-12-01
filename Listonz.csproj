@@ -248,6 +248,10 @@
     <Compile Include="Migrations\201311121553567_Social Column.Designer.cs">
       <DependentUpon>201311121553567_Social Column.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201312011015452_ContactsSingleString.cs" />
+    <Compile Include="Migrations\201312011015452_ContactsSingleString.Designer.cs">
+      <DependentUpon>201312011015452_ContactsSingleString.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\Attributes\IsTrueAttribute.cs" />
@@ -477,6 +481,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201311121553567_Social Column.resx">
       <DependentUpon>201311121553567_Social Column.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201312011015452_ContactsSingleString.resx">
+      <DependentUpon>201312011015452_ContactsSingleString.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

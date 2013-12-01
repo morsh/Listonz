@@ -224,19 +224,29 @@ vm.contacts = new vm.baseViewModel({
             self.Social = function () {
                 return JSON.parse(self.select().SocialData() || "{}") || {};
             };
+            self.SetSocial = function () {
+                var $el = $(this);
+                var currQtip = $el.closest('.qtip');
+                var target = currQtip.data('qtip').options.position.target[0];
+                var data = ko.dataFor(target);
+                var social = $(target).attr('social');
+                var socialData = JSON.parse(data.SocialData() || "{}") || {};
+                currQtip.find("#social-url").val(socialData[social]);
+            };
             self.UpdateSocial = function () {
                 var $el = $(event.srcElement);
-                var $dialog = $el.closest('.dialog');
-                var sourceElement = $dialog.data('sourceElement');
-                var data = ko.dataFor(sourceElement);
-                var social = sourceElement.social;
-                // $(event.srcElement).closest('.qtip').data('qtip').options.position.target[0].tagName
-                var socialData = JSON.parse(data.SocialData()) || {};
-                socialData[social] = $("#social-dialog #social-url").val();
+                var currQtip = $el.closest('.qtip');
+                var target = currQtip.data('qtip').options.position.target[0];
+                var data = ko.dataFor(target);
+                var social = $(target).attr('social');
+                var socialData = JSON.parse(data.SocialData() || "{}") || {};
+                socialData[social] = currQtip.find("#social-url").val();
                 data.SocialData(JSON.stringify(socialData));
+
+                currQtip.qtip('hide');
             };
             self.CancelForm = function () {
-                alert(9);
+                $(event.srcElement).closest('.qtip').qtip('hide');
             };
             self.HSocial = function () {
                 return JSON.parse(self.hover().SocialData || "{}") || {};
@@ -492,7 +502,7 @@ vm.contacts = new vm.baseViewModel({
 $(function () {
 
     // When clicking on social links, enable changing the links (in edit mode)
-    $(".vm-contacts").on("click", ".head .social .soc-link", function () {
+    $(".vm-contacts").on("click_on", ".head .social .soc-link", function () {
         var data = ko.dataFor(this);
         var socialData = JSON.parse(data.SocialData()) || {};
         var $el = $(this);
