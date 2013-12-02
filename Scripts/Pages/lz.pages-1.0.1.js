@@ -189,6 +189,9 @@ vm.baseViewModel = function (extend) {
         
         self.selected(d);
         self.showEditor(true);
+
+        // Prevent row from editing the contact
+        event.cancelBubble = true;
     };
 
     // Delete given entity
@@ -211,6 +214,9 @@ vm.baseViewModel = function (extend) {
                 error: lz.showError
             });
         }
+
+        // Prevent row from editing the contact
+        event.cancelBubble = true;
     };
 
     // Validate form
@@ -388,7 +394,10 @@ ko.bindingHandlers.qtip = {
             onShow = allBindingsAccessor().qtipOnShow || null,
             $el = $(element);
 
-        if ($(content).length > 0) {
+        var $content = null;
+        try { $content = $(content); } catch (e) { }
+
+        if ($content != null && $content.length > 0) {
             content = $(content);
             content.data('koContext', ko.contextFor($el[0]))
         }

@@ -471,19 +471,19 @@ tr.pager td {padding: 0 0.25em 0 0;}
     .vm-view .edit .head .email a:hover {background:none;}
 
     .vm-view .social .soc-link {width:16px;height:16px;display:inline-block;cursor:pointer;}
-    .vm-view .social .facebook {background:#333;}
-    .vm-view .social .on .facebook {background:#2745f8;}
-    .vm-view .social .linkedin {background:#666;}
-    .vm-view .social .on .linkedin {background:#0fe51a;}
-    .vm-view .social .twitter {background:#c7d1d6;}
-    .vm-view .social .on .twitter {background:#08b2fe;}
-    .vm-view .social a { text-decoration:none;}
+    .vm-view .social .facebook {background-image:url(/images/facebook-icon-g-16x16.png);}
+    .vm-view .social .on .facebook {background-image:url(/images/facebook-icon-16x16.png);}
+    .vm-view .social .linkedin {background-image:url(/images/linkedin-icon-g-16x16.png);}
+    .vm-view .social .on .linkedin {background-image:url(/images/linkedin-icon-16x16.png);}
+    .vm-view .social .twitter {background-image:url(/images/twitter-icon-g-16x16.png);}
+    .vm-view .social .on .twitter {background-image:url(/images/twitter-icon-16x16.png);}
+    .vm-view .social a {text-decoration:none;}
 
     #body .ui-tabs .ui-tabs-nav li.ui-tabs-selected a { cursor: pointer; }
 
 .btn-mini { background: transparent url(none) scroll no-repeat top center; width:22px; height:22px;border:none; }
 .tr-highlight tr .btn-mini {visibility:hidden;margin:0;}
-.tr-highlight tr:hover {background:#d8e0f7; }
+.tr-highlight tr:hover {background:#d8e0f7;cursor:pointer;}
 .tr-highlight tr:hover .btn-mini {visibility:visible;}
 .btn-edit { background-image: url(/images/edit.jpg);}
 .btn-delete { background-image: url(/images/delete.jpg);}
@@ -523,3 +523,9 @@ tr.pager td {padding: 0 0.25em 0 0;}
 #tabContacts .hover-profile {float:left;width:300px; height:300px;border:solid 1px #c7d1d6;}
     #tabContacts .hover-profile > div > div {padding:7px;}
     #tabContacts .hover-profile .prf-pic img {width: 70px; max-height:100px;}
+
+
+/* Tooltips */
+body .qtip {max-width:900px;}
+.ui-tooltip-content {word-wrap: break-word;white-space:pre;}
+    .ui-tooltip-content p {margin:0;}

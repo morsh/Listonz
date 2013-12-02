@@ -428,24 +428,24 @@ vm.contacts = new vm.baseViewModel({
 
             // Opens a dialog to enter a url for a contact picture
             self.changePicture = function () {
-            var srcElement = event.srcElement;
-            $("#dialog-picture").find('#PictureUrl').val(ko.dataFor(srcElement).ProfilePicture());
-            $("#dialog-picture").dialog({
-                autoOpen: true,
-                height: 'auto',
-                width: 'auto',
-                modal: true,
-                buttons: {
-                    "Set Picture": function () {
-                        var newProfilePicture = $(this).find('#PictureUrl').val();
-                        ko.dataFor(srcElement).ProfilePicture(newProfilePicture);
-                        $(this).dialog("close");
-                    },
-                    Cancel: function () { $(this).dialog("close"); }
-                },
-                close: function () { }
-            });
-        };
+
+                var $el = $(this);
+                var currQtip = $el.closest('.qtip');
+                var target = currQtip.data('qtip').options.position.target[0];
+                var data = ko.dataFor(target);
+                var profilePicture = data.ProfilePicture();
+                currQtip.find("#PictureUrl").val(profilePicture);
+            };
+            self.setPicture = function () {
+                var $el = $(event.srcElement);
+                var currQtip = $el.closest('.qtip');
+                var target = currQtip.data('qtip').options.position.target[0];
+                var data = ko.dataFor(target);
+                var newProfilePicture = currQtip.find('#PictureUrl').val();
+                data.ProfilePicture(newProfilePicture);
+
+                currQtip.qtip('hide');
+            };
     },
 
     // Bind actions after the view model base was initialized
