@@ -15,6 +15,9 @@ http://www.itorian.com/2013/03/PasswordResetting.html
 File storage on the cloud:
 https://cloud.google.com/products/cloud-storage
 
+simple membership problems:
+============================
+http://blogs.msdn.com/b/rickandy/archive/2012/08/15/initializesimplemembership-attribute-and-simplemembership-exceptions.aspx
 
 trip planning:
 http://www.cleartrip.com/api/
