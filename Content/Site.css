@@ -519,11 +519,35 @@ tr.pager td {padding: 0 0.25em 0 0;}
 #body .ui-tabs .ui-tabs-nav li.ui-tabs-active a {cursor:pointer;}
 
 .results td {white-space:nowrap;text-overflow:ellipsis;overflow:hidden; }
+.results td.overflow-none{text-overflow:clip; }
 #tabContacts .results {float:left;}
 #tabContacts .hover-profile {float:left;width:300px; height:300px;border:solid 1px #c7d1d6;}
     #tabContacts .hover-profile > div > div {padding:7px;}
+    #tabContacts .hover-profile .prf-pic {height:290px;}
     #tabContacts .hover-profile .prf-pic img {width: 70px; max-height:100px;}
 
+/* table fixing and sorting */
+    /*Framework*/
+    .Resize{resize:both;}
+    .Container {width:60%;float:left;display:inline-block;}
+    .Scrollable{position:relative;width:60%;}
+        .Scrollable .ScrollArea{/*Make this box scroll*/overflow:auto;direction:rtl;padding-left:5px;}
+        .Scrollable .ScrollArea > table {/*Make this box scroll*/direction:ltr;margin-top:-10px;width:100%;margin-top:5px;}
+        .Scrollable .Fixable .fix{position:absolute;margin:3px 0 3px 0; /*Escape the scrolling context*/}
+    /*App Specific*/
+    .Scrollable .ScrollArea{/*Give it a fixed size so it can scroll. Could also set using JS*/height:283px;}
+    .Scrollable table{table-layout:fixed;}
+    .Scrollable{/*Leave room for the header area*/padding-top:1.5em;/*TODO: Set a background image to make it look like there's a fixed row*/}
+
+    .Scrollable thead .fix {top:0;height:1.5em;line-height:1.5em;}
+    .Sortable > thead th {cursor:pointer;}
+    .Sortable > thead th .sort .ui-icon {background-position: -128px -32px;float:right;}
+    .Sortable > thead th .sort.down .ui-icon {background-position: -64px -32px;}
+    .Sortable > thead th .sort.down.up .ui-icon {background-position: 0 -32px;}
+
+/* actions toolbar */
+.actions {padding:0;margin:0;}
+    .actions li {float:left;padding:0 5px 0 0;}
 
 /* Tooltips */
 body .qtip {max-width:900px;}

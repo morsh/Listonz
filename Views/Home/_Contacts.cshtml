@@ -1,11 +1,16 @@
 ﻿<div data-bind="with: contacts">
 
     <div data-bind="showHide: loaded" class="vm-view vm-contacts">
-        <div data-bind="ifnot: showEditor()">
+        <div data-bind="showHide: !showEditor()">
 
-            <div class="clear-both">
-                <input type="button" value="Add" data-bind="click: edit" />
-            </div>
+            <ul class="actions">
+                <li>
+                    <input type="button" value="Add" data-bind="click: edit" />
+                </li>
+                <li>
+                    <input type="text" id="txtFreeText" value="" placeholder="Search..." data-bind="value: filter, valueUpdate: 'afterkeydown'" />
+                </li>
+            </ul>
 
             <ul class="categories">
                 <li class="cat-all" data-bind="attr: { 'class': categoryId() == 0 ? 'selected' : '' }">
@@ -29,44 +34,39 @@
                 </li>
             </ul>
 
-            <style>
-/*Framework*/
-.Resize{resize:both;}
-.Container {width:60%;float:left;display:inline-block;}
-.Scrollable{position:relative;width:60%;}
-    .Scrollable .ScrollArea{/*Make this box scroll*/overflow:auto;direction:rtl;padding-left:5px;}
-    .Scrollable .ScrollArea > table {/*Make this box scroll*/direction:ltr;margin-top:-10px;width:100%;margin-top:5px;}
-    .Scrollable .Fixable .fix{position:absolute;margin:3px 0 3px 0; /*Escape the scrolling context*/}
-/*App Specific*/
-    .Scrollable .ScrollArea{/*Give it a fixed size so it can scroll. Could also set using JS*/height:283px;}
-    .Scrollable table{table-layout:fixed;}
-    .Scrollable{/*Leave room for the header area*/padding-top:1.5em;/*TODO: Set a background image to make it look like there's a fixed row*/}
-
-    .Scrollable thead .fix{
-    /*Move above the scroll area into the fake header*/
-        top:0; /*Must absolutely position the top to avoid bugs in Firefox and IE6*/
-        height:1.5em;
-        line-height:1.5em;
-    }
-
-            </style>
-
             <div class="Container" data-bind="toggleClass: collection().length > 9, toggleClassName: 'Scrollable'">
                 <div class="results ScrollArea">
-                    <table>
+                    <table class="Sortable">
+                        <colgroup>
+                            <col style="width:160px;" />
+                            <col style="width:100px;" />
+                            <col style="width:100px;" />
+                            <col style="width:90px;" />
+                        </colgroup>
                         <thead>
                             <tr class='Fixable'>
-                                <th><span class=fix>Name</span></th>
-                                <th><span class=fix>Company</span></th>
-                                <th><span class=fix>Category</span></th>
-                                <th width="60px"></th>
+                                <th><span class='fix sort' sort-exp="FirstName:LastName" data-bind="
+    css: { down: isSortColumn($element), up: sortDir() == 'desc' }, click: sortClick">
+                                    Name<span class="ui-icon" /></span></th>
+                                <th><span class='fix sort' sort-exp="Company.FirstName" data-bind="
+    css: { down: isSortColumn($element), up: sortDir() == 'desc' }, click: sortClick">
+                                    Company<span class="ui-icon"/></span></th>
+                                <th><span class='fix sort' sort-exp="Category.Name:FirstName" data-bind="
+    css: { down: isSortColumn($element), up: sortDir() == 'desc' }, click: sortClick">
+                                    Category<span class="ui-icon"/></span></th>
+                                <th><span class='fix sort' sort-exp="Rating" sort-type="n" data-bind="
+    css: { down: isSortColumn($element), up: sortDir() == 'desc' }, click: sortClick">
+                                    Rating<span class="ui-icon"/></span></th>
+                                <th></th>
                             </tr>
                         </thead>
-                        <tbody class="tr-highlight" data-bind="foreach: collection">
+                        <tbody class="tr-highlight" data-bind="foreach: sortedCollection">
                             <tr onmousemove="ko.contextFor(this).$parent.updateHover(ko.dataFor(this));" data-bind="click: $parent.edit">
                                 <td data-bind="text: FirstName + ' ' + (LastName || '')"></td>
                                 <td><span data-bind="if: Company != null"><span data-bind="text: Company.FirstName"></span></span></td>
                                 <td><span data-bind="if: Category != null"><span data-bind="text: Category.Name"></span></span></td>
+                                <td class="overflow-none"><span data-bind="if: Rating != null">
+                                    <span data-bind="rateit: { value: Rating, max: 5, step: 0.1, readonly: true }"></span></span></td>
                                 <td>
                                     <button class="btn btn-mini btn-edit" data-bind="click: $parent.edit" title="Edit Contact"></button>
                                     <button class="btn btn-mini btn-delete" data-bind="click: $parent.remove" title="Delete Contact"></button>
@@ -88,7 +88,10 @@
                         <span data-bind="text: FirstName + ' ' + (LastName || '')"></span>
                         <span data-bind="if: Category != null"><span data-bind="text: '(' + Category.Name + ')'"></span></span>
                     </div>
-                    
+                    <div data-bind="if: Company != null">
+                        <span>Company: </span>
+                        <span data-bind="text: Company.FirstName"></span>
+                    </div>
                     <div class="email" data-bind="if: Email">
                         <a data-bind="attr: { href: 'mailto:' + Email }">
                             <div class="float-left"><img src="~/Images/email.png" height="20" /></div>

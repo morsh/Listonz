@@ -48,6 +48,25 @@ vm.baseViewModel = function (extend) {
 
     self.showEditor = ko.observable(false);
     self.startSave = ko.observable();
+    self.sort = ko.observable('Category.Name:FirstName');
+    self.sortDir = ko.observable('asc');
+    self.sortType = ko.observable('s');
+    self.isSortColumn = function (element) {
+        var sortExp = $(element || event.srcElement).attr('sort-exp');
+        return self.sort() == sortExp;
+    }
+    self.sortClick = function () {
+        var $el = $(event.srcElement).closest('.sort');
+        var sortExp = $el.attr('sort-exp');
+        var sortType = $el.attr('sort-type');
+        var dir = self.sort() == sortExp && self.sortDir() == 'asc' ? 'desc' : 'asc';
+        self.sort(sortExp);
+        self.sortType(sortType ? sortType : 's');
+        self.sortDir(dir);
+
+        self.sortedCollection.notifySubscribers();
+    };
+    self.filter = ko.observable('');
 
     self.selectedID = ko.observable(-1);
     self.selected = ko.observable(new self.model());
@@ -91,6 +110,43 @@ vm.baseViewModel = function (extend) {
                 vm.allloaded(true);
         });
     }
+
+    self.sortedCollection = ko.computed(function () {
+        var items = self.collection();
+        var _sort = self.sort();
+        var _filter = self.filter().toLowerCase();
+        if (_filter != '')
+            items = items.filter(function (r) {
+                for (var key in r)
+                    if (r[key] != null && r[key] != undefined && r[key].toLowerCase && r[key].toLowerCase().indexOf(_filter) >= 0)
+                        return true;
+                return false;
+            });
+        if (_sort != '') {
+            var _numeric = self.sortType() == 'n';
+            var _asc = self.sortDir() == 'asc' ? 1 : -1;
+            var _sortParts = _sort.split(':');
+            var _sortValues = [];
+            for (var p in _sortParts) _sortValues[p] = _sortParts[p].split('.');
+            var getVal = function (obj) {
+                var _val = _numeric ? 0 : '';
+                for (var v in _sortValues) {
+                    var _obj = obj;
+                    var _sortTerms = _sortValues[v];
+                    for (var t in _sortTerms)
+                        _obj = _obj ? _obj[_sortTerms[t]] : (_numeric ? 0 : '_');
+                    _val += _obj;
+                }
+                return _val;
+            };
+            items = items.sort(function (left, right) {
+                var _left = getVal(left), _right = getVal(right);
+                return _left == _right ? 0 : (_left < _right ? (-_asc) : _asc);
+            });
+        }
+
+        return items;
+    });
 
     // Select a single entity in the collection
     self.select = ko.dependentObservable(function () {
@@ -730,6 +786,7 @@ $(function () {
         });
     });
 
+    // Set the default tab
     $(function () {
         try {
             var defaultPath = $('[tabDefault]').first().attr('tabTrigger');
@@ -739,3 +796,30 @@ $(function () {
     });
 });
 
+///* Setting default events on dynamic elements */
+//$(".vm-view").on("click", "table.Sortable > thead th", function () {
+//    var $th = $(this);
+//    var $trHead = $th.parent();
+//    var $sorter = $th.find('.sort');
+//    var thIndex = $sorter.parent().parent().index();
+//    var $table = $trHead.closest('table').find('tbody');
+//    var sorted = $sorter.hasClass('down');
+//    var dir = sorted ? 'up' : 'down';
+//    $trHead.find('.sort').removeClass('up').removeClass('down');
+//    $sorter.addClass(dir);
+
+//    var tdSelector = 'td:eq(' + thIndex + ')';
+//    var $rows = $table.find('tr');
+//    $rows.sort(function (a, b) {
+//        var keyA = $(tdSelector, a).text();
+//        var keyB = $(tdSelector, b).text();
+//        if (dir == 'up') {
+//            return (keyA > keyB) ? -1 : 1;
+//        } else {
+//            return (keyA > keyB) ? 1 : -1;
+//        }
+//    });
+//    $.each($rows, function(index, row){
+//        $table.append(row);
+//    });
+//});
