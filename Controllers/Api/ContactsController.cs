@@ -15,6 +15,7 @@ using System.Xml;
 using System.Text;
 using System.Reflection;
 using System.Web.Security;
+using Listonz.Filters;
 
 namespace Listonz.Controllers.Api
 {
@@ -30,6 +31,7 @@ namespace Listonz.Controllers.Api
         public string abb { get; set; }
     }
 
+    [InitializeSimpleMembership]
     public class ContactsController : ApiController
     {
         private UsersContext db = new UsersContext();

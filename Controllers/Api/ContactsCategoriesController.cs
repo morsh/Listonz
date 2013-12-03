@@ -1,4 +1,5 @@
-﻿using Listonz.Models;
+﻿using Listonz.Filters;
+using Listonz.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -10,6 +11,7 @@ using System.Web.Http;
 
 namespace Listonz.Controllers.Api
 {
+    [InitializeSimpleMembership]
     public class ContactsCategoriesController : ApiController
     {
         private UsersContext db = new UsersContext();

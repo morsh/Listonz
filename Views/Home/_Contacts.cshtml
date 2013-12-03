@@ -1,7 +1,7 @@
 ﻿<div data-bind="with: contacts">
 
     <div data-bind="showHide: loaded" class="vm-view vm-contacts">
-        <div data-bind="showHide: !showEditor()">
+        <div data-bind="if: !showEditor()">
 
             <ul class="actions">
                 <li>
@@ -34,14 +34,14 @@
                 </li>
             </ul>
 
-            <div class="Container" data-bind="toggleClass: collection().length > 9, toggleClassName: 'Scrollable'">
+            <div class="Container" data-bind="css: { Scrollable: collection().length > 9 }">
                 <div class="results ScrollArea">
                     <table class="Sortable">
                         <colgroup>
-                            <col style="width:160px;" />
-                            <col style="width:100px;" />
-                            <col style="width:100px;" />
-                            <col style="width:90px;" />
+                            <col style="width:27%;" />
+                            <col style="width:20%;" />
+                            <col style="width:20%;" />
+                            <col style="width:19%;" />
                         </colgroup>
                         <thead>
                             <tr class='Fixable'>
@@ -78,7 +78,7 @@
             </div>
 
             <div class="hover-profile" data-bind="with: hover()">
-                <div data-bind="if: Id > 0">
+                <div data-bind="if: Id > 0, css : { hide: !(Id > 0) }">
                     <div class="float-left prf-pic">
                         <span data-bind="ifnot: ProfilePicture"><img src="~/Images/profile.jpg" /></span>
                         <span data-bind="if: ProfilePicture"><img data-bind="attr: { src: ProfilePicture }" src="" /></span>
@@ -128,7 +128,7 @@
                         <div data-bind="text: 'Fax: ' + FaxNumber"></div>
                     </div>
                 </div>
-                <div data-bind="ifnot: Id > 0">
+                <div data-bind="ifnot: Id > 0, css : { hide: Id > 0 }">
                     Hover on a contact to preview his\her details
                 </div>
             </div>
