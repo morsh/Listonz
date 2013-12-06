@@ -77,7 +77,16 @@ namespace Listonz.Models
         {
             get
             {
-                return Membership.GetUser().ProviderUserKey is int ? (int)Membership.GetUser().ProviderUserKey : -1;
+                try
+                {
+                    return Membership.GetUser().ProviderUserKey is int ? (int)Membership.GetUser().ProviderUserKey : -1;
+                }
+                catch (HttpException ex)
+                {
+                    if (ex.Message.Contains("unable to connect"))
+                        throw new ConnectionTimeoutException(ex);
+                    throw;
+                }
             }
         }
     }

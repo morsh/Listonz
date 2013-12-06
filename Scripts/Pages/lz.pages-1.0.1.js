@@ -39,6 +39,8 @@ vm.baseViewModel = function (extend) {
 
     // Is current module loaded
     self.loaded = ko.observable(false);
+    self.loading = ko.observable(false);
+
     // Collection of all current entities
     self.collection = ko.observableArray([]);
     // Is edit mode in new mode
@@ -94,7 +96,12 @@ vm.baseViewModel = function (extend) {
 
     // Refresh the module data collection
     self.refresh = function () {
+
+        if (self.loading()) return;
+
         self.collection.removeAll();
+
+        self.loading(true);
         $.getJSON(self.api + self.options.getAll(), function (data) {
             self.collection(data);
 
@@ -103,6 +110,7 @@ vm.baseViewModel = function (extend) {
             }
 
             self.selectedID(-1);
+            self.loading(false);
             self.loaded(true);
             vm.viewModelsToLoad(vm.viewModelsToLoad() - 1);
 
@@ -252,24 +260,46 @@ vm.baseViewModel = function (extend) {
 
     // Delete given entity
     self.remove = function (item) {
-        if (confirm(self.options.removeConfirm)) {
-            var itemToRemove = ko.utils.unwrapObservable(ko.toJS(item));
-            $.ajax({
-                url: self.api + self.options.remove + "?id=" + itemToRemove.Id,
-                type: "DELETE",
-                success: function (data) {
 
-                    for (var i = 0, j = self.collection().length; i < j; i++)
-                        if (self.collection()[i].Id == itemToRemove.Id) {
-                            self.collection.remove(self.collection()[i]);
-                            break;
+        $("<div title=\"Delete Confirmation\">" + self.msg.removeConfirm(item) + "</div>").dialog({
+            resizable: false,
+            modal: true,
+            buttons: {
+                "Delete": function () {
+
+                    var itemToRemove = ko.utils.unwrapObservable(ko.toJS(item));
+                    var $this = $(this);
+                    $.ajax({
+                        url: self.api + self.options.remove + "?id=" + itemToRemove.Id,
+                        type: "DELETE",
+                        success: function (data) {
+
+                            for (var i = 0, j = self.collection().length; i < j; i++)
+                                if (self.collection()[i].Id == itemToRemove.Id) {
+                                    self.collection.remove(self.collection()[i]);
+                                    break;
+                                }
+
+                            self.showEditor(false);
+                            self.refresh();
+                            $this.dialog("close");
+                        },
+                        error: function (err) {
+                            $this.dialog("close");
+
+                            if (lz.exp.isOf(err, lz.exp.DeletetionHaveChildren))
+                                lz.exp.alert("Delete Confirmation", self.msg.exp_childrenConfirm);
+                            else
+                                lz.showError(err);
                         }
+                    });
 
-                    self.showEditor(false);
                 },
-                error: lz.showError
-            });
-        }
+                Cancel: function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
 
         // Prevent row from editing the contact
         event.cancelBubble = true;
@@ -293,6 +323,30 @@ vm.baseViewModel = function (extend) {
 
 };
 /************************************************/
+
+// Exception Handling
+lz.exp = {
+    DeletetionHaveChildren: "Listonz.Models.DeletetionHaveChildrenLZException",
+    ConnectionTimeoutException: "Listonz.Models.ConnectionTimeoutException",
+
+    isOf: function (err, str) {
+        try { return JSON.parse(err.responseText).ExceptionType == "Listonz.Models.DeletetionHaveChildrenLZException"; }
+        catch (e) { }
+        return false;
+    },
+    alert: function (title, msg) {
+        $("<div title=\"" + title + "\">" + msg + "</div>").dialog({
+            resizable: false,
+            height: 'auto',
+            modal: true,
+            buttons: {
+                Ok: function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+    }
+};
 
 $.ajaxSetup({
     error: function (xhr, status, error) {
@@ -657,10 +711,36 @@ ko.bindingHandlers.chars = {
     }
 };
 
+// Making the content scrollable when page size is too small and items count threthold is too big
+ko.bindingHandlers.pageScoll = {
+    setCalculatedHeight: function (element, valueAccessor, allBindingsAccessor) {
+        //initialize datepicker with some optional options
+        var data = valueAccessor() || {},
+            $el = $(element);
+
+        data = ko.utils.extend({ rowHeight: 20, headerHeight: 20, heightDelta: 300 }, data);
+
+        var newHeight = $(window).height() - data.heightDelta;
+        $el.height(newHeight);
+        if (ko.dataFor(element).collection().length > ((newHeight - data.headerHeight) / data.rowHeight)) {
+            $el.addClass('Scrollable');
+            $el.find('.ScrollArea').height(newHeight);
+        }
+        else
+            $el.removeClass('Scollable');
+    },
+    init: function (element, valueAccessor, allBindingsAccessor) {
+        ko.bindingHandlers.pageScoll.setCalculatedHeight(element, valueAccessor, allBindingsAccessor);
+    },
+    update: function (element, valueAccessor, allBindingsAccessor) {
+        ko.bindingHandlers.pageScoll.setCalculatedHeight(element, valueAccessor, allBindingsAccessor);
+    }
+};
+
 /************************************************/
 
 
-// Page load methods
+// Page load methods (Sammy)
 lz.sammy = null;
 $(function () {
 
@@ -795,31 +875,3 @@ $(function () {
         catch (e) { }
     });
 });
-
-///* Setting default events on dynamic elements */
-//$(".vm-view").on("click", "table.Sortable > thead th", function () {
-//    var $th = $(this);
-//    var $trHead = $th.parent();
-//    var $sorter = $th.find('.sort');
-//    var thIndex = $sorter.parent().parent().index();
-//    var $table = $trHead.closest('table').find('tbody');
-//    var sorted = $sorter.hasClass('down');
-//    var dir = sorted ? 'up' : 'down';
-//    $trHead.find('.sort').removeClass('up').removeClass('down');
-//    $sorter.addClass(dir);
-
-//    var tdSelector = 'td:eq(' + thIndex + ')';
-//    var $rows = $table.find('tr');
-//    $rows.sort(function (a, b) {
-//        var keyA = $(tdSelector, a).text();
-//        var keyB = $(tdSelector, b).text();
-//        if (dir == 'up') {
-//            return (keyA > keyB) ? -1 : 1;
-//        } else {
-//            return (keyA > keyB) ? 1 : -1;
-//        }
-//    });
-//    $.each($rows, function(index, row){
-//        $table.append(row);
-//    });
-//});

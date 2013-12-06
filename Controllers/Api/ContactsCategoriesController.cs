@@ -108,6 +108,16 @@ namespace Listonz.Controllers.Api
             if (category.UserId != LZ.CurrentUserID)
                 throw new Exception("A user can only update it's own data");
 
+            var childContacts = from c in db.Contacts
+                                where c.CategoryId == category.Id
+                                select c;
+
+            foreach (var childContact in childContacts)
+            {
+                childContact.CategoryId = null;
+                childContact.Category = null;
+            }
+
             db.Categories.Remove(category);
 
             try

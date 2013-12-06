@@ -51,7 +51,7 @@ select[data-required] {background-position-x:170px; }
 
 #body {background-color: #efeeef;clear: both;padding-bottom: 10px;}
 
-    .main-content {background: url("../Images/accent.png") no-repeat;padding-left: 10px;padding-top: 30px;}
+    .main-content {padding-left: 10px;padding-top: 10px;}
 
     .featured + .main-content {background: url("../Images/heroAccent.png") no-repeat;}
 
@@ -62,7 +62,7 @@ footer {clear: both;background-color: #e2e2e2;font-size: .8em;height: 30px;}
 
 /* site title
 ----------------------------------------------------------*/
-.site-title {color: #c8c8c8;font-family: Rockwell, Consolas, "Courier New", Courier, monospace;font-size: 2.3em;margin: 0;display:block;float:left;}
+.site-title {color: #c8c8c8;font-family: Rockwell, Consolas, "Courier New", Courier, monospace;font-size: 2.3em;margin: 0 10px 0 0;display:block;float:left;}
     .site-title img {max-height:80px;border:solid 0 #fff;display:block;}
 
 .site-title a, 
@@ -457,12 +457,12 @@ tr.pager td {padding: 0 0.25em 0 0;}
 .loader img {display:none;}
 
 .vm-view {display:none;}
-    .vm-view ul { list-style:none;padding:10px;}
+    .vm-view ul { list-style:none;}
     .vm-view label { width: 140px;display:inline-block; }
 
-    .vm-view .edit .head {height:100px;}
+    .vm-view .edit .head {}
     .vm-view .edit .head .prf-pic {float:left;padding-right:20px;cursor:pointer;display:block;}
-        .vm-view .edit .head .prf-pic img {width: 70px; max-height:100px;}
+        .vm-view .edit .head .prf-pic img {max-width: 70px; max-height:100px;}
         .vm-view .edit .head .prf-pic .pic-edit {position:absolute; display:none;margin:-50px 0 0 5px;opacity:0.5;color:#fff;background:#000;border:2px solid #fff;}
         .vm-view .edit .head .prf-pic:hover .pic-edit {display:block;}
 
@@ -503,11 +503,16 @@ tr.pager td {padding: 0 0.25em 0 0;}
 .ui-menu .ac-big a div { padding-right: 15px;}
 .ui-menu .ac-big a {height: 55px;}
 
+.ui-tabs {border:none;background:none;}
+    .ui-tabs-nav {background:none;border:none;border-bottom:#aaa solid 1px;line-height:inherit;border-bottom-left-radius:0;border-bottom-right-radius:0;}
+    .ui-tabs-nav li {border-top-left-radius:0;border-top-right-radius:0;}
+    .ui-tabs .ui-tabs-panel {background:#fff;border:1px solid #aaa;border-top:none;}
+
 /* Contacts View Model
     ----------------------------------------------------------*/
 #tabContacts .categories {width: 100%; display: inline-block;padding:0;margin:0;}
     #tabContacts .categories ul {padding:0;margin:0;}
-    #tabContacts .categories li {float:left;padding:0 5px 0 0;}
+    #tabContacts .categories li {float:left;margin:0 5px 0 0;}
 
     #tabContacts .categories a {text-decoration:none;}
     #tabContacts .categories .selected {background:red;}
@@ -543,6 +548,7 @@ tr.pager td {padding: 0 0.25em 0 0;}
 
     .Scrollable thead .fix {top:0;height:1.5em;line-height:1.5em;}
     .Sortable > thead th {cursor:pointer;}
+    .Sortable > thead th .sort {display:inline-block}
     .Sortable > thead th .sort .ui-icon {background-position: -128px -32px;float:right;}
     .Sortable > thead th .sort.down .ui-icon {background-position: -64px -32px;}
     .Sortable > thead th .sort.down.up .ui-icon {background-position: 0 -32px;}
@@ -550,8 +556,16 @@ tr.pager td {padding: 0 0.25em 0 0;}
 /* actions toolbar */
 .actions {padding:0;margin:0;}
     .actions li {float:left;padding:0 5px 0 0;}
+    .actions button,
+    .actions input[type=button] {padding:4px 5px 3px 5px;}
 
 /* Tooltips */
 body .qtip {max-width:900px;}
 .ui-tooltip-content {word-wrap: break-word;white-space:pre;}
     .ui-tooltip-content p {margin:0;}
+
+/* Fiesl Icons */
+.vm-view .edit-form .ui-icon {position:absolute;right:0;margin:10px 10px;z-index:100;}
+.vm-view .edit-form > li {position:relative;}
+.vm-view .edit-form input,
+.vm-view .edit-form textarea {padding-right:30px;width:270px;}

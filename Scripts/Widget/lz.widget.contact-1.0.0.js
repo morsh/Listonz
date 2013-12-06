@@ -8,9 +8,20 @@ vm.contacts = new vm.baseViewModel({
             add: "PostContact",
             update: "PutContact",
             remove: "DeleteContact",
-            removeConfirm: "Are you sure you want to delete this contact?",
 
             updateRating: 'UpdateRating'
+        };
+        self.msg = {
+            removeConfirm: function (item) {
+                if (item.Category.Name == "Company")
+                    return "Are you sure you want to delete this company? All of it's contacts will still be available.";
+                else
+                    return "Are you sure you want to delete this contact?";
+            },
+            exp_childrenConfirm: "This company has other contacts under it",
+            cat_removeConfirm: function (item) {
+                return "Are you sure you want to delete this category? All of it's contacts will still be available.";
+            }
         };
 
         self.cat_api = "/api/contactscategories/";
@@ -18,8 +29,7 @@ vm.contacts = new vm.baseViewModel({
             getAll: function () { return "Get"; },
             add: "Post",
             update: "Put",
-            remove: "Delete",
-            removeConfirm: "Are you sure you want to delete this category?"
+            remove: "Delete"
         };
 
     },
@@ -295,26 +305,47 @@ vm.contacts = new vm.baseViewModel({
             };
             self.deleteCategory = function (item) {
 
-                if (confirm(self.cat_options.removeConfirm)) {
-                    var isSelected = $(event.srcElement).closest('li').hasClass('selected');
-                    var itemToRemove = ko.utils.unwrapObservable(ko.toJS(item));
-                    $.ajax({
-                        url: self.cat_api + self.cat_options.remove + "?id=" + itemToRemove.Id,
-                        type: "DELETE",
-                        success: function (data) {
+                $("<div title=\"Delete Confirmation\">" + self.msg.cat_removeConfirm(item) + "</div>").dialog({
+                    resizable: false,
+                    modal: true,
+                    buttons: {
+                        "Delete": function () {
 
-                            for (var i = 0, j = self.Categories().length; i < j; i++)
-                                if (self.Categories()[i].Id == itemToRemove.Id)
-                                    self.Categories.remove(self.Categories()[i]);
+                            var isSelected = $(event.srcElement).closest('li').hasClass('selected');
+                            var itemToRemove = ko.utils.unwrapObservable(ko.toJS(item));
+                            var $this = $(this);
+                            $.ajax({
+                                url: self.cat_api + self.cat_options.remove + "?id=" + itemToRemove.Id,
+                                type: "DELETE",
+                                success: function (data) {
 
-                            if (isSelected) {
-                                self.categoryId(0);
-                                self.categoryId.valueHasMutated();
-                            }
+                                    for (var i = 0, j = self.Categories().length; i < j; i++)
+                                        if (self.Categories()[i].Id == itemToRemove.Id)
+                                            self.Categories.remove(self.Categories()[i]);
+
+                                    if (isSelected) {
+                                        self.categoryId(0);
+                                        self.categoryId.valueHasMutated();
+                                    }
+
+                                    $this.dialog("close");
+                                    self.refresh();
+                                },
+                                error: function (err) {
+                                    $this.dialog("close");
+
+                                    if (lz.exp.isOf(err, lz.exp.DeletetionHaveChildren))
+                                        lz.exp.alert("Delete Confirmation", self.msg.exp_childrenConfirm);
+                                    else
+                                        lz.showError(err);
+                                }
+                            });
                         },
-                        error: lz.showError
-                    });
-                }
+                        Cancel: function () {
+                            $(this).dialog("close");
+                        }
+                    }
+                });
             };
             self.cancelCategory = function () {
                 var viewModel = ko.contextFor(event.srcElement).$parent;

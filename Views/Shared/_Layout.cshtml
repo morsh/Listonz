@@ -3,16 +3,21 @@
     <head>
         <meta charset="utf-8" />
         <title>@ViewBag.Title - My ASP.NET MVC Application</title>
-        <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+        <link href="~/logo-16x16.jpg" rel="shortcut icon" type="image/x-icon" />
         <meta name="viewport" content="width=device-width" />
+
+        @RenderSection("DefaultStyles", false)
+
         @Styles.Render("~/Content/css")
         @Scripts.Render("~/bundles/modernizr")
+
+        @RenderSection("CustomStyles", false)
     </head>
     <body>
         <header>
             <div class="content-wrapper">
                 <div class="float-left">
-                    <span class="site-title">@Html.ActionImage("Index", "Home", null, "~/Images/logo.jpg", "Home Page")</span>
+                    <span class="site-title">@Html.ActionImage("Index", "Home", null, "~/Images/logo-64x43.jpg", "Home Page")</span>
                     <span>@RenderSection("title", required: false)</span>
                 </div>
                 <div class="float-right">

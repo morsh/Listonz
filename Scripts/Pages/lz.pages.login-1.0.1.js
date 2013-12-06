@@ -21,6 +21,12 @@
     });
 
     $(function () {
+        try { 
+            var loc = app.getLocation().split('#')[1];
+            if (loc != "/Login" && loc != '/Register' && loc != '/ForgotPassword')
+                app.setLocation('');
+        }
+        catch (e) { }
         app.run('#/Login');
     });
 })(jQuery);

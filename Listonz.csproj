@@ -257,6 +257,7 @@
     <Compile Include="Models\Attributes\IsTrueAttribute.cs" />
     <Compile Include="Models\Attributes\PasswordStrengthAttribute.cs" />
     <Compile Include="Models\DataModules.cs" />
+    <Compile Include="Models\Exceptions.cs" />
     <Compile Include="Models\Extensions.cs" />
     <Compile Include="Models\Helpers\XmlToJson.cs" />
     <Compile Include="Models\LZ.cs" />

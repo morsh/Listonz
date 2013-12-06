@@ -170,24 +170,42 @@ namespace Listonz.Controllers.Api
         // DELETE api/Contact/5
         public HttpResponseMessage DeleteContact(int id)
         {
-            var contact = db.Contacts.Find(id);
-            if (contact == null || contact.UserId != LZ.CurrentUserID)
-            {
-                return Request.CreateResponse(HttpStatusCode.NotFound);
-            }
-
-            db.Contacts.Remove(contact);
-
             try
             {
-                db.SaveChanges();
-            }
-            catch (DbUpdateConcurrencyException ex)
-            {
-                return Request.CreateErrorResponse(HttpStatusCode.NotFound, ex);
-            }
+                var contact = db.Contacts.Find(id);
+                if (contact == null || contact.UserId != LZ.CurrentUserID)
+                {
+                    return Request.CreateResponse(HttpStatusCode.NotFound);
+                }
 
-            return Request.CreateResponse(HttpStatusCode.OK, contact);
+                var childContacts = from c in db.Contacts
+                                    where c.CompanyId == contact.Id
+                                    select c;
+
+                foreach (var childContact in childContacts)
+                {
+                    childContact.CompanyId = null;
+                    childContact.Company = null;
+                }
+
+                db.Contacts.Remove(contact);
+
+                try
+                {
+                    db.SaveChanges();
+                }
+                catch (DbUpdateConcurrencyException ex)
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.NotFound, ex);
+                }
+
+                return Request.CreateResponse(HttpStatusCode.OK, contact);
+            }
+            catch (Exception ex)
+            {
+                //Logger.Log(ex);
+                throw;
+            }
         }
 
         #region Extra Methods

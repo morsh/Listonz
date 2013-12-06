@@ -3,9 +3,11 @@
     <div data-bind="showHide: loaded" class="vm-view vm-contacts">
         <div data-bind="if: !showEditor()">
 
+            <div class="float-right" data-bind="qtip: '<p>Contacts help <br/> how nice! :)</p>'"><img src="/images/help-16x16.png" /></div>
+
             <ul class="actions">
                 <li>
-                    <input type="button" value="Add" data-bind="click: edit" />
+                    <input type="button" value="Add Contact" data-bind="click: edit" />
                 </li>
                 <li>
                     <input type="text" id="txtFreeText" value="" placeholder="Search..." data-bind="value: filter, valueUpdate: 'afterkeydown'" />
@@ -34,7 +36,7 @@
                 </li>
             </ul>
 
-            <div class="Container" data-bind="css: { Scrollable: collection().length > 9 }">
+            <div class="Container" data-bind="pageScoll: { rowHeight: 30, headerHeight: 30, heightDelta: 290 }">
                 <div class="results ScrollArea">
                     <table class="Sortable">
                         <colgroup>
@@ -98,18 +100,19 @@
                             <div data-bind="text: Email" class="float-left"></div>
                         </a>
                     </div>
+
                     <div class="rating">
                         <div data-bind="rateit: { value: $parent.hoverRating, max: 5, step: 0.1, readonly: true }"></div>
                     </div>
 
                     <div class="social">
-                        <a class="on" data-bind="if: $parent.HSocial().facebook || '' != '', attr: { 'href': $parent.HSocial().facebook } " target="_blank">
+                        <a class="on" data-bind="visible: $parent.HSocial().facebook, attr: { 'href': $parent.HSocial().facebook } " target="_blank">
                             <div class="soc-link facebook" title="Facebook Profile Link"></div>
                         </a>
-                        <a class="on" data-bind="if: $parent.HSocial().linkedin || '' != '', attr: { 'href': $parent.HSocial().linkedin } " target="_blank">
+                        <a class="on" data-bind="visible: $parent.HSocial().linkedin, attr: { 'href': $parent.HSocial().linkedin } " target="_blank">
                             <div class="soc-link linkedin" title="Linkedin Profile Link"></div>
                         </a>
-                        <a class="on" data-bind="if: $parent.HSocial().twitter || '' != '', attr: { 'href': $parent.HSocial().twitter } " target="_blank">
+                        <a class="on" data-bind="visible: $parent.HSocial().twitter, attr: { 'href': $parent.HSocial().twitter } " target="_blank">
                             <div class="soc-link twitter" title="Twitter Profile Link"></div>
                         </a>
                         <div id="social-dialog" class="dialog" title="Input a new address">
@@ -174,33 +177,30 @@
                             <div data-bind="text: Email" class="float-left"></div>
                         </a>
                     </div>
-                    <div class="rating">
-                        <div data-bind="rateit: { value: Rating, max: 5, step: 0.1 }"></div>
-                    </div>
-                    <div class="social">
+                    <div class="social float-right">
                         <span data-bind="attr: { 'class': $parent.Social().facebook || '' != '' ? 'on' : 'off' } ">
                             <div class="soc-link facebook" title="Facebook Profile Link" social="facebook"
                                 data-bind="
-                                    value: SocialData,
-                                    qtip: '#socialHover',
-                                    qtipType: 'Form',
-                                    qtipOnShow: $parent.SetSocial"></div>
+    value: SocialData,
+    qtip: '#socialHover',
+    qtipType: 'Form',
+    qtipOnShow: $parent.SetSocial"></div>
                         </span>
                         <span data-bind="attr: { 'class': $parent.Social().linkedin || '' != '' ? 'on' : 'off' } ">
                             <div class="soc-link linkedin" title="Linkedin Profile Link" social="linkedin"
                                 data-bind="
-                                    value: SocialData,
-                                    qtip: '#socialHover',
-                                    qtipType: 'Form',
-                                    qtipOnShow: $parent.SetSocial"></div>
+    value: SocialData,
+    qtip: '#socialHover',
+    qtipType: 'Form',
+    qtipOnShow: $parent.SetSocial"></div>
                         </span>
                         <span data-bind="attr: { 'class': $parent.Social().twitter || '' != '' ? 'on' : 'off' } ">
                             <div class="soc-link twitter" title="Twitter Profile Link" social="twitter"
                                 data-bind="
-                                    value: SocialData,
-                                    qtip: '#socialHover',
-                                    qtipType: 'Form',
-                                    qtipOnShow: $parent.SetSocial"></div>
+    value: SocialData,
+    qtip: '#socialHover',
+    qtipType: 'Form',
+    qtipOnShow: $parent.SetSocial"></div>
                         </span>
                         <div id="socialHover" class="dialog" social="facebook">
                             <label for="social-url">Text here:</label>
@@ -209,15 +209,21 @@
                             <a href="#" data-bind="click: $parent.CancelForm">Cancel</a>
                         </div>
                     </div>
+                    <div class="rating">
+                        <div data-bind="rateit: { value: Rating, max: 5, step: 0.1 }"></div>
+                    </div>
                 </section>
-                <ul class="float-left">
+                <ul class="edit-form float-left">
                     <li>
+                        <span class="ui-icon ui-icon-person"></span>
                         <span><input type="text" data-bind="value: FirstName" placeholder="First Name" data-required="true" maxlength="30" /></span>
                     </li>
                     <li>
+                        <span class="ui-icon ui-icon-person"></span>
                         <span><input type="text" data-bind="value: LastName" placeholder="Last Name" maxlength="30"/></span>
                     </li>
                     <li class="company">
+                        <span class="ui-icon ui-icon-suitcase"></span>
                         <span class="rel">
                             <hidden data-bind="value: CompanyId" value="" ></hidden>
                             <input type="text" placeholder="Company" onclick="if ($(this).val() == '') $(this).autocomplete('search', '');" maxlength="30" data-bind="
@@ -250,6 +256,7 @@
                         </span>
                     </li>
                     <li>
+                        <span class="ui-icon ui-icon-home"></span>
                         <span><input type="text" data-bind="value: Country,
     autoComplete: '/api/contacts/GetCountries',
     autocomplete_select: 'UpdateCountry',
@@ -276,8 +283,9 @@
                         <span><textarea data-bind="value: Notes" placeholder="Notes" maxlength="500"></textarea></span>
                     </li>
                 </ul>
-                <ul class="float-right">
+                <ul class="edit-form float-left">
                     <li class="category">
+                        <span class="ui-icon ui-icon-tag"></span>
                         <span class="rel">
                             <hidden data-bind="value: CategoryId" value="" ></hidden>
                             <input type="text" placeholder="Category" onclick="if ($(this).val() == '') $(this).autocomplete('search', '');" maxlength="30" data-bind="
@@ -303,6 +311,7 @@
                         </span>
                     </li>
                     <li>
+                        <span class="ui-icon ui-icon-mail-closed"></span>
                         <span>
                             <input type="text"
                                 data-bind="value: Email"
@@ -356,7 +365,7 @@
                     </div>
                     <input type="button" value="Save" data-bind="click: $parent.save" />
                     <input type="button" value="Cancel" data-bind="click: $parent.cancelEdit" />
-                    <input type="button" value="Delete" data-bind="click: $parent.remove" />
+                    <input type="button" value="Delete" data-bind="click: $parent.remove, visible: !$parent.isNew()" />
                 </div>
             </div>
         </div>
