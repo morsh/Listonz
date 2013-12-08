@@ -448,6 +448,14 @@ lz.fixPlaceholder = function () {
     $('[placeholder]').placeholder();
 };
 
+lz.getDlgCtx = function (ctrl) {
+    return $(ctrl).closest('.dialog').data('koContext');
+};
+
+lz.closeDlg = function (ctrl) {
+    return $(ctrl).closest('.qtip').qtip('hide');
+};
+
 /*********** ko extenssion methods **************/
 // ko extenssions
 ko.bindingHandlers.showHide = {
@@ -508,7 +516,7 @@ ko.bindingHandlers.qtip = {
         try { $content = $(content); } catch (e) { }
 
         if ($content != null && $content.length > 0) {
-            content = $(content);
+            content = $(content).clone();
             content.data('koContext', ko.contextFor($el[0]))
         }
 
@@ -520,31 +528,11 @@ ko.bindingHandlers.qtip = {
         if (type == 'Form') {
             options.show = 'click';
             options.hide = 'unfocus click';
+        } else if (type == "HoverStayOpen") {
+            options.hide = 'unfocus click';
         }
 
         $el.qtip(options);
-
-        //handle the field changing
-        //ko.utils.registerEventHandler(element, "change", function () {
-        //    var observable = valueAccessor();
-        //    observable($el.datepicker("getDate"));
-        //});
-
-        //handle disposal (if KO removes by the template binding)
-        //ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
-        //    $el.datepicker("destroy");
-        //});
-
-    },
-    update: function (element, valueAccessor) {
-        var value = ko.utils.unwrapObservable(valueAccessor()),
-            $el = $(element);
-
-        var current = $el.datepicker("getDate");
-
-        if (value - current !== 0) {
-            $el.datepicker("setDate", new Date(moment(value).format()));
-        }
     }
 };
 

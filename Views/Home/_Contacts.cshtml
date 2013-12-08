@@ -115,10 +115,6 @@
                         <a class="on" data-bind="visible: $parent.HSocial().twitter, attr: { 'href': $parent.HSocial().twitter } " target="_blank">
                             <div class="soc-link twitter" title="Twitter Profile Link"></div>
                         </a>
-                        <div id="social-dialog" class="dialog" title="Input a new address">
-                          <p id="social-title"></p>
-                          <input type="text" id="social-url" value="" />
-                        </div>
                     </div>
 
                     <div class="phone" data-bind="if: PhoneNumber">
@@ -202,11 +198,11 @@
     qtipType: 'Form',
     qtipOnShow: $parent.SetSocial"></div>
                         </span>
-                        <div id="socialHover" class="dialog" social="facebook">
+                        <div id="socialHover" class="dialog">
                             <label for="social-url">Text here:</label>
                             <input type="text" id="social-url" name="social-url" value="start" />
-                            <a href="#" data-bind="click: $parent.UpdateSocial">OK</a>
-                            <a href="#" data-bind="click: $parent.CancelForm">Cancel</a>
+                            <a href="#" onclick="click: lz.getDlgCtx(this).$parent.UpdateSocial();">OK</a>
+                            <a href="#" onclick="click: lz.closeDlg(this)">Cancel</a>
                         </div>
                     </div>
                     <div class="rating">

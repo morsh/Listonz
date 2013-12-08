@@ -10,17 +10,26 @@
                     </tr>
                 </thead>
                 <tbody class="tr-highlight" data-bind="foreach: collection">
-                    <tr data-bind="">
+                    <tr data-bind="
+    qtip: '#contactHover',
+    qtipType: 'HoverStayOpen',
+    qtipOnShow: $parent.updateHover,
+    qtipPosition: { my: 'left center', at: 'right center' }">
                         <td data-bind="text: FirstName + ' ' + (LastName || '')"></td>
-                        <td><span data-bind="if: Company != null"><span data-bind="    text: Company.FirstName"></span></span></td>
-                        <td><span data-bind="if: Category != null"><span data-bind="    text: Category.Name"></span></span></td>
+                        <td><span data-bind="if: Company != null"><span data-bind=" text: Company.FirstName"></span></span></td>
+                        <td><span data-bind="if: Category != null"><span data-bind="text: Category.Name"></span></span></td>
                         <td>
-                                <button class="btn btn-mini btn-edit" data-bind="click: function () { window.location = '#/Contacts/' + Id; }" title="Edit Contact"></button>
-                                <button class="btn btn-mini btn-delete" data-bind="click: $parent.remove" title="Delete Contact"></button>
+                            <button class="btn btn-mini btn-edit" data-bind="click: function () { window.location = '#/Contacts/' + Id; }" title="Edit Contact"></button>
+                            <button class="btn btn-mini btn-delete" data-bind="click: $parent.remove" title="Delete Contact"></button>
                         </td>                    
                     </tr>
                 </tbody>
             </table>
+             <div id="contactHover" class="dialog">
+                <span class="prf-pic"><img src="#" defsrc="~/Images/profile.jpg" /></span>
+                <button class="btn btn-mini btn-edit"   onclick ="lz.getDlgCtx(this).$parent.EditContact(this)" title="Edit Contact"></button>
+                <button class="btn btn-mini btn-delete" onclick="lz.getDlgCtx(this).$parent.DeleteContact(this)" title="Delete Contact"></button>
+            </div>
         </div>
         <a href="#/Contacts">More...</a>
     </div>

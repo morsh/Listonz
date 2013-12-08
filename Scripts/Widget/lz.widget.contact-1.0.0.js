@@ -13,7 +13,7 @@ vm.contacts = new vm.baseViewModel({
         };
         self.msg = {
             removeConfirm: function (item) {
-                if (item.Category.Name == "Company")
+                if (item.Category && item.Category.Name == "Company")
                     return "Are you sure you want to delete this company? All of it's contacts will still be available.";
                 else
                     return "Are you sure you want to delete this contact?";
