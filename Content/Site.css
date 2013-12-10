@@ -462,7 +462,6 @@ tr.pager td {padding: 0 0.25em 0 0;}
 
     .vm-view .edit .head {}
     .vm-view .edit .head .prf-pic {float:left;padding-right:20px;cursor:pointer;display:block;}
-        .vm-view .edit .head .prf-pic img {max-width: 70px; max-height:100px;}
         .vm-view .edit .head .prf-pic .pic-edit {position:absolute; display:none;margin:-50px 0 0 5px;opacity:0.5;color:#fff;background:#000;border:2px solid #fff;}
         .vm-view .edit .head .prf-pic:hover .pic-edit {display:block;}
 
@@ -526,13 +525,14 @@ tr.pager td {padding: 0 0.25em 0 0;}
 
 .results td {white-space:nowrap;text-overflow:ellipsis;overflow:hidden; }
 .results td.overflow-none{text-overflow:clip; }
+.results-wg td {white-space:normal;}
+
 #tabContacts .results {}
 #tabContacts .hover-profile {float:left;width:34%; height:300px;}
     #tabContacts .hover-profile > div {width:100%;height:100%;border:solid 1px #c7d1d6;}
     #tabContacts .hover-profile > div > div {padding:7px;}
     #tabContacts .hover-profile .prf-pic {height:290px;}
-    #tabContacts .hover-profile .prf-pic img {width: 70px; max-height:100px;}
-
+    
 /* table fixing and sorting */
     /*Framework*/
     .Resize{resize:both;}
@@ -569,3 +569,14 @@ body .qtip {max-width:900px;}
 .vm-view .edit-form > li {position:relative;}
 .vm-view .edit-form input,
 .vm-view .edit-form textarea {padding-right:30px;width:270px;}
+
+/* Images */
+img.img-prv, .img-prv img {max-width: 70px; max-height:100px;}
+img.img-46, .img-46 img {max-width: 46px; max-height:46px;}
+img.img-64, .img-64 img {max-width: 64px; max-height:64px;}
+
+/* Text */
+.txt-info {color:#666}
+
+/* Sizing */
+.wd-200 {width:200px;}

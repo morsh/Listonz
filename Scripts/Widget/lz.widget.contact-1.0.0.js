@@ -9,7 +9,8 @@ vm.contacts = new vm.baseViewModel({
             update: "PutContact",
             remove: "DeleteContact",
 
-            updateRating: 'UpdateRating'
+            updateRating: 'UpdateRating',
+            refreshModules: 'contacts'
         };
         self.msg = {
             removeConfirm: function (item) {

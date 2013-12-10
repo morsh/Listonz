@@ -9,7 +9,8 @@ vm.contactsWG = new vm.baseViewModel({
             update: "PutContact",
             remove: "DeleteContact",
 
-            updateRating: 'UpdateRating'
+            updateRating: 'UpdateRating',
+            refreshModules: 'contacts'
         };
 
         self.msg = {
@@ -70,41 +71,15 @@ vm.contactsWG = new vm.baseViewModel({
             this.Rating = ko.observable(0);
             this.LastUpdate = ko.observable('').extend({ date: true });
 
-            this.isCompany = ko.computed(function () {
-                return this.Category == "Company";
-            }, this);
-
-            this.FB = ko.computed(function () {
-                return true;
-            }, this);
+            this.SocialData = ko.observable('');
         }
     },
     view: function (self) {
 
-        self.showEditor.subscribe(self.updateImages);
-        self.showEditor.subscribe(function () {
-            if (self.selected().Company != null)
-                self.EditCompanyName(self.selected().Company.FirstName);
-            else
-                self.EditCompanyName('');
-
-            if (self.selected().Category != null)
-                self.EditCategoryName(self.selected().Category.Name);
-            else
-                self.EditCategoryName('');
-        });
+        //self.showEditor.subscribe(self.updateImages);
         //self.model.Company.subscribe(updateImages);
 
-        var oldShowEditor = false;
-        self.showEditor.subscribe(function (newValue) {
-            if (!oldShowEditor && self.categoryId() != 0)
-                self.categoryId(0);
-
-            oldShowEditor = newValue;
-        });
-
         self.rowHoverQtip = function () {
-            alert(0);
         };
     },
     extend: function (self) {
@@ -124,13 +99,14 @@ vm.contactsWG = new vm.baseViewModel({
                 $qtip.find('.aaa').text(this.id);
 
             };
-            self.EditContact = function (ctrl) {
-                lz.closeDlg(ctrl);
-                window.location = '#/Contacts/' + self.hover().Id;
+            self.EditContact = function (item) {
+                //lz.closeDlg(ctrl);
+                window.location = '#/Contacts/' + item.Id;
             };
-            self.DeleteContact = function (ctrl) {
-                lz.closeDlg(ctrl);
-                self.remove(self.hover());
+            self.DeleteContact = function (item) {
+                //lz.closeDlg(ctrl);
+                self.remove(item);
+                event.cancelBubble = true;
             };
     }
 });

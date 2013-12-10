@@ -453,7 +453,7 @@ jQuery(function () {
         method: function (paramObj) {
             // The property value indicates if this is an email field or not.
             // Obviously, if it wasnt, the property wouldnt be there, but oh well. :P
-            if (paramObj.propertyValue)
+            if (paramObj.propertyValue && paramObj.input && paramObj.input.val())
                 // E-Mail regex check
                 if (!new RegExp(/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/i).test(paramObj.input.val())) {
                     return false;

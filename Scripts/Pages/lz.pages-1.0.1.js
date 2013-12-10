@@ -22,6 +22,7 @@ vm.viewModelsToLoad = ko.observable(0);
 
 // A flag to know if all the view models have finished loading
 vm.allloaded = ko.observable(false);
+vm.refreshModule = ko.observable('');
 
 // Base class for all the view models
 vm.baseViewModel = function (extend) {
@@ -117,7 +118,19 @@ vm.baseViewModel = function (extend) {
             if (vm.viewModelsToLoad() === 0)
                 vm.allloaded(true);
         });
+
+        // if this is not the first refresh of the module
+        if (self.loaded() && self.options.refreshModules && !vm.refreshModule()) {
+            $.each(self.options.refreshModules.split(' '), function (i, v) {
+                if ($.trim(v)) { vm.refreshModule(v); vm.refreshModule.notifySubscribers(v); vm.refreshModule(''); }
+            });
+        }
     }
+
+    if (self.options.refreshModules)
+        $.each(self.options.refreshModules.split(' '), function (i, v) {
+            vm.refreshModule.subscribe(function (newVal) { if(newVal == v) self.refresh(); });
+        });
 
     self.sortedCollection = ko.computed(function () {
         var items = self.collection();
@@ -345,8 +358,50 @@ lz.exp = {
                 }
             }
         });
+    },
+
+    msg: {
+        idleTimeout: "You have been idle for 5 minutes, please click 'OK' to be redirected to login"
     }
 };
+
+/* This object handles the timeout check for redirecting to login form
+/* Each time the user performs
+*/
+lz.idle = {
+    _timeout: 5 * 60 * 1000, /* in milliseconds */
+    _lastActive: new Date(),
+    _dialogOpen: false,
+    active: function () { this._lastActive = new Date(); },
+    check: function () {
+        var now = new Date();
+        if (now - this._lastActive > this._timeout && !this._dialogOpen) {
+            _dialogOpen = true;
+            $("<div title=\"Idle Logout\">" + lz.exp.msg.idleTimeout + "</div>").dialog({
+                resizable: false,
+                height: 'auto',
+                modal: true,
+                buttons: {
+                    Ok: function () {
+                        window.location = '/';
+                    }
+                }
+            });
+        }
+        return !this._dialogOpen;
+    },
+    load: function () {
+        setInterval(lz.idle.check, 60000);
+        $(window).bind("focus", function (event) {
+            lz.idle.check();
+        });
+        $(document).ajaxSend(function () {
+            if (lz.idle.check())
+                lz.idle.active();
+        });
+    }
+};
+$(function () { lz.idle.load(); });
 
 $.ajaxSetup({
     error: function (xhr, status, error) {

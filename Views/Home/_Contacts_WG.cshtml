@@ -1,32 +1,45 @@
 ﻿<div data-bind="with: contactsWG">
     <div data-bind="showHide: loaded" class="vm-view vm-contacts">
-         <div class="results">
+         <div class="results results-wg">
             <table>
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Company</th>
-                        <th>Category</th>
-                    </tr>
-                </thead>
                 <tbody class="tr-highlight" data-bind="foreach: collection">
-                    <tr data-bind="
+                    <tr data-bind1="
     qtip: '#contactHover',
     qtipType: 'HoverStayOpen',
     qtipOnShow: $parent.updateHover,
-    qtipPosition: { my: 'left center', at: 'right center' }">
-                        <td data-bind="text: FirstName + ' ' + (LastName || '')"></td>
-                        <td><span data-bind="if: Company != null"><span data-bind=" text: Company.FirstName"></span></span></td>
-                        <td><span data-bind="if: Category != null"><span data-bind="text: Category.Name"></span></span></td>
-                        <td>
-                            <button class="btn btn-mini btn-edit" data-bind="click: function () { window.location = '#/Contacts/' + Id; }" title="Edit Contact"></button>
+    qtipPosition: { my: 'left center', at: 'right center' }" data-bind="click: $parent.EditContact">
+                        <td class="img-46" style="padding:3px;">
+                            <span data-bind="ifnot: ProfilePicture"><img src="~/Images/profile.jpg" /></span>
+                            <span data-bind="if: ProfilePicture"><img data-bind="    attr: { src: ProfilePicture }" src="" /></span>
+                        </td>
+                        <td class="wd-200" valign="top">
+                            <span data-bind="text: FirstName + ' ' + (LastName || '')"></span>
+                            <span data-bind="if: Category != null">(<span data-bind="    text: Category.Name"></span>)</span>
+                            <span data-bind="if: Company != null" style="white-space:nowrap;">
+                                <span class="txt-info">works at</span>
+                                <span data-bind="text: Company.FirstName"></span>
+                            </span>
+                        </td>
+                        <td style="padding:3px;">
+                            <div class="social">
+                                <a class="on" data-bind="visible: JSON.parse(SocialData || '{}').facebook, attr: { 'href': JSON.parse(SocialData || '{}').facebook } " target="_blank">
+                                    <div class="soc-link facebook" title="Facebook Profile Link"></div>
+                                </a>
+                                <a class="on" data-bind="visible: JSON.parse(SocialData || '{}').linkedin, attr: { 'href': JSON.parse(SocialData || '{}').linkedin } " target="_blank">
+                                    <div class="soc-link linkedin" title="Linkedin Profile Link"></div>
+                                </a>
+                                <a class="on" data-bind="visible: JSON.parse(SocialData || '{}').twitter, attr: { 'href': JSON.parse(SocialData || '{}').twitter } " target="_blank">
+                                    <div class="soc-link twitter" title="Twitter Profile Link"></div>
+                                </a>
+                            </div>
+                            <button class="btn btn-mini btn-edit" title="Edit Contact"></button>
                             <button class="btn btn-mini btn-delete" data-bind="click: $parent.remove" title="Delete Contact"></button>
                         </td>                    
                     </tr>
                 </tbody>
             </table>
              <div id="contactHover" class="dialog">
-                <span class="prf-pic"><img src="#" defsrc="~/Images/profile.jpg" /></span>
+                <span class="img-sml"><img src="#" defsrc="~/Images/profile.jpg" /></span>
                 <button class="btn btn-mini btn-edit"   onclick ="lz.getDlgCtx(this).$parent.EditContact(this)" title="Edit Contact"></button>
                 <button class="btn btn-mini btn-delete" onclick="lz.getDlgCtx(this).$parent.DeleteContact(this)" title="Delete Contact"></button>
             </div>

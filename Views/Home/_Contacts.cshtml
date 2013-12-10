@@ -81,7 +81,7 @@
 
             <div class="hover-profile" data-bind="with: hover()">
                 <div data-bind="if: Id > 0, css : { hide: !(Id > 0) }">
-                    <div class="float-left prf-pic">
+                    <div class="float-left prf-pic img-prv">
                         <span data-bind="ifnot: ProfilePicture"><img src="~/Images/profile.jpg" /></span>
                         <span data-bind="if: ProfilePicture"><img data-bind="attr: { src: ProfilePicture }" src="" /></span>
                     </div>
@@ -138,7 +138,7 @@
 
             <div data-bind=" { with: select(), jqValidation: validationContext } ">
                 <section class="head">
-                    <div class="prf-pic" data-bind="
+                    <div class="prf-pic img-prv" data-bind="
     qtip: '#dialog-picture',
     qtipType: 'Form',
     qtipPosition: { my: 'left center', at: 'right center'},
@@ -211,15 +211,15 @@
                 </section>
                 <ul class="edit-form float-left">
                     <li>
-                        <span class="ui-icon ui-icon-person"></span>
+                        <span class="ui-icon ui-icon-person" data-bind="qtip: 'Fill in first name'"></span>
                         <span><input type="text" data-bind="value: FirstName" placeholder="First Name" data-required="true" maxlength="30" /></span>
                     </li>
                     <li>
-                        <span class="ui-icon ui-icon-person"></span>
+                        <span class="ui-icon ui-icon-person" data-bind="qtip: 'Fill in last name'"></span>
                         <span><input type="text" data-bind="value: LastName" placeholder="Last Name" maxlength="30"/></span>
                     </li>
                     <li class="company">
-                        <span class="ui-icon ui-icon-suitcase"></span>
+                        <span class="ui-icon ui-icon-suitcase" data-bind="qtip: 'select an exiting company or fuck off'"></span>
                         <span class="rel">
                             <hidden data-bind="value: CompanyId" value="" ></hidden>
                             <input type="text" placeholder="Company" onclick="if ($(this).val() == '') $(this).autocomplete('search', '');" maxlength="30" data-bind="
@@ -252,7 +252,7 @@
                         </span>
                     </li>
                     <li>
-                        <span class="ui-icon ui-icon-home"></span>
+                        <span class="ui-icon ui-icon-home" data-bind="qtip: 'Home is where the heart'"></span>
                         <span><input type="text" data-bind="value: Country,
     autoComplete: '/api/contacts/GetCountries',
     autocomplete_select: 'UpdateCountry',
@@ -281,7 +281,7 @@
                 </ul>
                 <ul class="edit-form float-left">
                     <li class="category">
-                        <span class="ui-icon ui-icon-tag"></span>
+                        <span class="ui-icon ui-icon-tag" data-bind="qtip: 'Are you a playa??'"></span>
                         <span class="rel">
                             <hidden data-bind="value: CategoryId" value="" ></hidden>
                             <input type="text" placeholder="Category" onclick="if ($(this).val() == '') $(this).autocomplete('search', '');" maxlength="30" data-bind="
@@ -307,7 +307,7 @@
                         </span>
                     </li>
                     <li>
-                        <span class="ui-icon ui-icon-mail-closed"></span>
+                        <span class="ui-icon ui-icon-mail-closed" data-bind="qtip: 'If it&rsquo;s not gmail... don&rsquo;t bother...'"></span>
                         <span>
                             <input type="text"
                                 data-bind="value: Email"
