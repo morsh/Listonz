@@ -1,4 +1,8 @@
-﻿(function ($) {
+﻿// Will cancel the idle popup from showing up
+lz.cancelIdle = true;
+
+$(function () {
+    "use strict";
     var app = $.sammy('#loginForm', function () {
 
         function showView(viewSelector) {
@@ -29,15 +33,23 @@
         catch (e) { }
         app.run('#/Login');
     });
-})(jQuery);
 
-$(function () {
+    // Binding password strength control
+    var $password = $('.pass-strength input[type=password]');
+
+    if ($password.length > 0) {
+        $password.get(0).passStrength = $password.password_strength({
+            minLength: 8,
+            specialLength: 0,
+            messages: ["Are you kidding me?!", "A little better", "Almost there...", "Now that wan't so hard, was it?"]
+        });
+    }
 
     // Register Partial Handling
     // =========================
     
     // Agree to terms handling - replace "terms" word with link
-    $leagal = $('#viewRegister .leagal');
+    var $leagal = $('#viewRegister .leagal');
     var termsWord = $leagal.attr('termslink');
     if (typeof(termsWord) != 'undefined' && termsWord != '') {
         var termsLink = '<a href="#" onclick="return false;">' + termsWord + '</a>';
@@ -61,7 +73,7 @@ $(function () {
         });
     }
 
-    $('#viewRegister #UserName').on('keyup blur change', function () {
+    $('#viewReg ister #UserName').on('keyup blur change', function () {
 
         function setUserFound(status) {
             var $e = $('#viewRegister .user-found').attr('class', 'user-found');

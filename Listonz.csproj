@@ -385,6 +385,8 @@
     <Content Include="Scripts\moment-with-langs.min.js" />
     <Content Include="Scripts\moment.js" />
     <Content Include="Scripts\moment.min.js" />
+    <Content Include="Scripts\Pages\knockout.extenssions-1.0.0.js" />
+    <Content Include="Scripts\Pages\lz-1.0.0.js" />
     <Content Include="Scripts\Widget\lz.widget.contact-wg-1.0.0.js" />
     <Content Include="Scripts\Widget\lz.widget.contact-1.0.0.js" />
     <Content Include="Scripts\Pages\lz.pages.login-1.0.1.js" />
@@ -447,6 +449,7 @@
     <Content Include="Views\Home\_Contacts.cshtml" />
     <Content Include="Views\Account\Admin.cshtml" />
     <Content Include="Views\Home\_Contacts_WG.cshtml" />
+    <Content Include="Views\Account\ForceLogoff.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

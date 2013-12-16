@@ -154,8 +154,8 @@
                                 <label for="PictureUrl">Picture Url</label>
                                 <textarea name="PictureUrl" id="PictureUrl" class="text ui-widget-content ui-corner-all" style="width: 400px;" ></textarea>
                             </fieldset>
-                            <a href="#" data-bind="click: $parent.setPicture">OK</a>
-                            <a href="#" data-bind="click: $parent.CancelForm">Cancel</a>
+                            <a href="#" onclick="lz.getDlgCtx(this).$parent.setPicture()">OK</a>
+                            <a href="#" onclick="lz.getDlgCtx(this).$parent.CancelForm()">Cancel</a>
                           </form>
                         </div>
                     </div>

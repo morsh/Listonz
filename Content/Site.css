@@ -1,11 +1,10 @@
 ﻿html { background-color: #e2e2e2;margin: 0;padding: 0;}
 body {background-color: #fff;border-top: solid 10px #000;color: #333;font-size: 12px;font-family: 'lucida grande', Verdana, Helvetica, Sans-Serif;margin: 0;padding: 0;}
 
-a {color: #333;outline: none;padding-left: 3px;padding-right: 3px;text-decoration: underline;}
+a {color: #333;outline: none;text-decoration: underline;}
 
     a:link, a:visited,
     a:active, a:hover {color: #333;}
-    a:hover {background-color: #c7d1d6;}
 
 img {border:none;}
 
@@ -48,27 +47,19 @@ select[data-required] {background-position-x:170px; }
 /* main layout
 ----------------------------------------------------------*/
 .content-wrapper {margin: 0 auto;max-width: 960px;}
-
 #body {background-color: #efeeef;clear: both;padding-bottom: 10px;}
-
     .main-content {padding-left: 10px;padding-top: 10px;}
-
     .featured + .main-content {background: url("../Images/heroAccent.png") no-repeat;}
-
 header .content-wrapper {padding-top: 20px; }
-
 footer {clear: both;background-color: #e2e2e2;font-size: .8em;height: 30px;}
-
 
 /* site title
 ----------------------------------------------------------*/
 .site-title {color: #c8c8c8;font-family: Rockwell, Consolas, "Courier New", Courier, monospace;font-size: 2.3em;margin: 0 10px 0 0;display:block;float:left;}
     .site-title img {max-height:80px;border:solid 0 #fff;display:block;}
-
 .site-title a, 
 .site-title a:hover, 
 .site-title a:active {background: none;color: #c8c8c8;outline: none;text-decoration: none;padding:0;}
-
 
 /* login
 ----------------------------------------------------------*/
@@ -90,23 +81,17 @@ ul#menu {font-size: 1.3em;font-weight: 600;margin: 0 0 5px;padding: 0;text-align
         ul#menu li a {background: none;color: #999;text-decoration: none;}
         ul#menu li a:hover {color: #333;text-decoration: none;}
 
-
 /* page elements
 ----------------------------------------------------------*/
 /* featured */
 .featured {background-color: #fff;}
-
     .featured .content-wrapper {background-color: #7ac0da;background-image: -ms-linear-gradient(left, #7ac0da 0%, #a4d4e6 100%);background-image: -o-linear-gradient(left, #7ac0da 0%, #a4d4e6 100%);background-image: -webkit-gradient(linear, left top, right top, color-stop(0, #7ac0da), color-stop(1, #a4d4e6));background-image: -webkit-linear-gradient(left, #7ac0da 0%, #a4d4e6 100%);background-image: linear-gradient(left, #7ac0da 0%, #a4d4e6 100%);color: #3e5667;padding: 20px 40px 30px 40px;}
-
         .featured hgroup.title h1, .featured hgroup.title h2 {color: #fff;}
-
         .featured p {font-size: 1.1em;}
 
 /* page titles */
 hgroup.title {margin-bottom: 10px;}
-
 hgroup.title h1, hgroup.title h2 {display: inline;}
-
 hgroup.title h2 {font-weight: normal;margin-left: 3px;}
 
 /* features */
@@ -114,7 +99,6 @@ section.feature {width: 300px;float: left;padding: 10px;}
 
 /* content */
 article {float: left;width: 70%;}
-
 aside {float: right;width: 25%;}
     aside ul {list-style: none;padding: 0;}
         aside ul li {background: url("../Images/bullet.png") no-repeat 0 50%;padding: 2px 0 2px 20px;}
@@ -123,19 +107,14 @@ aside {float: right;width: 25%;}
 
 /* narrow page */
 .narrow {width: 450px;margin-left: auto;margin-right: auto;border:1px dashed #ffea00;padding: 10px;}
-
     .narrow .validation-error {display: block;margin-left: 15px;}
-
     .narrow .validation-summary-errors ul {margin: 0;padding: 0;}
-
     .narrow .validation-summary-errors li {list-style: none;margin: 0;}
     .narrow input {width: 425px;}
-
     .narrow input[type="checkbox"],
     .narrow input[type="submit"],
     .narrow input[type="button"],
     .narrow button {width: auto;}
-
     .narrow input[type="password"] { width:200px; }
 
 /* login page */
@@ -165,28 +144,21 @@ aside {float: right;width: 25%;}
 
 /* contact */
 .contact h3 {font-size: 1.2em;}
-
 .contact p {margin: 5px 0 0 10px;}
-
 .contact iframe {border: 1px solid #333;margin: 5px 0 0 10px;}
 
 /* forms */
 fieldset {border: none;margin: 0;padding: 0;}
 
     fieldset legend {display: none;}
-
     fieldset ol {padding: 0;list-style: none;}
-
         fieldset ol li {padding-bottom: 5px;}
         fieldset ol li .info {width:15px;height:15px;background:transparent url(/Images/info.png);margin:3px 15px 0 0;float:right;}
 
 label {display: block;font-size: 1em;font-weight: 600;width: 90%;}
-
 label.checkbox {display: inline;}
-
 input, textarea, select {border: 1px solid #e2e2e2;background: #fff;color: #333;font-size: 1.2em;margin: 5px 0 6px 0;padding: 5px;width: 200px;}
 select {width:213px;}
-
 textarea {font-family: inherit;height: 59px;}
 
     input:focus, textarea:focus {border: 1px solid #7ac0da;}
@@ -261,39 +233,16 @@ input[type="checkbox"].input-validation-error {
 table {border-collapse: collapse;border-spacing: 0;border: 0 none;}
 
 th {font-size: 1em;text-align: left;border: none 0px;padding: 0.25em 2em 0.25em 0em;white-space:nowrap;}
-
     th a {display: block;position: relative;}
-
     th a:link, th a:visited, th a:active, th a:hover {color: #333;font-weight: 600;text-decoration: none;padding: 0;}
-
-    th a:hover {
-        color: #000;
-    }
-
-    th.asc a, th.desc a {
-        margin-right: .75em;
-    }
-
-    th.asc a:after, th.desc a:after {
-        display: block;
-        position: absolute;
-        right: 0em;
-        top: 0;
-        font-size: 0.75em;
-    }
-
-    th.asc a:after {
-        content: '▲';
-    }
-
-    th.desc a:after {
-        content: '▼';
-    }
+    th a:hover {color: #000;}
+    th.asc a, th.desc a {margin-right: .75em;}
+    th.asc a:after, th.desc a:after {display: block;position: absolute;right: 0em;top: 0;font-size: 0.75em;}
+    th.asc a:after {content: '▲';}
+    th.desc a:after {content: '▼';}
 
 td {padding: 0.25em 2em 0.25em 0em;border: 0 none;}
-
 tr.pager td {padding: 0 0.25em 0 0;}
-
 
 /********************
 *   Mobile Styles   *
@@ -303,63 +252,22 @@ tr.pager td {padding: 0 0.25em 0 0;}
     /* header
     ----------------------------------------------------------*/
     header .float-left,
-    header .float-right {
-        float: none;
-    }
+    header .float-right {float: none;}
 
     /* logo */
-    header .site-title {
-        margin: 10px;
-        text-align: center;
-    }
+    header .site-title {margin: 10px;text-align: center;}
 
     /* login */
-    #login {
-        font-size: .85em;
-        margin: 0 0 12px;
-        text-align: center;
-    }
-
-        #login ul {
-            margin: 5px 0;
-            padding: 0;
-        }
-
-        #login li {
-            display: inline;
-            list-style: none;
-            margin: 0;
-            padding: 0;
-        }
-
-        #login a {
-            background: none;
-            color: #999;
-            font-weight: 600;
-            margin: 2px;
-            padding: 0;
-        }
-
-        #login a:hover {
-            color: #333;
-        }
+    #login {font-size: .85em;margin: 0 0 12px;text-align: center;}
+        #login ul {margin: 5px 0;padding: 0;}
+        #login li {display: inline;list-style: none;margin: 0;padding: 0;}
+        #login a {background: none;color: #999;font-weight: 600;margin: 2px;padding: 0;}
+        #login a:hover {color: #333;}
 
     /* menu */
-    nav {
-        margin-bottom: 5px;
-    }
-
-    ul#menu {
-        margin: 0;
-        padding: 0;
-        text-align: center;
-    }
-
-        ul#menu li {
-            margin: 0;
-            padding: 0;
-        }
-
+    nav {margin-bottom: 5px;}
+    ul#menu {margin: 0;padding: 0;text-align: center;}
+        ul#menu li {margin: 0;padding: 0;}
 
     /* main layout
     ----------------------------------------------------------*/
@@ -527,11 +435,14 @@ tr.pager td {padding: 0 0.25em 0 0;}
 .results td.overflow-none{text-overflow:clip; }
 .results-wg td {white-space:normal;}
 
-#tabContacts .results {}
-#tabContacts .hover-profile {float:left;width:34%; height:300px;}
-    #tabContacts .hover-profile > div {width:100%;height:100%;border:solid 1px #c7d1d6;}
-    #tabContacts .hover-profile > div > div {padding:7px;}
-    #tabContacts .hover-profile .prf-pic {height:290px;}
+.results {}
+.hover-profile {float:left;width:311px; height:300px;}
+    .hover-profile > div {width:100%;height:100%;border:solid 1px #c7d1d6;}
+    .hover-profile > div > div {padding:7px;}
+    .hover-profile .prf-pic {height:290px;}
+    .hover-profile .prf-pic {height:290px;}
+    .hover-profile .rating {margin-top:20px;}
+
     
 /* table fixing and sorting */
     /*Framework*/
@@ -554,7 +465,7 @@ tr.pager td {padding: 0 0.25em 0 0;}
     .Sortable > thead th .sort.down.up .ui-icon {background-position: 0 -32px;}
 
 /* actions toolbar */
-.actions {padding:0;margin:0;}
+.actions {padding:0;margin:0;clear:left;}
     .actions li {float:left;padding:0 5px 0 0;}
     .actions button,
     .actions input[type=button] {padding:4px 5px 3px 5px;}

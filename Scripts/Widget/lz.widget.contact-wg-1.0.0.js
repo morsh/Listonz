@@ -88,7 +88,18 @@ vm.contactsWG = new vm.baseViewModel({
         // =================
             self.hover = ko.observable(new self.model());
             var stopEvents = false;
-            self.updateHover = function () {
+            self.updateHover = function (data) {
+                stopEvents = true;
+                self.hover(data);
+                stopEvents = false;
+            };
+            self.HSocial = function () {
+                return JSON.parse(self.hover().SocialData || "{}") || {};
+            };
+            self.CancelForm = function () {
+                $(event.srcElement).closest('.qtip').qtip('hide');
+            };
+            self.updateHover1 = function () {
 
                 $('.qtip').each(function () { $(this).qtip('hide'); });
 
@@ -99,6 +110,35 @@ vm.contactsWG = new vm.baseViewModel({
                 $qtip.find('.aaa').text(this.id);
 
             };
+            self.newContact = function () {
+
+                $('.qtip').each(function () { $(this).qtip('hide'); });
+
+                var $qtip = $(this);
+                var hoverData = ko.dataFor($qtip.data('qtip').target[0]);
+                self.hover(hoverData);
+
+                $qtip.find('.aaa').text(this.id);
+
+            };
+
+            self.addContact = function (ctrl) {
+
+                $('.qtip').each(function () { $(this).qtip('hide'); });
+                
+                var $dlg = $(ctrl).closest('.dialog');
+                var firstName = $dlg.find('#cnt-wg-new-fn').val();
+                var lastName = $dlg.find('#cnt-wg-new-ln').val();
+                var email = $dlg.find('#cnt-wg-new-email').val();
+                self.isNew(true);
+                var newContact = ko.toJS(ko.utils.unwrapObservable(new self.model()));
+                newContact.FirstName = firstName;
+                newContact.LastName = lastName;
+                newContact.Email = email;
+
+                self.save(newContact);
+            };
+            
             self.EditContact = function (item) {
                 //lz.closeDlg(ctrl);
                 window.location = '#/Contacts/' + item.Id;

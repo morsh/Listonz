@@ -1,13 +1,16 @@
 ﻿<div data-bind="with: contactsWG">
     <div data-bind="showHide: loaded" class="vm-view vm-contacts">
-         <div class="results results-wg">
+
+        <div class="results results-wg float-left">
             <table>
                 <tbody class="tr-highlight" data-bind="foreach: collection">
                     <tr data-bind1="
     qtip: '#contactHover',
     qtipType: 'HoverStayOpen',
     qtipOnShow: $parent.updateHover,
-    qtipPosition: { my: 'left center', at: 'right center' }" data-bind="click: $parent.EditContact">
+    qtipPosition: { my: 'left center', at: 'right center' }"
+                        onmousemove="ko.contextFor(this).$parent.updateHover(ko.dataFor(this));" 
+                         data-bind="click: $parent.EditContact">
                         <td class="img-46" style="padding:3px;">
                             <span data-bind="ifnot: ProfilePicture"><img src="~/Images/profile.jpg" /></span>
                             <span data-bind="if: ProfilePicture"><img data-bind="    attr: { src: ProfilePicture }" src="" /></span>
@@ -44,6 +47,81 @@
                 <button class="btn btn-mini btn-delete" onclick="lz.getDlgCtx(this).$parent.DeleteContact(this)" title="Delete Contact"></button>
             </div>
         </div>
-        <a href="#/Contacts">More...</a>
+
+        <div class="hover-profile float-left" data-bind="with: hover()">
+            <div data-bind="if: Id > 0, css: { hide: !(Id > 0) }">
+                <div class="float-left prf-pic img-prv">
+                    <span data-bind="ifnot: ProfilePicture"><img src="~/Images/profile.jpg" /></span>
+                    <span data-bind="if: ProfilePicture"><img data-bind="    attr: { src: ProfilePicture }" src="" /></span>
+                </div>
+                    
+                <div>
+                    <span data-bind="text: FirstName + ' ' + (LastName || '')"></span>
+                    <span data-bind="if: Category != null"><span data-bind="    text: '(' + Category.Name + ')'"></span></span>
+                </div>
+                <div data-bind="if: Company != null">
+                    <span>Company: </span>
+                    <span data-bind="text: Company.FirstName"></span>
+                </div>
+                <div class="email" data-bind="if: Email">
+                    <a data-bind="attr: { href: 'mailto:' + Email }">
+                        <div class="float-left"><img src="~/Images/email.png" height="20" /></div>
+                        <div data-bind="text: Email" class="float-left"></div>
+                    </a>
+                </div>
+
+                <div class="rating">
+                    <div data-bind="rateit: { value: $parent.hoverRating, max: 5, step: 0.1, readonly: true }"></div>
+                </div>
+
+                <div class="social">
+                    <a class="on" data-bind="visible: $parent.HSocial().facebook, attr: { 'href': $parent.HSocial().facebook } " target="_blank">
+                        <div class="soc-link facebook" title="Facebook Profile Link"></div>
+                    </a>
+                    <a class="on" data-bind="visible: $parent.HSocial().linkedin, attr: { 'href': $parent.HSocial().linkedin } " target="_blank">
+                        <div class="soc-link linkedin" title="Linkedin Profile Link"></div>
+                    </a>
+                    <a class="on" data-bind="visible: $parent.HSocial().twitter, attr: { 'href': $parent.HSocial().twitter } " target="_blank">
+                        <div class="soc-link twitter" title="Twitter Profile Link"></div>
+                    </a>
+                </div>
+
+                <div class="phone" data-bind="if: PhoneNumber">
+                    <div data-bind="text: 'Phone: ' + PhoneNumber"></div>
+                </div>
+                <div class="phone" data-bind="if: MobileNumber">
+                    <div data-bind="text: 'Mobile: ' + MobileNumber"></div>
+                </div>
+                <div class="phone" data-bind="if: FaxNumber">
+                    <div data-bind="text: 'Fax: ' + FaxNumber"></div>
+                </div>
+            </div>
+            <div data-bind="ifnot: Id > 0, css: { hide: Id > 0 }">
+                Hover on a contact to preview his\her details
+            </div>
+        </div>
+
+        <ul class="actions">
+            <li>
+                <a href="#/Contacts">More...</a>
+            </li>
+            <li>
+                <a href="#" data-bind="
+    qtip: '#cnt-wg-new',
+    qtipType: 'HoverStayOpen',
+    qtipOnShow: $parent.newContact,
+    qtipPosition: { my: 'bottom center', at: 'top center' }">Add New Contact</a>
+                <div id="cnt-wg-new" class="dialog" data-bind="jqValidation: validationContext">
+                    <label>First Name</label>
+                    <input id="cnt-wg-new-fn" />
+                    <label>Last Name</label>
+                    <input id="cnt-wg-new-ln" />
+                    <label>Email</label>
+                    <input id="cnt-wg-new-email" />
+                    <a href="#" onclick="lz.getDlgCtx(this).$data.addContact(this); return false;">OK</a>
+                    <a href="#" onclick="lz.getDlgCtx(this).$data.CancelForm(); return false;">Cancel</a>
+                </div>
+            </li>
+        </ul>
     </div>
 </div>

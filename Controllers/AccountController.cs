@@ -84,6 +84,17 @@ namespace Listonz.Controllers
             return PartialView();
         }
 
+        [AllowAnonymous]
+        public ActionResult ForceLogoff(string returnUrl)
+        {
+            ViewBag.ReturnUrl = returnUrl;
+
+            if (User.Identity.IsAuthenticated)
+                return RedirectToLocal(returnUrl);
+
+            return View();
+        }
+
         //
         // POST: /Account/Register
 
