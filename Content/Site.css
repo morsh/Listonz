@@ -364,6 +364,7 @@ tr.pager td {padding: 0 0.25em 0 0;}
 .loader {width:100%;text-align:center; }
 .loader img {display:none;}
 
+.lz-module {width:100%;}
 .vm-view {display:none;}
     .vm-view ul { list-style:none;}
     .vm-view label { width: 140px;display:inline-block; }
@@ -378,6 +379,7 @@ tr.pager td {padding: 0 0.25em 0 0;}
     .vm-view .edit .head .email div { padding:3px; }
     .vm-view .edit .head .email a:hover {background:none;}
 
+    .vm-view .social {float:left;}
     .vm-view .social .soc-link {width:16px;height:16px;display:inline-block;cursor:pointer;}
     .vm-view .social .facebook {background-image:url(/images/facebook-icon-g-16x16.png);}
     .vm-view .social .on .facebook {background-image:url(/images/facebook-icon-16x16.png);}
@@ -386,6 +388,8 @@ tr.pager td {padding: 0 0.25em 0 0;}
     .vm-view .social .twitter {background-image:url(/images/twitter-icon-g-16x16.png);}
     .vm-view .social .on .twitter {background-image:url(/images/twitter-icon-16x16.png);}
     .vm-view .social a {text-decoration:none;}
+
+    .vm-view .rating {float:left;margin-right:30px;}
 
     #body .ui-tabs .ui-tabs-nav li.ui-tabs-selected a { cursor: pointer; }
 
@@ -436,7 +440,7 @@ tr.pager td {padding: 0 0.25em 0 0;}
 .results-wg td {white-space:normal;}
 
 .results {}
-.hover-profile {float:left;width:311px; height:300px;}
+.hover-profile {float:left;width:311px; height:300px;margin:25px 0;}
     .hover-profile > div {width:100%;height:100%;border:solid 1px #c7d1d6;}
     .hover-profile > div > div {padding:7px;}
     .hover-profile .prf-pic {height:290px;}
@@ -476,6 +480,7 @@ body .qtip {max-width:900px;}
     .ui-tooltip-content p {margin:0;}
 
 /* Fiesl Icons */
+.vm-view .edit-form.first {clear:left;}
 .vm-view .edit-form .ui-icon {position:absolute;right:0;margin:10px 10px;z-index:100;}
 .vm-view .edit-form > li {position:relative;}
 .vm-view .edit-form input,

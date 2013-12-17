@@ -6,7 +6,36 @@ vm.viewModelsToLoad = ko.observable(0);
 
 // A flag to know if all the view models have finished loading
 vm.allloaded = ko.observable(false);
-vm.refreshModule = ko.observable('');
+
+// The following properties 
+vm.events = new function () {
+    var self = this;
+
+    self.init = function () {
+        self.module = ko.observable('');
+        self.action = ko.observable('');
+        self.data = ko.observable();
+    };
+    self.init();
+
+    self.trigger = function (eModule, eAction, eData) {
+
+        // Making sure not in the middle of another call - should change to a multiple calls system
+        if (self.module()) return;
+
+        self.action(eAction);
+        self.data(eData);
+        self.module(eModule);
+
+        self.init();
+    };
+
+    self.watch = function (eModule, method) {
+        self.module.subscribe(function (newValue) {
+            if (newValue == eModule) method();
+        });
+    };
+};
 
 // Base class for all the view models
 vm.baseViewModel = function (extend) {
@@ -96,24 +125,28 @@ vm.baseViewModel = function (extend) {
 
             self.selectedID(-1);
             self.loading(false);
-            self.loaded(true);
-            vm.viewModelsToLoad(vm.viewModelsToLoad() - 1);
 
-            if (vm.viewModelsToLoad() === 0)
-                vm.allloaded(true);
+            if (vm.viewModelsToLoad() > 0) {
+                self.loaded(true);
+                vm.viewModelsToLoad(vm.viewModelsToLoad() - 1);
+
+                if (vm.viewModelsToLoad() === 0)
+                    vm.allloaded(true);
+            }
         });
 
-        // if this is not the first refresh of the module
-        if (self.loaded() && self.options.refreshModules && !vm.refreshModule()) {
+        // if this is not the first refresh of the module, there are modules to refresh and , trigger refresh event
+        if (self.loaded() && self.options.refreshModules) {
             $.each(self.options.refreshModules.split(' '), function (i, v) {
-                if ($.trim(v)) { vm.refreshModule(v); vm.refreshModule.notifySubscribers(v); vm.refreshModule(''); }
+                if ($.trim(v)) { vm.events.trigger(v, 'refresh'); }
             });
         }
     }
 
+    // subscribe to module changes
     if (self.options.refreshModules)
         $.each(self.options.refreshModules.split(' '), function (i, v) {
-            vm.refreshModule.subscribe(function (newVal) { if(newVal == v) self.refresh(); });
+            vm.events.watch(v, function () { if (vm.events.module() == v) self.refresh(); });
         });
 
     self.sortedCollection = ko.computed(function () {
@@ -455,6 +488,7 @@ $(function () {
                         var tabSubPath = $(this).attr('tabsubpath');
                         var ctx = ko.dataFor($(tabSubPath)[0]);
                         ctx.refresh();
+                        ctx.showEditor(false);
                     }
                     catch (e) { }
             });

@@ -1,4 +1,4 @@
-﻿<div data-bind="with: contacts">
+﻿<div data-bind="with: contacts" class="lz-module">
 
     <div data-bind="showHide: loaded" class="vm-view vm-contacts">
         <div data-bind="if: !showEditor()">
@@ -132,11 +132,13 @@
                 </div>
             </div>
         </div>
+
+        <!-- Editor Part -->
         <div data-bind="if: showEditor" class="edit">
 
             <div class="float-right" data-bind="qtip: '<p>This is a mambo jambo text <br/> how nice :)</p>'"><img src="/images/help-16x16.png" /></div>
 
-            <div data-bind=" { with: select(), jqValidation: validationContext } ">
+            <div data-bind="{ with: select(), jqValidation: validationContext }">
                 <section class="head">
                     <div class="prf-pic img-prv" data-bind="
     qtip: '#dialog-picture',
@@ -173,7 +175,11 @@
                             <div data-bind="text: Email" class="float-left"></div>
                         </a>
                     </div>
-                    <div class="social float-right">
+                    <div class="social-rating">
+                        <div class="rating">
+                            <div data-bind="rateit: { value: Rating, max: 5, step: 0.1 }"></div>
+                        </div>
+                        <div class="social">
                         <span data-bind="attr: { 'class': $parent.Social().facebook || '' != '' ? 'on' : 'off' } ">
                             <div class="soc-link facebook" title="Facebook Profile Link" social="facebook"
                                 data-bind="
@@ -205,11 +211,9 @@
                             <a href="#" onclick="click: lz.closeDlg(this)">Cancel</a>
                         </div>
                     </div>
-                    <div class="rating">
-                        <div data-bind="rateit: { value: Rating, max: 5, step: 0.1 }"></div>
                     </div>
                 </section>
-                <ul class="edit-form float-left">
+                <ul class="edit-form float-left first">
                     <li>
                         <span class="ui-icon ui-icon-person" data-bind="qtip: 'Fill in first name'"></span>
                         <span><input type="text" data-bind="value: FirstName" placeholder="First Name" data-required="true" maxlength="30" /></span>
