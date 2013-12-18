@@ -3,7 +3,7 @@
 
         <div class="results results-wg float-left">
             <table>
-                <tbody class="tr-highlight" data-bind="foreach: collection">
+                <tbody class="tr-highlight" data-bind="foreach: sortedCollection">
                     <tr data-bind1="
     qtip: '#contactHover',
     qtipType: 'HoverStayOpen',
@@ -108,7 +108,7 @@
             <li>
                 <a href="#" data-bind="
     qtip: '#cnt-wg-new',
-    qtipType: 'HoverStayOpen',
+    qtipType: 'Form',
     qtipOnShow: $parent.newContact,
     qtipPosition: { my: 'bottom center', at: 'top center' }">Add New Contact</a>
                 <div id="cnt-wg-new" class="dialog" data-bind="jqValidation: validationContext">

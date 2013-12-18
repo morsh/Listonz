@@ -62,6 +62,8 @@ ko.bindingHandlers.qtip = {
             content.data('koContext', ko.contextFor($el[0]))
         }
 
+        if (content == "next-ph") content = $el.next().find('input').attr('placeholder');
+
         options.content = content;
         options.position = position;
 

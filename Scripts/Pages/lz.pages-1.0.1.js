@@ -42,6 +42,11 @@ vm.baseViewModel = function (extend) {
     "use strict";
     var self = this;
 
+    self.widget = {
+        isWidget: false,
+        selectTop: 5
+    };
+
     extend.api(self);
     extend.model(self);
     extend.extend(self);
@@ -233,10 +238,16 @@ vm.baseViewModel = function (extend) {
             var postData = ko.toJS(ko.utils.unwrapObservable(item));
             if (self.prepareDataForSave)
                 self.prepareDataForSave(postData);
+
+            // If this is a new item
             if (self.isNew())
                 $.post(self.api + self.options.add, postData, function (data) {
                     self.collection.push(data);
+                    if (self.widget.isWidget && self.collection().length >= self.widget.selectTop)
+                        self.collection.pop();
                 });
+
+            // If Updating an existing item
             else
                 $.ajax({
                     url: self.api + self.options.update + "?id=" + postData.Id,
@@ -365,7 +376,7 @@ lz.idle = {
     check: function () {
         var now = new Date();
         if (now - this._lastActive > this._timeout && !this._dialogOpen) {
-            _dialogOpen = true;
+            this._dialogOpen = true;
             $("<div title=\"Idle Logout\">" + lz.exp.msg.idleTimeout + "</div>").dialog({
                 resizable: false,
                 height: 'auto',

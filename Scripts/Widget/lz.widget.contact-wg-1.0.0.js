@@ -2,9 +2,10 @@
 
 vm.contactsWG = new vm.baseViewModel({
     api: function (self) {
+        self.widget.isWidget = true;
         self.api = "/api/contacts/";
         self.options = {
-            getAll: function () { return "GetContacts?$top=5" + '&$orderby=LastUpdate%20desc'; },
+            getAll: function () { return "GetContacts?$top=" + self.widget.selectTop + '&$orderby=LastUpdate%20desc'; },
             add: "PostContact",
             update: "PutContact",
             remove: "DeleteContact",
@@ -79,8 +80,8 @@ vm.contactsWG = new vm.baseViewModel({
         //self.showEditor.subscribe(self.updateImages);
         //self.model.Company.subscribe(updateImages);
 
-        self.rowHoverQtip = function () {
-        };
+        self.sort("LastUpdate");
+        self.sortDir("desc");
     },
     extend: function (self) {
 
@@ -88,6 +89,7 @@ vm.contactsWG = new vm.baseViewModel({
         // =================
             self.hover = ko.observable(new self.model());
             var stopEvents = false;
+            
             self.updateHover = function (data) {
                 stopEvents = true;
                 self.hover(data);
@@ -98,17 +100,6 @@ vm.contactsWG = new vm.baseViewModel({
             };
             self.CancelForm = function () {
                 $(event.srcElement).closest('.qtip').qtip('hide');
-            };
-            self.updateHover1 = function () {
-
-                $('.qtip').each(function () { $(this).qtip('hide'); });
-
-                var $qtip = $(this);
-                var hoverData = ko.dataFor($qtip.data('qtip').target[0]);
-                self.hover(hoverData);
-
-                $qtip.find('.aaa').text(this.id);
-
             };
             self.newContact = function () {
 

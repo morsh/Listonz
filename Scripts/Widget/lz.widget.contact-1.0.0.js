@@ -302,6 +302,8 @@ vm.contacts = new vm.baseViewModel({
 
                     // Setting new id in company Id field
                     ko.dataFor($('.category hidden[data-bind*=CategoryId]')[0]).CategoryId(data.Id);
+
+                    viewModel.Categories().push(data);
                 });
             };
             self.deleteCategory = function (item) {
@@ -312,7 +314,6 @@ vm.contacts = new vm.baseViewModel({
                     buttons: {
                         "Delete": function () {
 
-                            var isSelected = $(event.srcElement).closest('li').hasClass('selected');
                             var itemToRemove = ko.utils.unwrapObservable(ko.toJS(item));
                             var $this = $(this);
                             $.ajax({
@@ -321,10 +322,12 @@ vm.contacts = new vm.baseViewModel({
                                 success: function (data) {
 
                                     for (var i = 0, j = self.Categories().length; i < j; i++)
-                                        if (self.Categories()[i].Id == itemToRemove.Id)
+                                        if (self.Categories()[i].Id == itemToRemove.Id) {
                                             self.Categories.remove(self.Categories()[i]);
+                                            break;
+                                        }
 
-                                    if (isSelected) {
+                                    if (self.categoryId() == itemToRemove.Id) {
                                         self.categoryId(0);
                                         self.categoryId.valueHasMutated();
                                     }

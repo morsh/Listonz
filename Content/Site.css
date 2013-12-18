@@ -41,9 +41,11 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder { color:#666; }
 .rel {position:relative;}
 [data-required] {background:url(/images/required.png) right top no-repeat; }
 select[data-required] {background-position-x:170px; }
-.add-choice {display:none;position:absolute; margin: -33px 0 0 172px; padding: 4px 6px 4px; border: #08b2fe 1px solid; color: #08b2fe; background:#fff;cursor:pointer;}
-.add-form {position:absolute;border: #e2e2e2 1px solid;margin:-7px 0;background:#fff;}
-
+/* Parent of add-choice should be in relative position */
+.add-choice {display:none;position:absolute; margin-top: -34px; right:0; padding: 5px 10px 5px; border: #08b2fe 1px solid; color: #08b2fe; background:#fff;cursor:pointer;z-index:100;}
+.add-form {position:absolute;border: #e2e2e2 1px solid;margin:-7px 0;background:#fff;z-index:101;}
+    .add-form ul {padding:20px 40px 20px;}
+    .add-form input[type="button"] {width:150px !important;padding:7px !important;margin:0;}
 /* main layout
 ----------------------------------------------------------*/
 .content-wrapper {margin: 0 auto;max-width: 960px;}

@@ -1,6 +1,8 @@
 ﻿<div data-bind="with: contacts" class="lz-module">
 
     <div data-bind="showHide: loaded" class="vm-view vm-contacts">
+
+        <!-- Main View -->
         <div data-bind="if: !showEditor()">
 
             <div class="float-right" data-bind="qtip: '<p>Contacts help <br/> how nice! :)</p>'"><img src="/images/help-16x16.png" /></div>
@@ -215,15 +217,15 @@
                 </section>
                 <ul class="edit-form float-left first">
                     <li>
-                        <span class="ui-icon ui-icon-person" data-bind="qtip: 'Fill in first name'"></span>
+                        <span class="ui-icon ui-icon-person" data-bind="qtip: 'next-ph'"></span>
                         <span><input type="text" data-bind="value: FirstName" placeholder="First Name" data-required="true" maxlength="30" /></span>
                     </li>
                     <li>
-                        <span class="ui-icon ui-icon-person" data-bind="qtip: 'Fill in last name'"></span>
+                        <span class="ui-icon ui-icon-person" data-bind="qtip: 'next-ph'"></span>
                         <span><input type="text" data-bind="value: LastName" placeholder="Last Name" maxlength="30"/></span>
                     </li>
                     <li class="company">
-                        <span class="ui-icon ui-icon-suitcase" data-bind="qtip: 'select an exiting company or fuck off'"></span>
+                        <span class="ui-icon ui-icon-suitcase" data-bind="qtip: 'next-ph'"></span>
                         <span class="rel">
                             <hidden data-bind="value: CompanyId" value="" ></hidden>
                             <input type="text" placeholder="Company" onclick="if ($(this).val() == '') $(this).autocomplete('search', '');" maxlength="30" data-bind="
@@ -256,7 +258,7 @@
                         </span>
                     </li>
                     <li>
-                        <span class="ui-icon ui-icon-home" data-bind="qtip: 'Home is where the heart'"></span>
+                        <span class="ui-icon ui-icon-home" data-bind="qtip: 'next-ph'"></span>
                         <span><input type="text" data-bind="value: Country,
     autoComplete: '/api/contacts/GetCountries',
     autocomplete_select: 'UpdateCountry',
@@ -285,7 +287,7 @@
                 </ul>
                 <ul class="edit-form float-left">
                     <li class="category">
-                        <span class="ui-icon ui-icon-tag" data-bind="qtip: 'Are you a playa??'"></span>
+                        <span class="ui-icon ui-icon-tag" data-bind="qtip: 'next-ph'"></span>
                         <span class="rel">
                             <hidden data-bind="value: CategoryId" value="" ></hidden>
                             <input type="text" placeholder="Category" onclick="if ($(this).val() == '') $(this).autocomplete('search', '');" maxlength="30" data-bind="
@@ -311,7 +313,7 @@
                         </span>
                     </li>
                     <li>
-                        <span class="ui-icon ui-icon-mail-closed" data-bind="qtip: 'If it&rsquo;s not gmail... don&rsquo;t bother...'"></span>
+                        <span class="ui-icon ui-icon-mail-closed" data-bind="qtip: 'next-ph'"></span>
                         <span>
                             <input type="text"
                                 data-bind="value: Email"
