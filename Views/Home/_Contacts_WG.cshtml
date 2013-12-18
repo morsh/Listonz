@@ -106,18 +106,18 @@
                 <a href="#/Contacts">More...</a>
             </li>
             <li>
-                <a href="#" data-bind="
+                <a href="#" onclick="return false;" data-bind="
     qtip: '#cnt-wg-new',
     qtipType: 'Form',
     qtipOnShow: $parent.newContact,
     qtipPosition: { my: 'bottom center', at: 'top center' }">Add New Contact</a>
                 <div id="cnt-wg-new" class="dialog" data-bind="jqValidation: validationContext">
                     <label>First Name</label>
-                    <input id="cnt-wg-new-fn" />
+                    <input id="cnt-wg-new-fn" data-required="true" maxlength="30"/>
                     <label>Last Name</label>
-                    <input id="cnt-wg-new-ln" />
+                    <input id="cnt-wg-new-ln" maxlength="30"/>
                     <label>Email</label>
-                    <input id="cnt-wg-new-email" />
+                    <input id="cnt-wg-new-email" data-validate="true" data-email="true" maxlength="265"  />
                     <a href="#" onclick="lz.getDlgCtx(this).$data.addContact(this); return false;">OK</a>
                     <a href="#" onclick="lz.getDlgCtx(this).$data.CancelForm(); return false;">Cancel</a>
                 </div>

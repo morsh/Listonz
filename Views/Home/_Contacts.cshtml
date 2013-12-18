@@ -186,7 +186,7 @@
                             <div class="soc-link facebook" title="Facebook Profile Link" social="facebook"
                                 data-bind="
     value: SocialData,
-    qtip: '#socialHover',
+    qtip: '#fbHover',
     qtipType: 'Form',
     qtipOnShow: $parent.SetSocial"></div>
                         </span>
@@ -194,7 +194,7 @@
                             <div class="soc-link linkedin" title="Linkedin Profile Link" social="linkedin"
                                 data-bind="
     value: SocialData,
-    qtip: '#socialHover',
+    qtip: '#liHover',
     qtipType: 'Form',
     qtipOnShow: $parent.SetSocial"></div>
                         </span>
@@ -202,12 +202,24 @@
                             <div class="soc-link twitter" title="Twitter Profile Link" social="twitter"
                                 data-bind="
     value: SocialData,
-    qtip: '#socialHover',
+    qtip: '#twHover',
     qtipType: 'Form',
     qtipOnShow: $parent.SetSocial"></div>
                         </span>
-                        <div id="socialHover" class="dialog">
-                            <label for="social-url">Text here:</label>
+                        <div id="fbHover" class="dialog">
+                            <label for="social-url">Facebook Profile Link:</label>
+                            <input type="text" id="social-url" name="social-url" value="start" />
+                            <a href="#" onclick="click: lz.getDlgCtx(this).$parent.UpdateSocial();">OK</a>
+                            <a href="#" onclick="click: lz.closeDlg(this)">Cancel</a>
+                        </div>
+                        <div id="liHover" class="dialog">
+                            <label for="social-url">Linkedin Profile Link:</label>
+                            <input type="text" id="social-url" name="social-url" value="start" />
+                            <a href="#" onclick="click: lz.getDlgCtx(this).$parent.UpdateSocial();">OK</a>
+                            <a href="#" onclick="click: lz.closeDlg(this)">Cancel</a>
+                        </div>
+                        <div id="twHover" class="dialog">
+                            <label for="social-url">Twitter Profile Link:</label>
                             <input type="text" id="social-url" name="social-url" value="start" />
                             <a href="#" onclick="click: lz.getDlgCtx(this).$parent.UpdateSocial();">OK</a>
                             <a href="#" onclick="click: lz.closeDlg(this)">Cancel</a>

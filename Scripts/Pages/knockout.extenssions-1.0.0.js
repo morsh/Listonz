@@ -54,11 +54,17 @@ ko.bindingHandlers.qtip = {
             onShow = allBindingsAccessor().qtipOnShow || null,
             $el = $(element);
 
+        try {
+            $el.qtip("api").hide();
+            $el.qtip("api").destroy();
+            $el.removeClass('generated_qtip');
+        } catch (err) { };
+
         var $content = null;
         try { $content = $(content); } catch (e) { }
 
         if ($content != null && $content.length > 0) {
-            content = $(content).clone();
+            content = $(content); /* Note that you shouldn't use the same content as two different tooltips */
             content.data('koContext', ko.contextFor($el[0]))
         }
 

@@ -114,9 +114,17 @@ vm.contactsWG = new vm.baseViewModel({
             };
 
             self.addContact = function (ctrl) {
-
-                $('.qtip').each(function () { $(this).qtip('hide'); });
                 
+                // Check for validation rules
+                var validationResult = self.validationContext.Validate();
+                if (!validationResult.valid) {
+                    // Oh boy, you're in troubleeeeee!
+                    self.validationErrors(validationResult.messages);
+                    return;
+                }
+
+                self.CancelForm();
+
                 var $dlg = $(ctrl).closest('.dialog');
                 var firstName = $dlg.find('#cnt-wg-new-fn').val();
                 var lastName = $dlg.find('#cnt-wg-new-ln').val();
