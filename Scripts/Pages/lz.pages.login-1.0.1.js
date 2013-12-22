@@ -73,7 +73,7 @@ $(function () {
         });
     }
 
-    $('#viewReg ister #UserName').on('keyup blur change', function () {
+    $('#viewRegister #UserName').on('keyup blur change', function () {
 
         function setUserFound(status) {
             var $e = $('#viewRegister .user-found').attr('class', 'user-found');

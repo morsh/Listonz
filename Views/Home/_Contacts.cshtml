@@ -32,7 +32,7 @@
                     <a href="#" data-bind="click: function () { tabsChangeAddMode(true) }"><span>Add +</span></a>
                 </li>
                 <li class="cat-add" data-bind="if: tabsAddNewMode">
-                    <input data-bind="value: tabsNewCategoryName" />
+                    <input data-bind="value: tabsNewCategoryName, hasFocus: tabsAddNewMode" />
                     <button data-bind="click: tabsSaveCategory">Save</button>
                     <button data-bind="click: function () { tabsChangeAddMode(false) }">Cancel</button>
                 </li>

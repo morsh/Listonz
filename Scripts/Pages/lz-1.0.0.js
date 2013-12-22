@@ -140,7 +140,7 @@ lz.exp = {
     },
 
     msg: {
-        idleTimeout: "You have been idle for 5 minutes, please click 'OK' to be redirected to login"
+        idleTimeout: "You have been idle for 30 minutes, please click 'OK' to be redirected to login"
     }
 };
 
