@@ -162,6 +162,7 @@ vm.contacts = new vm.baseViewModel({
             self.EditCompanyName = ko.observable('');
             self.NewCompany = ko.observable(false);
 
+            // Open the add new company panel
             self.AddNewCompany = function () {
                 var viewModel = ko.contextFor(event.srcElement).$parent;
                 var newCompanyName = viewModel.EditCompanyName();
@@ -172,6 +173,8 @@ vm.contacts = new vm.baseViewModel({
                 $form.find('#comp-emal').val('');
                 $form.find('#comp-pnum').val('');
             };
+
+            // When clicking save and cancel in the new company panel
             self.saveCompany = function (item) {
 
                 try

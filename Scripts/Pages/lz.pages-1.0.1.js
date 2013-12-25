@@ -193,6 +193,10 @@ vm.baseViewModel = function (extend) {
 
     // Select a single entity in the collection
     self.select = ko.dependentObservable(function () {
+
+        if (self.isNew() && self.showEditor())
+            return self.select._latestValue;
+
         var selected = self.selected();
         var result = ko.utils.arrayFilter(self.collection(), function (item) {
             return item == selected
