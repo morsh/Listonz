@@ -129,11 +129,13 @@ vm.contactsWG = new vm.baseViewModel({
                 var firstName = $dlg.find('#cnt-wg-new-fn').val();
                 var lastName = $dlg.find('#cnt-wg-new-ln').val();
                 var email = $dlg.find('#cnt-wg-new-email').val();
+                var phone = $dlg.find('#cnt-wg-new-phone').val();
                 self.isNew(true);
                 var newContact = ko.toJS(ko.utils.unwrapObservable(new self.model()));
                 newContact.FirstName = firstName;
                 newContact.LastName = lastName;
                 newContact.Email = email;
+                newContact.PhoneNumber = phone;
 
                 self.save(newContact);
             };

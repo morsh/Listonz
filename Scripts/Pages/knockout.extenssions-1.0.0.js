@@ -248,6 +248,24 @@ ko.bindingHandlers.chars = {
     }
 };
 
+// For some reason "hasFocus" binding disables some function binding on "click" binding,
+// This method fixes this problem - problem can be reproduced by: 
+// contacts - categories - add new hasFocus + try to click cancel \ save
+ko.bindingHandlers.lzFocus = {
+    focusFunc: function (element, valueAccessor, allBindingsAccessor) {
+        var focusIf = valueAccessor() || false,
+            $el = $(element);
+
+        if (focusIf) $el.focus();
+    },
+    init: function (element, valueAccessor, allBindingsAccessor) {
+        ko.bindingHandlers.lzFocus.focusFunc(element, valueAccessor, allBindingsAccessor);
+    },
+    update: function (element, valueAccessor, allBindingsAccessor) {
+        ko.bindingHandlers.lzFocus.focusFunc(element, valueAccessor, allBindingsAccessor);
+    }
+};
+
 // Making the content scrollable when page size is too small and items count threthold is too big
 ko.bindingHandlers.pageScoll = {
     setCalculatedHeight: function (element, valueAccessor, allBindingsAccessor) {

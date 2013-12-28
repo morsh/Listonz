@@ -121,10 +121,12 @@ vm.contacts = new vm.baseViewModel({
                 self.refresh();
             });
 
-            self.tabsChangeAddMode = function (addMode) {
-                self.tabsAddNewMode(addMode);
-                self.tabsNewCategoryName('');
-            };
+            self.tabsAddNewCat = function () { self.tabsAddNewMode(true); };
+            self.tabsCancelNewCat = function () { self.tabsAddNewMode(false); };
+
+            self.tabsAddNewMode.subscribe(function (newValue) {
+                if (newValue == true) { self.tabsNewCategoryName(''); }
+            });
 
             self.tabsSaveCategory = function () {
                 var catData = ko.toJS(ko.utils.unwrapObservable(new self.categoryModel()));
@@ -132,7 +134,7 @@ vm.contacts = new vm.baseViewModel({
 
                 $.post(self.cat_api + self.cat_options.add, catData, function (data) {
                     self.Categories.push(data);
-                    self.tabsChangeAddMode(false);
+                    self.tabsCancelNewCat();
                 });
             };
 
@@ -364,12 +366,16 @@ vm.contacts = new vm.baseViewModel({
         // =================
 
             self.selectedCountry = ko.observable('');
+            self.selectedCountryName = ko.observable('');
 
             // Update company after it is selected from the autocomplete list
             self.UpdateCountry = function (element, selectedItem, viewModel) {
                 if (selectedItem != null) {
                     $(element).val(selectedItem.n).data('item', selectedItem);
                     self.selectedCountry(selectedItem.i2);
+                    self.selectedCountryName(selectedItem.n);
+                    viewModel.State('');
+                    viewModel.City('');
                     viewModel.Country(selectedItem.n);
                 }
             };
@@ -410,14 +416,11 @@ vm.contacts = new vm.baseViewModel({
         // State Methods
         // =============
 
-            self.selectedState = ko.observable('');
-
             // Update company after it is selected from the autocomplete list
             self.UpdateState = function (element, selectedItem, viewModel) {
                 if (selectedItem != null) {
-                    $(element).val(selectedItem.name).data('item', selectedItem);
-                    viewModel.State(selectedItem.name);
-                    self.selectedState(selectedItem.abb);
+                    $(element).val(selectedItem.value).data('item', selectedItem);
+                    viewModel.State(selectedItem.value);
                 }
             };
 
@@ -427,7 +430,7 @@ vm.contacts = new vm.baseViewModel({
 
             // render the company item for each company in the autocomplete list
             self.renderState = function (ul, item) {
-                var name = item.name;
+                var name = item.label;
                 return $("<li />")
                     .data('item.autocomplete', item)
                     .append("<a><div>" + name + "</div></a>")

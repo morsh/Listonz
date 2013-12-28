@@ -29,12 +29,12 @@
                     </ul>
                 </li>
                 <li class="cat-new" data-bind="if: !tabsAddNewMode() && Categories().length < 8">
-                    <a href="#" data-bind="click: function () { tabsChangeAddMode(true) }"><span>Add +</span></a>
+                    <a href="#" data-bind="click: tabsAddNewCat"><span>Add +</span></a>
                 </li>
                 <li class="cat-add" data-bind="if: tabsAddNewMode">
-                    <input data-bind="value: tabsNewCategoryName, hasFocus: tabsAddNewMode" />
+                    <input data-bind="value: tabsNewCategoryName, lzFocus: tabsAddNewMode" />
                     <button data-bind="click: tabsSaveCategory">Save</button>
-                    <button data-bind="click: function () { tabsChangeAddMode(false) }">Cancel</button>
+                    <button data-bind="click: tabsCancelNewCat">Cancel</button>
                 </li>
             </ul>
 
@@ -279,7 +279,7 @@
                     </li>
                     <li>
                         <span><input type="text" data-bind="value: State,
-    autoComplete: '/api/contacts/GetStates?country=' + ($parent.selectedCountry() != '' ? $parent.selectedCountry() : Country()),
+    autoComplete: '/api/contacts/GetStates?country=' + ($parent.selectedCountryName() != '' ? $parent.selectedCountryName() : Country()),
     autocomplete_select: 'UpdateState',
     autocomplete_render: 'renderState',
     autocomplete_cache: 'filterState'" placeholder="State" maxlength="30"/></span>
