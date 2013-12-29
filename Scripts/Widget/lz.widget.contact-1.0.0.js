@@ -425,7 +425,7 @@ vm.contacts = new vm.baseViewModel({
             };
 
             self.filterState = function (item, search) {
-                return item.name.toLowerCase().indexOf(search.toLowerCase()) === 0;
+                return item.toLowerCase().indexOf(search.toLowerCase()) === 0;
             };
 
             // render the company item for each company in the autocomplete list

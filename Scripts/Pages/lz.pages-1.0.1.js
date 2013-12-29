@@ -503,7 +503,6 @@ $(function () {
                         var tabSubPath = $(this).attr('tabsubpath');
                         var ctx = ko.dataFor($(tabSubPath)[0]);
                         ctx.refresh();
-                        ctx.showEditor(false);
                     }
                     catch (e) { }
             });
