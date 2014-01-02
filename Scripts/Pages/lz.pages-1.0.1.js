@@ -5,7 +5,7 @@ var vm = namespace("lz.viewModel");
 vm.viewModelsToLoad = ko.observable(0);
 
 // A flag to know if all the view models have finished loading
-vm.allloaded = ko.observable(false);
+vm.allloaded = ko.observable(true);
 
 // The following properties 
 vm.events = new function () {
@@ -90,6 +90,13 @@ vm.baseViewModel = function (extend) {
     self.filter = ko.observable('');
 
     self.selectedID = ko.observable(-1);
+    self.selectedID.subscribe(function () {
+        if (self.selectedID() > 0 && self.loaded()) {
+            self.edit(self.selectedID());
+            self.selectedID(-1);
+        }
+    });
+
     self.selected = ko.observable(new self.model());
     self.cancelEdit = function () { self.showEditor(false); };
 
@@ -112,6 +119,29 @@ vm.baseViewModel = function (extend) {
 
     // view model methods
     //=====================
+
+    // TODO:
+    // When the event is insert \ update, only need to do it with one element (when views are loaded)
+    self.notifying = ko.observable(false);
+    self.refreshConnectedModules = function () {
+        // if this is not the first refresh of the module, there are modules to refresh and , trigger refresh event
+        if (self.loaded() && self.options.refreshModules) {
+            self.notifying(true);
+            $.each(self.options.refreshModules.split(' '), function (i, v) {
+                if ($.trim(v)) { vm.events.trigger(v, 'refresh'); }
+            });
+            self.notifying(false);
+        }
+    };
+    // subscribe to module changes
+    if (self.options.refreshModules)
+        $.each(self.options.refreshModules.split(' '), function (i, v) {
+            vm.events.watch(v, function () {
+                if (!self.notifying() && vm.events.module() == v)
+                    if (vm.events.action() == "refresh") self.refresh();
+                    else if (vm.events.action() == "add") self.refresh();
+            });
+        });
 
     // Refresh the module data collection
     self.refresh = function () {
@@ -140,19 +170,8 @@ vm.baseViewModel = function (extend) {
             }
         });
 
-        // if this is not the first refresh of the module, there are modules to refresh and , trigger refresh event
-        if (self.loaded() && self.options.refreshModules) {
-            $.each(self.options.refreshModules.split(' '), function (i, v) {
-                if ($.trim(v)) { vm.events.trigger(v, 'refresh'); }
-            });
-        }
+        self.refreshConnectedModules();
     }
-
-    // subscribe to module changes
-    if (self.options.refreshModules)
-        $.each(self.options.refreshModules.split(' '), function (i, v) {
-            vm.events.watch(v, function () { if (vm.events.module() == v) self.refresh(); });
-        });
 
     self.sortedCollection = ko.computed(function () {
         var items = self.collection();
@@ -249,6 +268,8 @@ vm.baseViewModel = function (extend) {
                     self.collection.push(data);
                     if (self.widget.isWidget && self.collection().length >= self.widget.selectTop)
                         self.collection.pop();
+
+                    self.refreshConnectedModules();
                 });
 
             // If Updating an existing item
@@ -263,6 +284,8 @@ vm.baseViewModel = function (extend) {
                         for (var i = 0, j = self.collection().length; i < j; i++)
                             if (self.collection()[i].Id == postData.Id)
                                 self.collection.replace(self.collection()[i], postData);
+
+                        self.refreshConnectedModules();
                     },
                     error: lz.showError
                 });
@@ -294,8 +317,6 @@ vm.baseViewModel = function (extend) {
             self.isNew(true);
         };
 
-        lz.sammy.quietRoute(lz.sammy.path + "/" + itemID);
-        
         self.selected(d);
         self.showEditor(true);
 
@@ -363,9 +384,6 @@ vm.baseViewModel = function (extend) {
 
     // Call extended method that are bound to the module
     extend.view(self);
-
-    self.refresh();
-
 };
 /************************************************/
 
@@ -424,17 +442,21 @@ $(function () {
     });
     $loader.find('img').show();
 
-     // Enable tabs on tab controls
+    // Enable tabs on tab controls
+    var _lastClickedView = null;
     if ($('.tabs').tabs)
         $('.tabs').tabs()
         .find('>ul>li>a').click(function () {
 
-
-            var currentTabID = $(this).attr('href');
-            if (currentTabID != window.location.hash.replace('#/', '#tab')) {
-                window.location = currentTabID.replace('#tab', '#/');
+            // First click navigated to destination hash
+            // second click (automated by navigation) clicks on the view
+            var $a = $(this);
+            var currentTabPath = $a.attr('tabTrigger');
+            if (currentTabPath != window.location.hash) {
+                window.location = currentTabPath;
             }
             else {
+                var currentTabID = $a.attr('href');
                 var $view = $(currentTabID + ':visible .vm-view');
 
                 if ($view[0]) {
@@ -444,7 +466,10 @@ $(function () {
                         viewModel.showEditor(false);
                     if (!showEditor)
                         viewModel.showEditor.valueHasMutated();
+                    if (!showEditor && _lastClickedView == currentTabPath) viewModel.refresh();
                 }
+
+                _lastClickedView = currentTabPath;
             }
         });
 
@@ -482,8 +507,9 @@ $(function () {
                 if (contextPath) {
                     var selectedTab = $(contextPath);
                     var koContext = ko.contextFor(selectedTab[0]);
-                    koContext.$data.selectedID(itemID || null);
-                    koContext.$data.refresh();
+                    koContext.$data.selectedID(itemID || -1);
+                    if (!koContext.$data.loaded())
+                        koContext.$data.refresh();
                 }
             }
             finally {
@@ -496,22 +522,11 @@ $(function () {
             var triggerPath = $el.attr('tabTrigger');
             var contextPath = $el.attr('tabSubPath');
 
-            $el.mousedown(function () {
-                if ($(this).parent().hasClass('ui-tabs-active'))
-                    try
-                    {
-                        var tabSubPath = $(this).attr('tabsubpath');
-                        var ctx = ko.dataFor($(tabSubPath)[0]);
-                        ctx.refresh();
-                    }
-                    catch (e) { }
-            });
-
             sammy.get(triggerPath, function (context) {
                 sammy.path = triggerPath;
                 sammy.subPath = '';
                 if (sammy.quiet) return;
-                showView($el);
+                showView($el, contextPath);
             });
 
             if (contextPath)

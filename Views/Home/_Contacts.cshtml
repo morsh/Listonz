@@ -22,10 +22,12 @@
                 </li>
                 <li class="cat-cts">
                     <ul data-bind="foreach: Categories">
+                        <!-- ko if: $index() < 8-->
                         <li data-bind="attr: { 'class': $parent.categoryId() == Id ? 'selected' : '' }">
                             <a href="#" data-bind="click: function () { $parent.categoryId(Id) }"><span data-bind=" text: Name"></span></a>
                             <div class="remove" data-bind="if: UserId != null"><a href="#" data-bind="click: $parent.deleteCategory"><span class="ui-icon ui-icon-close"></span></a></div>
                         </li>
+                        <!-- /ko -->
                     </ul>
                 </li>
                 <li class="cat-new" data-bind="if: !tabsAddNewMode() && Categories().length < 8">
