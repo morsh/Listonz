@@ -110,6 +110,8 @@ namespace Listonz.Controllers
                 {
                     WebSecurity.CreateUserAndAccount(model.UserName, model.Password, new { EmailId = model.EmailId, Details = model.Details });
                     WebSecurity.Login(model.UserName, model.Password);
+                    return JavaScript("window.location = '/'");
+
                     return RedirectToAction("Index", "Home");
                 }
                 catch (MembershipCreateUserException e)
