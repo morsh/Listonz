@@ -73,6 +73,16 @@ $(function () {
         });
     }
 
+    $('.narrow .li-input').each(function () {
+        $(this).find('input').focusin(function () {
+            $(this).closest('.li-input').find('label').hide();
+        }).focusout(function () {
+            if ($(this).val() == "")
+                $(this).closest('.li-input').find('label').show();
+        });
+    });
+
+    // User name existance check
     $('#viewRegister #UserName').on('keyup blur change', function () {
 
         function setUserFound(status) {
@@ -87,7 +97,6 @@ $(function () {
                 }
             }
             $e.attr('title', title);
-            
         }
 
         var account = $(this).val();

@@ -129,21 +129,27 @@ namespace Listonz.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Disassociate(string provider, string providerUserId)
         {
-            string ownerAccount = OAuthWebSecurity.GetUserName(provider, providerUserId);
             ManageMessageId? message = null;
 
-            // Only disassociate the account if the currently logged in user is the owner
-            if (ownerAccount == User.Identity.Name)
+            ICollection<OAuthAccount> accounts = OAuthWebSecurity.GetAccountsFromUserName(User.Identity.Name);
+            List<ExternalLogin> externalLogins = new List<ExternalLogin>();
+            foreach (OAuthAccount account in accounts)
             {
-                // Use a transaction to prevent the user from deleting their last login credential
-                using (var scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.Serializable }))
+                var clientData = OAuthWebSecurity.GetOAuthClientData(account.Provider);
+
+                // Only disassociate the account if the currently logged in user is the owner
+                if (provider == account.Provider && providerUserId == account.ProviderUserId)
                 {
-                    bool hasLocalAccount = OAuthWebSecurity.HasLocalAccount(WebSecurity.GetUserId(User.Identity.Name));
-                    if (hasLocalAccount || OAuthWebSecurity.GetAccountsFromUserName(User.Identity.Name).Count > 1)
+                    // Use a transaction to prevent the user from deleting their last login credential
+                    using (var scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.Serializable }))
                     {
-                        OAuthWebSecurity.DeleteAccount(provider, providerUserId);
-                        scope.Complete();
-                        message = ManageMessageId.RemoveLoginSuccess;
+                        bool hasLocalAccount = OAuthWebSecurity.HasLocalAccount(WebSecurity.GetUserId(User.Identity.Name));
+                        if (hasLocalAccount || OAuthWebSecurity.GetAccountsFromUserName(User.Identity.Name).Count > 1)
+                        {
+                            OAuthWebSecurity.DeleteAccount(provider, providerUserId);
+                            scope.Complete();
+                            message = ManageMessageId.RemoveLoginSuccess;
+                        }
                     }
                 }
             }
@@ -304,19 +310,41 @@ namespace Listonz.Controllers
 
             using (var db = new UsersContext())
             {
-                if (!db.UserProfiles.Any(u => u.UserName == userName))
-                    return View("LoginResult", new LoginResultViewModel(true, returnUrl));
-
-                if (!db.UserProfiles.Any(u => u.UserName == userName))
+                if (User.Identity.IsAuthenticated)
                 {
-                    if (!db.UserProfiles.Any(u => u.UserName == email))
-                    {
-                        db.UserProfiles.Add(new UserProfile { UserName = userName, EmailId = email });
-                        db.SaveChanges();
-                    }
-                    else
-                        throw new Exception("A user with this email already exists");
+                    // If the current user is logged in add the new account
+                    OAuthWebSecurity.CreateOrUpdateAccount(result.Provider, result.ProviderUserId, User.Identity.Name);
+                    return View("LoginResult", new LoginResultViewModel(true, returnUrl));
                 }
+
+                if (email == null || !db.UserProfiles.Any(u => u.EmailId == email))
+                {
+                    // User is new, ask for their desired membership name
+                    UserProfile user = null;
+                    var additionNum = 1;
+                    var relevantUsers = db.UserProfiles
+                        .Where(u => u.UserName.ToLower().StartsWith(userName.ToLower()))
+                        .Select(u => u.UserName);
+
+                    var uniqueUserName = userName;
+                    while (relevantUsers.Contains(uniqueUserName))
+                        uniqueUserName = userName + " " + (additionNum++);
+
+                    // Check if user already exists
+                    if (user == null)
+                    {
+                        // Insert name into the profile table
+                        db.UserProfiles.Add(new UserProfile { UserName = uniqueUserName });
+                        db.SaveChanges();
+
+                        OAuthWebSecurity.CreateOrUpdateAccount(result.Provider, result.ProviderUserId, uniqueUserName);
+                        OAuthWebSecurity.Login(result.Provider, result.ProviderUserId, createPersistentCookie: false);
+                    }
+
+                    return View("LoginResult", new LoginResultViewModel(true, returnUrl));
+                }
+                else
+                    throw new Exception("A user with this email already exists");
             }
 
             //OAuthWebSecurity.CreateOrUpdateAccount(result.Provider, result.ProviderUserId, userName);

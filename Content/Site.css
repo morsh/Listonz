@@ -118,6 +118,16 @@ aside {float: right;width: 25%;}
     .narrow input[type="button"],
     .narrow button {width: auto;}
     .narrow input[type="password"] { width:200px; }
+    .narrow .li-input {background:#fff url(none) scroll no-repeat left center;padding:5px 30px;margin:10px 0;position:relative;border:1px solid #eee;}
+        .narrow .li-input input {width: 380px; border:0px solid #fff;}
+        .narrow .li-input label {position:absolute;margin:10px;background:none;pointer-events:none;z-index:1;}
+        .narrow .li-input .info {position:absolute;right:0;}
+        .narrow .li-input input[type="password"] { width:200px; }
+        .narrow .li-input input.input-validation-error {background:#ffaa88;}
+
+    .narrow .li-input .ui-icon {position:absolute;margin:9px -18px;}
+    .narrow .li-input .info {position:absolute;margin:11px 10px;}
+    
 
 /* login page */
 
@@ -153,9 +163,9 @@ aside {float: right;width: 25%;}
 fieldset {border: none;margin: 0;padding: 0;}
 
     fieldset legend {display: none;}
-    fieldset ol {padding: 0;list-style: none;}
-        fieldset ol li {padding-bottom: 5px;}
-        fieldset ol li .info {width:15px;height:15px;background:transparent url(/Images/info.png);margin:3px 15px 0 0;float:right;}
+    fieldset ol {padding: 0;list-style: none;display:inline-block;}
+        fieldset ol li {padding-bottom: 5px; }
+        fieldset ol li .info {width:15px;height:15px;background:transparent url(/Images/info.png);margin:3px 0 0 15px;float:right;}
 
 label {display: block;font-size: 1em;font-weight: 600;width: 90%;}
 label.checkbox {display: inline;}
@@ -194,40 +204,20 @@ textarea {font-family: inherit;height: 59px;}
 
 /* info and errors */
 .message-info {border: 1px solid;clear: both;padding: 10px 20px;}
-
 .message-error {clear: both;color: #e80c4d;font-size: 1.1em;font-weight: bold;margin: 20px 0 10px 0;}
-
 .message-success {color: #7ac0da;font-size: 1.3em;font-weight: bold;margin: 20px 0 10px 0;}
-
 .error {color: #e80c4d;border:1px solid #e80c4d;}
 
 /* styles for validation helpers */
-.field-validation-error {
-    color: #e80c4d;
-    font-weight: bold;
-}
+.field-validation-error {color: #e80c4d;font-weight: bold;}
+.field-validation-valid {display: none;}
 
-.field-validation-valid {
-    display: none;
-}
+input.input-validation-error {border: 1px solid #e80c4d; background:#ffaa88;}
 
-input.input-validation-error {
-    border: 1px solid #e80c4d;
-}
+input[type="checkbox"].input-validation-error {border: 0 none;}
 
-input[type="checkbox"].input-validation-error {
-    border: 0 none;
-}
-
-.validation-summary-errors {
-    color: #e80c4d;
-    font-weight: bold;
-    font-size: 1.1em;
-}
-
-.validation-summary-valid {
-    display: none;
-}
+.validation-summary-errors {color: #e80c4d;font-weight: bold;font-size: 1.1em;}
+.validation-summary-valid { display: none; }
 
 
 /* tables
@@ -336,17 +326,13 @@ tr.pager td {padding: 0 0.25em 0 0;}
 
     /* narrow page */
     .narrow {float: none;width: auto;}
-
         .narrow input,
         .narrow input[type="password"] {width: 260px !important;}
-
         .narrow .validation-error {display: block;margin-left: 15px;}
-        
     /* login page */
 
     #viewLogin 
     #socialLoginForm {margin-left: 0;float: none;width: auto;}
-
 
     /* footer
     ----------------------------------------------------------*/

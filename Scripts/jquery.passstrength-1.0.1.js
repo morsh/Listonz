@@ -111,7 +111,7 @@
         specialLength: 1,
         upperLength: 1,
         numberLength: 1,
-        barWidth: 200,
+        barWidth: 160,
         barColor: 'Red',
         mediumColor: 'Orange',
         strongColor: 'Green',
@@ -193,7 +193,7 @@
             var barTopPos = $("[id$='" + this.id + "']").position().top + $("[id$='" + this.id + "']").height() + 6;
 
             var container = $('<div id="PasswordStrengthContainer"></div>')
-                .css({ display: 'inline-block', float: 'right', width: '220px'});
+                .css({ display: 'inline-block', float: 'right', width: '170px', marginTop: '5px'});
 
             //add the container next to textbox
             $(this).after(container);

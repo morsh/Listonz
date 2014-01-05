@@ -7,29 +7,34 @@
     <fieldset>
         <legend>Registration Form</legend>
         <ol>
-            <li>
-                @Html.HintFor(m => m.UserName)
+            <li class="li-input">
+                <span class="ui-icon ui-icon-person" data-bind="qtip: 'next-ph'"></span>
                 @Html.LabelFor(m => m.UserName)
+                @Html.HintFor(m => m.UserName)
                 @Html.TextBoxFor(m => m.UserName)
                 <div class="user-found" />
                 @Html.ValidationMessageFor(m => m.UserName)
             </li>
-            <li class="pass-strength">
+            <li class="pass-strength li-input">
+                <span class="ui-icon ui-icon-locked"></span>
                 @Html.HintFor(m => m.Password)
                 @Html.LabelFor(m => m.Password)
                 <div style="position:relative">
                     @Html.PasswordFor(m => m.Password)
                 </div>
             </li>
-            <li>
+            <li class="li-input">
+                <span class="ui-icon ui-icon-locked"></span>
                 @Html.LabelFor(m => m.ConfirmPassword)
                 @Html.PasswordFor(m => m.ConfirmPassword)
             </li>
-            <li>
+            <li class="li-input">
+                <span class="ui-icon ui-icon-mail-closed"></span>
                 @Html.LabelFor(m => m.EmailId)
                 @Html.TextBoxFor(m => m.EmailId)
             </li>
-            <li>
+            <li class="li-input">
+                <span class="ui-icon ui-icon-pencil"></span>
                 @Html.LabelFor(m => m.Details)
                 @Html.TextBoxFor(m => m.Details)
             </li>
