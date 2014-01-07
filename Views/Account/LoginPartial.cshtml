@@ -6,12 +6,14 @@
     <fieldset>
         <legend>Log in Form</legend>
         <ol>
-            <li>
+            <li class="li-input">
+                <span class="ui-icon ui-icon-person" data-bind="qtip: 'next-ph'"></span>
                 @Html.LabelFor(m => m.UserName)
                 @Html.TextBoxFor(m => m.UserName)
                 @Html.ValidationMessageFor(m => m.UserName)
             </li>
-            <li>
+            <li class="li-input">
+                <span class="ui-icon ui-icon-locked"></span>
                 @Html.LabelFor(m => m.Password)
                 @Html.PasswordFor(m => m.Password)
                 @Html.ValidationMessageFor(m => m.Password)

@@ -131,9 +131,9 @@ aside {float: right;width: 25%;}
 
 /* login page */
 
-    #viewLogin input[type="password"] { width: 425px; }
+    #viewLogin input[type="password"] { width: 380px; }
 
-    #viewRegister .user-found { position: absolute; width: 24px; height: 24px; margin-top: -32px; margin-left: 410px; }
+    #viewRegister .user-found { position: absolute; width: 24px; height: 24px; margin-top: -32px; margin-left: 365px; }
         #viewRegister .user-found.false {background: #fff url(/images/greenv.png); }
         #viewRegister .user-found.true { background: #fff url(/images/redx.png); }
         #viewRegister .user-found.wait { background: #fff url(/images/wait.gif); }
