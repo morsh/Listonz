@@ -256,7 +256,9 @@ vm.contacts = new vm.baseViewModel({
                 var data = ko.dataFor(target);
                 var social = $(target).attr('social');
                 var socialData = JSON.parse(data.SocialData() || "{}") || {};
-                socialData[social] = currQtip.find("#social-url").val();
+                var newValue = currQtip.find("#social-url").val();
+                if (newValue.indexOf("http") != 0) newValue = "http://" + newValue;
+                socialData[social] = newValue;
                 data.SocialData(JSON.stringify(socialData));
 
                 currQtip.qtip('hide');
