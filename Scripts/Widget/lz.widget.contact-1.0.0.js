@@ -1,7 +1,13 @@
 ﻿var vm = namespace("lz.viewModel");
 
 vm.contacts = new vm.baseViewModel({
+
     api: function (self) {
+
+        // Constants
+        self.CompanyCategoryId = 2;
+
+        // Parameters for general calls
         self.api = "/api/contacts/";
         self.options = {
             getAll: function (clear) { return "GetContacts" + (self.categoryId() == 0 || clear ? '' : '?$filter=CategoryId eq ' + self.categoryId()); },
@@ -234,8 +240,10 @@ vm.contacts = new vm.baseViewModel({
                 viewModel.CategoryId(selectedItem ? selectedItem.Id : null);
                 viewModel.Category = null;
             };
+
+            // Checks if the current edited profile is a company according to the selected category
             self.isCompany = function () {
-                return self.select().CategoryId == 2 || self.select().CategoryId() == 2;
+                return self.select().CategoryId == self.CompanyCategoryId || self.select().CategoryId() == self.CompanyCategoryId;
             };
             self.Social = function () {
                 return JSON.parse(self.select().SocialData() || "{}") || {};
@@ -445,6 +453,14 @@ vm.contacts = new vm.baseViewModel({
             // Handle data before save (after the data was turned into JSON)
             self.prepareDataForSave = function (data) {
                 data.Birthday = moment(data.Birthday).format();
+
+                // Handle company contact type
+                if (data.CategoryId == self.CompanyCategoryId) {
+                    data.LastName = null;
+                    data.DrivingLisence = null;
+                    data.SocialSecurity = null;
+                    data.Single = null;
+                }
             };
 
             // Search for company images automatically when entering a company name

@@ -7,6 +7,7 @@
 
             <div class="float-right" data-bind="qtip: '<p>Contacts help <br/> how nice! :)</p>'"><img src="/images/help-16x16.png" /></div>
 
+            <!-- Actions -->
             <ul class="actions">
                 <li>
                     <input type="button" value="Add Contact" data-bind="click: edit" />
@@ -16,21 +17,22 @@
                 </li>
             </ul>
 
+            <!-- Categories -->
             <ul class="categories">
-                <li class="cat-all" data-bind="attr: { 'class': categoryId() == 0 ? 'selected' : '' }">
+                <li class="cat-all" data-bind="toggleClass: categoryId() == 0, toggleClassName: 'selected'">
                     <a href="#" data-bind="click: function () { categoryId(0) }"><span>All Contacts</span></a>
                 </li>
                 <li class="cat-cts">
                     <ul data-bind="foreach: Categories">
-                        <!-- ko if: $index() < 8-->
-                        <li data-bind="attr: { 'class': $parent.categoryId() == Id ? 'selected' : '' }">
+                        <!-- -ko if: $index() < 8-->
+                        <li data-bind="toggleClass: $parent.categoryId() == Id, toggleClassName: 'selected', qtip: Name">
                             <a href="#" data-bind="click: function () { $parent.categoryId(Id) }"><span data-bind=" text: Name"></span></a>
                             <div class="remove" data-bind="if: UserId != null"><a href="#" data-bind="click: $parent.deleteCategory"><span class="ui-icon ui-icon-close"></span></a></div>
                         </li>
                         <!-- /ko -->
                     </ul>
                 </li>
-                <li class="cat-new" data-bind="if: !tabsAddNewMode() && Categories().length < 8">
+                <li class="cat-new" data-bind="if: !tabsAddNewMode() && Categories().length >= 0">
                     <a href="#" data-bind="click: tabsAddNewCat"><span>Add +</span></a>
                 </li>
                 <li class="cat-add" data-bind="if: tabsAddNewMode">
@@ -40,23 +42,20 @@
                 </li>
             </ul>
 
+            <!-- Results -->
             <div class="Container" data-bind="pageScoll: { rowHeight: 30, headerHeight: 30, heightDelta: 290 }">
                 <div class="results ScrollArea">
                     <table class="Sortable">
                         <colgroup>
-                            <col style="width:27%;" />
+                            <col style="width:40%;" />
+                            <col style="width:26%;" />
                             <col style="width:20%;" />
-                            <col style="width:20%;" />
-                            <col style="width:19%;" />
                         </colgroup>
                         <thead>
                             <tr class='Fixable'>
                                 <th><span class='fix sort' sort-exp="FirstName:LastName" data-bind="
     css: { down: isSortColumn($element), up: sortDir() == 'desc' }, click: sortClick">
                                     Name<span class="ui-icon" /></span></th>
-                                <th><span class='fix sort' sort-exp="Company.FirstName" data-bind="
-    css: { down: isSortColumn($element), up: sortDir() == 'desc' }, click: sortClick">
-                                    Company<span class="ui-icon"/></span></th>
                                 <th><span class='fix sort' sort-exp="Category.Name:FirstName" data-bind="
     css: { down: isSortColumn($element), up: sortDir() == 'desc' }, click: sortClick">
                                     Category<span class="ui-icon"/></span></th>
@@ -68,8 +67,11 @@
                         </thead>
                         <tbody class="tr-highlight" data-bind="foreach: sortedCollection">
                             <tr onmousemove="ko.contextFor(this).$parent.updateHover(ko.dataFor(this));" data-bind="click: $parent.edit">
-                                <td data-bind="text: FirstName + ' ' + (LastName || '')"></td>
-                                <td><span data-bind="if: Company != null"><span data-bind="text: Company.FirstName"></span></span></td>
+                                <td>
+                                    <span data-bind="text: FirstName + ' ' + (LastName || '')"></span>
+                                    <br />
+                                    <span class="company" data-bind="if: Company != null"><span data-bind="text: Company.FirstName"></span></span>
+                                </td>
                                 <td><span data-bind="if: Category != null"><span data-bind="text: Category.Name"></span></span></td>
                                 <td class="overflow-none"><span data-bind="if: Rating != null">
                                     <span data-bind="rateit: { value: Rating, max: 5, step: 0.1, readonly: true }"></span></span></td>
@@ -83,6 +85,7 @@
                 </div>
             </div>
 
+            <!-- Profile Hover -->
             <div class="hover-profile" data-bind="with: hover()">
                 <div data-bind="if: Id > 0, css : { hide: !(Id > 0) }">
                     <div class="float-left prf-pic img-prv">
@@ -143,6 +146,8 @@
             <div class="float-right" data-bind="qtip: '<p>This is a mambo jambo text <br/> how nice :)</p>'"><img src="/images/help-16x16.png" /></div>
 
             <div data-bind="{ with: select(), jqValidation: validationContext }">
+
+                <!-- Header Editor Part -->
                 <section class="head">
                     <div class="prf-pic img-prv" data-bind="
     qtip: '#dialog-picture',
@@ -169,7 +174,9 @@
                         <h2>
                             <span data-bind="if: FirstName() == '' && LastName() == '' && $parent.isNew()">Add New Contact</span>
                             <span data-bind="text: FirstName"></span>
-                            <span data-bind="text: LastName"></span>
+                            <span data-bind="if: !$parent.isCompany()">
+                                <span data-bind="text: LastName"></span>
+                            </span>
                         </h2>
                     </div>
                     <div class="email">
@@ -229,16 +236,22 @@
                     </div>
                     </div>
                 </section>
+                
+                <!-- Left Editor Part -->
                 <ul class="edit-form float-left first">
-                    <li>
+                    <li data-bind="if: !$parent.isCompany()">
                         <span class="ui-icon ui-icon-person" data-bind="qtip: 'next-ph'"></span>
                         <span><input type="text" data-bind="value: FirstName" placeholder="First Name" data-required="true" maxlength="30" /></span>
                     </li>
-                    <li>
+                    <li data-bind="if: !$parent.isCompany()">
                         <span class="ui-icon ui-icon-person" data-bind="qtip: 'next-ph'"></span>
                         <span><input type="text" data-bind="value: LastName" placeholder="Last Name" maxlength="30"/></span>
                     </li>
-                    <li class="company">
+                    <li data-bind="if: $parent.isCompany()">
+                        <span class="ui-icon ui-icon-person" data-bind="qtip: 'next-ph'"></span>
+                        <span><input type="text" data-bind="value: FirstName" placeholder="Company Name" data-required="true" maxlength="30" /></span>
+                    </li>
+                    <li class="company" data-bind="if: !$parent.isCompany()">
                         <span class="ui-icon ui-icon-suitcase" data-bind="qtip: 'next-ph'"></span>
                         <span class="rel">
                             <hidden data-bind="value: CompanyId" value="" ></hidden>
@@ -299,6 +312,8 @@
                         <span><textarea data-bind="value: Notes" placeholder="Notes" maxlength="500"></textarea></span>
                     </li>
                 </ul>
+                
+                <!-- Right Editor Part -->
                 <ul class="edit-form float-left">
                     <li class="category">
                         <span class="ui-icon ui-icon-tag" data-bind="qtip: 'next-ph'"></span>
@@ -345,7 +360,7 @@
                     <li>
                         <span><input type="text" data-bind="value: FaxNumber, chars: 'phone'" placeholder="Fax Number" data-phone="true" data-validate="true" maxlength="20" /></span>
                     </li>
-                    <li>
+                    <li data-bind="if: !$parent.isCompany()">
                         <span><input type="text" placeholder="Birthday" data-date="true" data-validate="true" data-bind="
     datepicker: Birthday,
     datepickerOptions: { 
@@ -355,16 +370,16 @@
         showOtherMonths: true,
         selectOtherMonths: true }"  /></span>
                     </li>
-                    <li class="chk-height">
+                    <li class="chk-height" data-bind="if: !$parent.isCompany()">
                         <span>
                             <select data-bind="options: [ 'Single', 'Married', 'Divorced', 'Other' ], value: Single" ></select></span>
                         <!--label onclick="$(this).prev().click()">Single</!--label-->
                     </li>
-                    <li>
+                    <li data-bind="if: !$parent.isCompany()">
                         <span>
                             <input type="text" data-bind="value: SocialSecurity" maxlength="15" placeholder="Social Security / ID" /></span>
                     </li>
-                    <li>
+                    <li data-bind="if: !$parent.isCompany()">
                         <span>
                             <input type="text" data-bind="value: DrivingLisence" maxlength="15" placeholder="Driving Lisence" /></span>
                     </li>
@@ -375,6 +390,8 @@
                         </label>
                     </li>
                 </ul>
+                
+                <!-- Save Actions -->
                 <div class="float-left clear-both">
                     <div data-bind="foreach: $parent.validationErrors">
                         <div data-bind="text: $data"></div>

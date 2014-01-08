@@ -177,12 +177,16 @@ vm.baseViewModel = function (extend) {
         var items = self.collection();
         var _sort = self.sort();
         var _filter = self.filter().toLowerCase();
+        var _isRelevant = function (o) {
+            for (var k in o)
+                if ((typeof o[k] == "string" && o[k].toLowerCase().indexOf(_filter) >= 0) ||
+                    (typeof o[k] == "object" && _isRelevant(o[k])))
+                    return true;
+            return false;
+        }
         if (_filter != '')
             items = items.filter(function (r) {
-                for (var key in r)
-                    if (r[key] != null && r[key] != undefined && r[key].toLowerCase && r[key].toLowerCase().indexOf(_filter) >= 0)
-                        return true;
-                return false;
+                return _isRelevant(r);
             });
         if (_sort != '') {
             var _numeric = self.sortType() == 'n';

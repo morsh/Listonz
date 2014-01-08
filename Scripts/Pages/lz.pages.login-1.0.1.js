@@ -86,11 +86,11 @@ $(function () {
                 else
                     $input.closest('.li-input').find('label').hide();
 
-                $input.focusin(function () {
-                    $(this).closest('.li-input').find('label').hide();
-                }).focusout(function () {
+                $input.on('focusin focusout blur change', function () {
                     if ($(this).val() == "")
                         $(this).closest('.li-input').find('label').show();
+                    else
+                        $(this).closest('.li-input').find('label').hide();
                 });
             });
         };

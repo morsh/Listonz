@@ -132,6 +132,7 @@ aside {float: right;width: 25%;}
 /* login page */
 
     #viewLogin input[type="password"] { width: 380px; }
+    #viewLogin input:focus { outline: none; }
 
     #viewRegister .user-found { position: absolute; width: 24px; height: 24px; margin-top: -32px; margin-left: 365px; }
         #viewRegister .user-found.false {background: #fff url(/images/greenv.png); }
@@ -234,6 +235,7 @@ th {font-size: 1em;text-align: left;border: none 0px;padding: 0.25em 2em 0.25em 
     th.desc a:after {content: '▼';}
 
 td {padding: 0.25em 2em 0.25em 0em;border: 0 none;}
+td:last-child {padding: 0.25em 0 0.25em 0em;}
 tr.pager td {padding: 0 0.25em 0 0;}
 
 /********************
@@ -382,6 +384,9 @@ tr.pager td {padding: 0 0.25em 0 0;}
     #body .ui-tabs .ui-tabs-nav li.ui-tabs-selected a { cursor: pointer; }
 
 .btn-mini { background: transparent url(none) scroll no-repeat top center; width:22px; height:22px;border:none; }
+.tr-highlight tr {height:33px;}
+    .tr-highlight tr td {vertical-align:top;}
+    .tr-highlight .company {color:#666;}
 .tr-highlight tr .btn-mini {visibility:hidden;margin:0;}
 .tr-highlight tr:hover {background:#d8e0f7;cursor:pointer;}
 .tr-highlight tr:hover .btn-mini {visibility:visible;}
@@ -409,17 +414,23 @@ tr.pager td {padding: 0 0.25em 0 0;}
 
 /* Contacts View Model
     ----------------------------------------------------------*/
-#tabContacts .categories {width: 100%; display: inline-block;padding:0;margin:0;}
-    #tabContacts .categories ul {padding:0;margin:0;}
-    #tabContacts .categories li {float:left;margin:0 5px 0 0;}
+#tabContacts .categories {width: 100px; display: inline-block;padding:0;margin:20px 10px 0 0;float:left;clear:left;}
+    #tabContacts .categories ul {padding:0;margin:0;float:left;clear:left;}
+    #tabContacts .categories li {float:left;margin:0 5px 0 0;width:100%;white-space:nowrap;overflow:hidden;}
 
     #tabContacts .categories a {text-decoration:none;}
     #tabContacts .categories .selected {background:red;}
-    #tabContacts .categories .cat-add input {width:100px; padding:0;margin:0;}
-    #tabContacts .categories .cat-add button {padding:0;margin:0;}
+    #tabContacts .categories .cat-add input {width:95px; padding:0;margin:0;}
+    #tabContacts .categories .cat-add button {padding:0;margin:2px 4px 0 0;float:left;}
     #tabContacts .categories .remove { margin-top: -30px; position: absolute;display:none;}
     #tabContacts .categories .cat-cts li:hover .remove {display:block;}
     #tabContacts .categories .cat-cts li:hover .remove a {background:#c7d1d6;float:left;padding:1px;}
+
+    #tabContacts .categories .cat-cts li,
+    #tabContacts .categories .cat-all,
+    #tabContacts .categories .cat-new {padding:5px 0;}
+    #tabContacts .categories .cat-cts li:hover,
+    #tabContacts .categories .cat-all:hover {background:#6afb06;}
 
 #body .ui-tabs .ui-tabs-nav li.ui-tabs-active a {cursor:pointer;}
 
@@ -440,7 +451,7 @@ tr.pager td {padding: 0 0.25em 0 0;}
 /* table fixing and sorting */
     /*Framework*/
     .Resize{resize:both;}
-    .Container {width:65%;display:inline-block;float:left;}
+    .Container {width:480px;display:inline-block;float:left;}
     .Scrollable{position:relative;padding-top:1.5em;}
     .ScrollArea {width:100%;}
         .Scrollable .ScrollArea {overflow:auto;direction:rtl;height:283px;}
