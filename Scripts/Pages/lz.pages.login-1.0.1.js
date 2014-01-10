@@ -87,7 +87,7 @@ $(function () {
                     $input.closest('.li-input').find('label').hide();
 
                 $input.on('focusin focusout blur change', function () {
-                    if ($(this).val() == "")
+                    if (document.activeElement != this && $(this).val() == "")
                         $(this).closest('.li-input').find('label').show();
                     else
                         $(this).closest('.li-input').find('label').hide();

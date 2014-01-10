@@ -119,7 +119,7 @@ aside {float: right;width: 25%;}
     .narrow button {width: auto;}
     .narrow input[type="password"] { width:200px; }
     .narrow .li-input {background:#fff url(none) scroll no-repeat left center;padding:5px 30px;margin:10px 0;position:relative;border:1px solid #eee;}
-        .narrow .li-input input {width: 380px; border:0px solid #fff;}
+        .narrow .li-input input {width: 380px; border:0px solid #fff;outline:0 solid #fff;}
         .narrow .li-input label {position:absolute;margin:10px;background:none;pointer-events:none;z-index:1;}
         .narrow .li-input .info {position:absolute;right:0;}
         .narrow .li-input input[type="password"] { width:200px; }
@@ -137,7 +137,7 @@ aside {float: right;width: 25%;}
     #viewRegister .user-found { position: absolute; width: 24px; height: 24px; margin-top: -32px; margin-left: 365px; }
         #viewRegister .user-found.false {background: #fff url(/images/greenv.png); }
         #viewRegister .user-found.true { background: #fff url(/images/redx.png); }
-        #viewRegister .user-found.wait { background: #fff url(/images/wait.gif); }
+        #viewRegister .user-found.wait { background: #fff url(/images/ajax-loader.gif) center center no-repeat; }
     #viewRegister .leagal { display:inline; }
     #viewRegister #leagalMessage { display: none; }
 
