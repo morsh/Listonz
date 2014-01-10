@@ -103,7 +103,10 @@ namespace Listonz.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult RegisterPartial(RegisterModel model)
         {
-            if (ModelState.IsValid && (string)Session["AdminPassword"] == "shikaka")
+            if ((string)Session["AdminPassword"] != "shikaka")
+                ModelState.AddModelError("", "The admin password is incorrect");
+
+            else if (ModelState.IsValid)
             {
                 // Attempt to register the user
                 try
