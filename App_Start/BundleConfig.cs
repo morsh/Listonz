@@ -8,40 +8,41 @@ namespace Listonz
         // For more information on Bundling, visit http://go.microsoft.com/fwlink/?LinkId=254725
         public static void RegisterBundles(BundleCollection bundles)
         {
-//#if !DEBUG
-//            BundleTable.EnableOptimizations = true;
-//#endif
+#if !DEBUG
+            BundleTable.EnableOptimizations = true;
+#endif
 
             // Site base scripts - part of layouts
             bundles.Add(new ScriptBundle("~/bundles/base").Include(
-                        "~/Scripts/jquery-{version}.js",
-                        "~/Scripts/jquery-migrate-{version}.js",
-                        "~/Scripts/jquery-ui-{version}.js",
-                        "~/Scripts/jquery.qtip*",
-                        "~/Scripts/sammy-{version}.js",
+                        "~/Scripts/Libs/jquery-{version}.js",
+                        "~/Scripts/Libs/jquery-migrate-{version}.js",
+                        "~/Scripts/Libs/jquery-ui-{version}.js",
+                        "~/Scripts/Libs/jquery.qtip*",
+                        "~/Scripts/Libs/sammy-{version}.js",
                         "~/Scripts/Pages/lz-{version}.js"));
 
             // Modernizer - Part of layout but in different location in the html
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
-                        "~/Scripts/modernizr-*"));
+                        "~/Scripts/Libs/modernizr-*"));
 
             // Login screen
             bundles.Add(new ScriptBundle("~/bundles/login").Include(
-                        "~/Scripts/jquery.validate*",
-                        "~/Scripts/jquery.unobtrusive*",
+                        "~/Scripts/Libs/jquery.validate.js",
+                        "~/Scripts/Libs/jquery.validate.unobtrusive-lz.js",
+                        "~/Scripts/Libs/jquery.unobtrusive*",
                         "~/Scripts/Pages/lz.pages.validation-{version}.js",
                         "~/Scripts/Pages/lz.pages.login-{version}.js",
-                        "~/Scripts/jquery.passstrength-{version}.js"
+                        "~/Scripts/Libs/jquery.passstrength-{version}.js"
                         ));
             // pages min
             bundles.Add(new ScriptBundle("~/bundles/pages").Include(
-                        "~/Scripts/knockout-{version}.js",
-                        "~/Scripts/knockout.mapping-latest*",
-                        "~/Scripts/jquery.validator*",
-                        "~/Scripts/jquery.validator.knockout*",
-                        "~/Scripts/moment*",
+                        "~/Scripts/Libs/knockout-{version}.js",
+                        "~/Scripts/Libs/knockout.mapping-latest*",
+                        "~/Scripts/Libs/jquery.validator*",
+                        "~/Scripts/Libs/jquery.validator.knockout*",
+                        "~/Scripts/Libs/moment*",
                         "~/Scripts/Pages/knockout.extenssions-1.0.0.js",
-                        "~/Scripts/jquery.rateit*",
+                        "~/Scripts/Libs/jquery.rateit*",
                         "~/Scripts/Pages/lz.pages-{version}.js"));
 
 

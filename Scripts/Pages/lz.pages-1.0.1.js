@@ -51,6 +51,7 @@ vm.baseViewModel = function (extend) {
     extend.model(self);
     extend.extend(self);
 
+    // Adding 1 to loader so that when all loaders finish loading, the general loader.gif will stop
     vm.viewModelsToLoad(vm.viewModelsToLoad() + 1);
 
     // View model variables
@@ -152,7 +153,12 @@ vm.baseViewModel = function (extend) {
 
         self.loading(true);
         $.getJSON(self.api + self.options.getAll(), function (data) {
-            self.collection(data);
+
+            var modelCollection = [];
+            for (var i = 0; i < data.length; i++)
+                modelCollection.push(new self.model(data[i]));
+
+            self.collection(modelCollection);
 
             if (self.selectedID() >= 0) {
                 self.edit(self.selectedID());
@@ -178,10 +184,12 @@ vm.baseViewModel = function (extend) {
         var _sort = self.sort();
         var _filter = self.filter().toLowerCase();
         var _isRelevant = function (o) {
-            for (var k in o)
-                if ((typeof o[k] == "string" && o[k].toLowerCase().indexOf(_filter) >= 0) ||
-                    (typeof o[k] == "object" && _isRelevant(o[k])))
+            for (var k in o) {
+                var v = typeof(o[k]) == 'function' ? o[k]() : o[k];
+                if ((typeof v == "string" && v.toLowerCase().indexOf(_filter) >= 0) ||
+                    (typeof v == "object" && _isRelevant(v)))
                     return true;
+            }
             return false;
         }
         if (_filter != '')
@@ -200,7 +208,7 @@ vm.baseViewModel = function (extend) {
                     var _obj = obj;
                     var _sortTerms = _sortValues[v];
                     for (var t in _sortTerms)
-                        _obj = _obj ? _obj[_sortTerms[t]] : (_numeric ? 0 : '_');
+                        _obj = _obj ? _obj[_sortTerms[t]]() : (_numeric ? 0 : '_');
                     _val += _obj;
                 }
                 return _val;
@@ -269,7 +277,8 @@ vm.baseViewModel = function (extend) {
             // If this is a new item
             if (self.isNew())
                 $.post(self.api + self.options.add, postData, function (data) {
-                    self.collection.push(data);
+                    postData = new self.model(data);
+                    self.collection.push(postData);
                     if (self.widget.isWidget && self.collection().length >= self.widget.selectTop)
                         self.collection.pop();
 
@@ -285,8 +294,9 @@ vm.baseViewModel = function (extend) {
                     success: function (data) {
                         if (arguments.length > 2 && arguments[2] != null && arguments[2].responseText != '')
                             postData = JSON.parse(arguments[2].responseText)
+                        postData = new self.model(postData);
                         for (var i = 0, j = self.collection().length; i < j; i++)
-                            if (self.collection()[i].Id == postData.Id)
+                            if (self.collection()[i].Id() == postData.Id())
                                 self.collection.replace(self.collection()[i], postData);
 
                         self.refreshConnectedModules();
@@ -301,16 +311,16 @@ vm.baseViewModel = function (extend) {
     self.edit = function (data) {
         var d = null;
         var itemID = 0;
-        if (data && !isNaN(data.Id) && data.Id != 0) {
+        if (data && typeof(data.Id) == "function" && data.Id() != 0) {
             d = data;
-            itemID = d.Id;
+            itemID = d.Id();
             self.isNew(false);
         } else if (data && !isNaN(data) && data != 0) {
 
             for (var i = 0; i < self.collection().length; i++)
-                if (self.collection()[i].Id == data) {
+                if (self.collection()[i].Id() == data) {
                     d = self.collection()[i];
-                    itemID = d.Id;
+                    itemID = d.Id();
                     self.isNew(false);
                 }
 
@@ -323,6 +333,9 @@ vm.baseViewModel = function (extend) {
 
         self.selected(d);
         self.showEditor(true);
+
+
+        lz.sammy.quietRoute(lz.sammy.path + "/" + itemID);
 
         // Prevent row from editing the contact
         event.cancelBubble = true;

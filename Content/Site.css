@@ -1,7 +1,7 @@
 ﻿html { background-color: #e2e2e2;margin: 0;padding: 0;}
 body {background-color: #fff;border-top: solid 10px #000;color: #333;font-size: 12px;font-family: 'lucida grande', Verdana, Helvetica, Sans-Serif;margin: 0;padding: 0;}
 
-a {color: #333;outline: none;text-decoration: underline;}
+a {color: #333;outline: none;text-decoration: none;}
 
     a:link, a:visited,
     a:active, a:hover {color: #333;}
@@ -234,7 +234,7 @@ th {font-size: 1em;text-align: left;border: none 0px;padding: 0.25em 2em 0.25em 
     th.asc a:after {content: '▲';}
     th.desc a:after {content: '▼';}
 
-td {padding: 0.25em 2em 0.25em 0em;border: 0 none;}
+td {padding: 0.25em 1em 0.25em 0em;border: 0 none;}
 td:last-child {padding: 0.25em 0 0.25em 0em;}
 tr.pager td {padding: 0 0.25em 0 0;}
 
@@ -354,7 +354,11 @@ tr.pager td {padding: 0 0.25em 0 0;}
 .loader {width:100%;text-align:center; }
 .loader img {display:none;}
 
-.lz-module {width:100%;}
+.lz-module {width:100%;position:relative;min-height:100px;}
+    .lz-module .lz-module-loading {position:absolute;left:0;top:0;height:100%;width:100%;background:#fff;text-align:center;display:block;z-index:100;opacity:.5;}
+        .lz-module .lz-module-loading .center-img {display: inline-block;height: 100%;vertical-align: middle;}
+        .lz-module .lz-module-loading img {vertical-align: middle;}
+
 .vm-view {display:none;}
     .vm-view ul { list-style:none;}
     .vm-view label { width: 140px;display:inline-block; }
@@ -384,12 +388,14 @@ tr.pager td {padding: 0 0.25em 0 0;}
     #body .ui-tabs .ui-tabs-nav li.ui-tabs-selected a { cursor: pointer; }
 
 .btn-mini { background: transparent url(none) scroll no-repeat top center; width:22px; height:22px;border:none; }
-.tr-highlight tr {height:33px;}
+.tr-highlight tr {height:64px;}
     .tr-highlight tr td {vertical-align:top;}
     .tr-highlight .company {color:#666;}
+    .tr-highlight .email {display:inline-block;overflow:hidden;text-overflow:ellipsis;width:100%;}
 .tr-highlight tr .btn-mini {visibility:hidden;margin:0;}
-.tr-highlight tr:hover {background:#d8e0f7;cursor:pointer;}
+.tr-highlight tr:hover {background:#d8e0f7;cursor:pointer;outline:2px solid #e2e2e2;}
 .tr-highlight tr:hover .btn-mini {visibility:visible;}
+.tr-highlight .prf-pic {padding-right:5px;}
 .btn-edit { background-image: url(/images/edit.jpg);}
 .btn-delete { background-image: url(/images/delete.jpg);}
 
@@ -414,7 +420,7 @@ tr.pager td {padding: 0 0.25em 0 0;}
 
 /* Contacts View Model
     ----------------------------------------------------------*/
-#tabContacts .categories {width: 100px; display: inline-block;padding:0;margin:20px 10px 0 0;float:left;clear:left;}
+#tabContacts .categories {width: 100px; display: inline-block;padding:0;margin:50px 10px 0 0;left:0;top:0;position:absolute;}
     #tabContacts .categories ul {padding:0;margin:0;float:left;clear:left;}
     #tabContacts .categories li {float:left;margin:0 5px 0 0;width:100%;white-space:nowrap;overflow:hidden;}
 
@@ -428,9 +434,10 @@ tr.pager td {padding: 0 0.25em 0 0;}
 
     #tabContacts .categories .cat-cts li,
     #tabContacts .categories .cat-all,
-    #tabContacts .categories .cat-new {padding:5px 0;}
+    #tabContacts .categories .cat-new {min-height:17px;}
     #tabContacts .categories .cat-cts li:hover,
-    #tabContacts .categories .cat-all:hover {background:#6afb06;}
+    #tabContacts .categories .cat-all:hover {}
+        #tabContacts .categories .cat-cts li:hover a {position:absolute;background:#6afb06;outline:2px solid #e2e2e2;z-index:1; }
 
 #body .ui-tabs .ui-tabs-nav li.ui-tabs-active a {cursor:pointer;}
 
@@ -451,7 +458,7 @@ tr.pager td {padding: 0 0.25em 0 0;}
 /* table fixing and sorting */
     /*Framework*/
     .Resize{resize:both;}
-    .Container {width:480px;display:inline-block;float:left;}
+    .Container {float:left;margin-left:110px;}
     .Scrollable{position:relative;padding-top:1.5em;}
     .ScrollArea {width:100%;}
         .Scrollable .ScrollArea {overflow:auto;direction:rtl;height:283px;}
@@ -488,9 +495,11 @@ body .qtip {max-width:900px;}
 
 /* Images */
 div.img-prv {width:70px;min-height:78px;}
+div.img-46 {width:46px;min-height:46px;}
 img.img-prv, .img-prv img {max-width: 70px; max-height:100px;}
 img.img-46, .img-46 img {max-width: 46px; max-height:46px;}
 img.img-64, .img-64 img {max-width: 64px; max-height:64px;}
+img.img-32, .img-32 img {max-width: 32px; max-height:32px;}
 
 /* Text */
 .txt-info {color:#666}

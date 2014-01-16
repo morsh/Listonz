@@ -1,4 +1,5 @@
-﻿<div data-bind="with: contactsWG">
+﻿<div data-bind="with: contactsWG" class="lz-module">
+    @Html.Partial("_ModuleLoader")
     <div data-bind="showHide: loaded" class="vm-view vm-contacts">
 
         <div class="results results-wg float-left">
@@ -16,15 +17,15 @@
                             <span data-bind="if: ProfilePicture"><img data-bind="    attr: { src: ProfilePicture }" src="" /></span>
                         </td>
                         <td class="wd-200" valign="top">
-                            <span data-bind="text: FirstName + ' ' + (LastName || '')"></span>
-                            <span data-bind="if: Category != null">(<span data-bind="    text: Category.Name"></span>)</span>
-                            <span data-bind="if: Company != null" style="white-space:nowrap;">
+                            <span data-bind="text: FullName"></span>
+                            <span data-bind="if: Category().Id != null">(<span data-bind="text: Category().Name"></span>)</span>
+                            <span data-bind="if: Company().Id" style="white-space:nowrap;">
                                 <span class="txt-info">works at</span>
-                                <span data-bind="text: Company.FirstName"></span>
+                                <span data-bind="text: Company().FirstName"></span>
                             </span>
                         </td>
                         <td style="padding:3px;">
-                            <div class="social">
+                            <!--div class="social">
                                 <a class="on" data-bind="visible: JSON.parse(SocialData || '{}').facebook, attr: { 'href': JSON.parse(SocialData || '{}').facebook } " target="_blank">
                                     <div class="soc-link facebook" title="Facebook Profile Link"></div>
                                 </a>
@@ -34,7 +35,7 @@
                                 <a class="on" data-bind="visible: JSON.parse(SocialData || '{}').twitter, attr: { 'href': JSON.parse(SocialData || '{}').twitter } " target="_blank">
                                     <div class="soc-link twitter" title="Twitter Profile Link"></div>
                                 </a>
-                            </div>
+                            </!--div-->
                             <button class="btn btn-mini btn-edit" title="Edit Contact"></button>
                             <button class="btn btn-mini btn-delete" data-bind="click: $parent.remove" title="Delete Contact"></button>
                         </td>                    
@@ -49,19 +50,19 @@
         </div>
 
         <div class="hover-profile float-left" data-bind="with: hover()">
-            <div data-bind="if: Id > 0, css: { hide: !(Id > 0) }">
+            <div data-bind="if: Id() > 0, toggleClass: !(Id() > 0), toggleClassName: 'hide'">
                 <div class="float-left prf-pic img-prv">
                     <span data-bind="ifnot: ProfilePicture"><img src="~/Images/profile.jpg" /></span>
-                    <span data-bind="if: ProfilePicture"><img data-bind="    attr: { src: ProfilePicture }" src="" /></span>
+                    <span data-bind="if: ProfilePicture"><img data-bind="attr: { src: ProfilePicture }" src="" /></span>
                 </div>
                     
                 <div>
-                    <span data-bind="text: FirstName + ' ' + (LastName || '')"></span>
-                    <span data-bind="if: Category != null"><span data-bind="    text: '(' + Category.Name + ')'"></span></span>
+                    <span data-bind="text: FullName"></span>
+                    <span data-bind="if: Category().Id">(<span data-bind="text: Category().Name"></span>)</span>
                 </div>
-                <div data-bind="if: Company != null">
+                <div data-bind="if: Company().Id">
                     <span>Company: </span>
-                    <span data-bind="text: Company.FirstName"></span>
+                    <span data-bind="text: Company().FirstName"></span>
                 </div>
                 <div class="email" data-bind="if: Email">
                     <a data-bind="attr: { href: 'mailto:' + Email }">
@@ -75,28 +76,28 @@
                 </div>
 
                 <div class="social">
-                    <a class="on" data-bind="visible: $parent.HSocial().facebook, attr: { 'href': $parent.HSocial().facebook } " target="_blank">
+                    <a class="on" data-bind="visible: Social().facebook, attr: { 'href': Social().facebook } " target="_blank">
                         <div class="soc-link facebook" title="Facebook Profile Link"></div>
                     </a>
-                    <a class="on" data-bind="visible: $parent.HSocial().linkedin, attr: { 'href': $parent.HSocial().linkedin } " target="_blank">
+                    <a class="on" data-bind="visible: Social().linkedin, attr: { 'href': Social().linkedin } " target="_blank">
                         <div class="soc-link linkedin" title="Linkedin Profile Link"></div>
                     </a>
-                    <a class="on" data-bind="visible: $parent.HSocial().twitter, attr: { 'href': $parent.HSocial().twitter } " target="_blank">
+                    <a class="on" data-bind="visible: Social().twitter, attr: { 'href': Social().twitter } " target="_blank">
                         <div class="soc-link twitter" title="Twitter Profile Link"></div>
                     </a>
                 </div>
 
                 <div class="phone" data-bind="if: PhoneNumber">
-                    <div data-bind="text: 'Phone: ' + PhoneNumber"></div>
+                    <div data-bind="text: 'Phone: ' + PhoneNumber()"></div>
                 </div>
                 <div class="phone" data-bind="if: MobileNumber">
-                    <div data-bind="text: 'Mobile: ' + MobileNumber"></div>
+                    <div data-bind="text: 'Mobile: ' + MobileNumber()"></div>
                 </div>
                 <div class="phone" data-bind="if: FaxNumber">
-                    <div data-bind="text: 'Fax: ' + FaxNumber"></div>
+                    <div data-bind="text: 'Fax: ' + FaxNumber()"></div>
                 </div>
             </div>
-            <div data-bind="ifnot: Id > 0, css: { hide: Id > 0 }">
+            <div data-bind="ifnot: Id() > 0, css: { hide: Id() > 0 }">
                 Hover on a contact to preview his\her details
             </div>
         </div>

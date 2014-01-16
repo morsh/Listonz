@@ -41,41 +41,51 @@ vm.contacts = new vm.baseViewModel({
 
     },
     model: function (self) {
-        self.model = function () {
-            this.Id = ko.observable(0);
-            this.UserId = ko.observable(0);
-            this.FirstName = ko.observable('');
-            this.LastName = ko.observable('');
-            this.ProfilePicture = ko.observable('');
+        self.model = function (fromObject) {
 
-            this.CompanyId = ko.observable();
-            this.Company = ko.observable({
-                Id: ko.observable(),
-                FirstName: ko.observable('')
+            var obj = $.extend(true, {}, fromObject, { Company: {}, Category: {} });
+            var mdl = this;
+            mdl.Id = ko.observable(obj.Id);
+            mdl.UserId = ko.observable(obj.UserId);
+
+            mdl.FirstName = ko.observable(obj.FirstName);
+            mdl.LastName = ko.observable(obj.LastName);
+            mdl.FullName = ko.computed(function () {
+                return mdl.FirstName() + ' ' + (mdl.LastName() || '');
             });
-            this.Country = ko.observable();
-            this.State = ko.observable('');
-            this.City = ko.observable('');
-            this.Street = ko.observable('');
-            this.Notes = ko.observable(''); 
-            this.CategoryId = ko.observable();
-            this.Category = ko.observable({
-                Id: ko.observable(),
-                Name: ko.observable('')
+            mdl.ProfilePicture = ko.observable(obj.ProfilePicture);
+
+            mdl.CompanyId = ko.observable(obj.CompanyId);
+            mdl.Company = ko.observable({
+                Id: ko.observable(obj.Company.Id),
+                FirstName: ko.observable(obj.Company.FirstName)
+            });
+            mdl.Country = ko.observable(obj.Country);
+            mdl.State = ko.observable(obj.State);
+            mdl.City = ko.observable(obj.City);
+            mdl.Street = ko.observable(obj.Street);
+            mdl.Notes = ko.observable(obj.Notes);
+            mdl.CategoryId = ko.observable(obj.CategoryId);
+            mdl.Category = ko.observable({
+                Id: ko.observable(obj.Category.Id),
+                Name: ko.observable(obj.Category.Name)
             });
 
-            this.Email = ko.observable('');
-            this.PhoneNumber = ko.observable('');
-            this.MobileNumber = ko.observable('');
-            this.FaxNumber = ko.observable('');
-            this.Birthday = ko.observable('');
-            this.Single = ko.observable('');
-            this.SocialSecurity = ko.observable('');
-            this.DrivingLisence = ko.observable('');
-            this.Rating = ko.observable(0);
-            this.LastUpdate = ko.observable('').extend({ date: true });
+            mdl.Email = ko.observable(obj.Email);
+            mdl.PhoneNumber = ko.observable(obj.PhoneNumber);
+            mdl.MobileNumber = ko.observable(obj.MobileNumber);
+            mdl.FaxNumber = ko.observable(obj.FaxNumber);
+            mdl.Birthday = ko.observable(obj.Birthday);
+            mdl.Single = ko.observable(obj.Single);
+            mdl.SocialSecurity = ko.observable(obj.SocialSecurity);
+            mdl.DrivingLisence = ko.observable(obj.DrivingLisence);
+            mdl.Rating = ko.observable(obj.Rating);
+            mdl.LastUpdate = ko.observable(obj.LastUpdate).extend({ date: true });
 
-            this.SocialData = ko.observable('');
+            mdl.SocialData = ko.observable(obj.SocialData);
+            mdl.Social = ko.computed(function () {
+                return JSON.parse(mdl.SocialData() || "{}") || {};
+            });
         }
 
         self.categoryModel = function () {

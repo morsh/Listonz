@@ -1,5 +1,5 @@
 ﻿<div data-bind="with: contacts" class="lz-module">
-
+    @Html.Partial("_ModuleLoader")
     <div data-bind="showHide: loaded" class="vm-view vm-contacts">
 
         <!-- Main View -->
@@ -25,7 +25,7 @@
                 <li class="cat-cts">
                     <ul data-bind="foreach: Categories">
                         <!-- -ko if: $index() < 8-->
-                        <li data-bind="toggleClass: $parent.categoryId() == Id, toggleClassName: 'selected', qtip: Name">
+                        <li data-bind="toggleClass: $parent.categoryId() == Id, toggleClassName: 'selected'">
                             <a href="#" data-bind="click: function () { $parent.categoryId(Id) }"><span data-bind=" text: Name"></span></a>
                             <div class="remove" data-bind="if: UserId != null"><a href="#" data-bind="click: $parent.deleteCategory"><span class="ui-icon ui-icon-close"></span></a></div>
                         </li>
@@ -43,13 +43,14 @@
             </ul>
 
             <!-- Results -->
-            <div class="Container" data-bind="pageScoll: { rowHeight: 30, headerHeight: 30, heightDelta: 290 }">
+            <div class="Container" data-bind="pageScoll: { rowHeight: 64, headerHeight: 30, heightDelta: 290 }">
                 <div class="results ScrollArea">
                     <table class="Sortable">
                         <colgroup>
-                            <col style="width:40%;" />
-                            <col style="width:26%;" />
-                            <col style="width:20%;" />
+                            <col style="width:35%;" />
+                            <col style="width:23%;" />
+                            <col style="width:25%;" />
+                            <col style="width:17%;" />
                         </colgroup>
                         <thead>
                             <tr class='Fixable'>
@@ -68,14 +69,46 @@
                         <tbody class="tr-highlight" data-bind="foreach: sortedCollection">
                             <tr onmousemove="ko.contextFor(this).$parent.updateHover(ko.dataFor(this));" data-bind="click: $parent.edit">
                                 <td>
-                                    <span data-bind="text: FirstName + ' ' + (LastName || '')"></span>
-                                    <br />
-                                    <span class="company" data-bind="if: Company != null"><span data-bind="text: Company.FirstName"></span></span>
+                                    <div class="float-left prf-pic img-46">
+                                        <span data-bind="ifnot: ProfilePicture"><img src="~/Images/profile.jpg" /></span>
+                                        <span data-bind="if: ProfilePicture"><img data-bind="attr: { src: ProfilePicture }" src="" /></span>
+                                    </div>
+                                    <span data-bind="text: FullName"></span>
+                                    <span data-bind="if: Category().Id"><br /><b><span data-bind="text: Category().Name"></span></b></span>
+                                    <span class="company" data-bind="if: Company().Id"><br /><span data-bind="text: Company().FirstName"></span></span>
                                 </td>
-                                <td><span data-bind="if: Category != null"><span data-bind="text: Category.Name"></span></span></td>
-                                <td class="overflow-none"><span data-bind="if: Rating != null">
-                                    <span data-bind="rateit: { value: Rating, max: 5, step: 0.1, readonly: true }"></span></span></td>
                                 <td>
+                                    <div class="email" data-bind="if: Email">
+                                        <a data-bind="attr: { href: 'mailto:' + Email() }">
+                                            <span class="ui-icon ui-icon-mail-closed float-left"></span>
+                                            <span data-bind="text: Email"></span>
+                                        </a>
+                                    </div>
+                                    <div class="social clear-both" style="padding-top:5px;">
+                                        <a class="on" data-bind="visible: Social().facebook != null, attr: { 'href': Social().facebook } " target="_blank">
+                                            <div class="soc-link facebook" title="Facebook Profile Link"></div>
+                                        </a>
+                                        <a class="on" data-bind="visible: Social().linkedin != null, attr: { 'href': Social().linkedin } " target="_blank">
+                                            <div class="soc-link linkedin" title="Linkedin Profile Link"></div>
+                                        </a>
+                                        <a class="on" data-bind="visible: Social().twitter != null, attr: { 'href': Social().twitter } " target="_blank">
+                                            <div class="soc-link twitter" title="Twitter Profile Link"></div>
+                                        </a>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="phone" data-bind="if: PhoneNumber">
+                                        <div data-bind="text: 'Phone: ' + PhoneNumber()"></div>
+                                    </div>
+                                    <div class="phone" data-bind="if: MobileNumber">
+                                        <div data-bind="text: 'Mobile: ' + MobileNumber()"></div>
+                                    </div>
+                                    <div class="phone" data-bind="if: FaxNumber">
+                                        <div data-bind="text: 'Fax: ' + FaxNumber()"></div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span data-bind="if: Rating != null"><span data-bind="    rateit: { value: Rating, max: 5, step: 0.1, readonly: true }"></span></span>
                                     <button class="btn btn-mini btn-edit" data-bind="click: $parent.edit" title="Edit Contact"></button>
                                     <button class="btn btn-mini btn-delete" data-bind="click: $parent.remove" title="Delete Contact"></button>
                                 </td>
@@ -86,7 +119,7 @@
             </div>
 
             <!-- Profile Hover -->
-            <div class="hover-profile" data-bind="with: hover()">
+            <div class="hover-profile hide" data-bind="if: false@*with: hover()*@">
                 <div data-bind="if: Id > 0, css : { hide: !(Id > 0) }">
                     <div class="float-left prf-pic img-prv">
                         <span data-bind="ifnot: ProfilePicture"><img src="~/Images/profile.jpg" /></span>
