@@ -43,8 +43,8 @@
             </ul>
 
             <!-- Results -->
-            <div class="Container" data-bind="pageScoll: { rowHeight: 64, headerHeight: 30, heightDelta: 290 }">
-                <div class="results ScrollArea">
+            <div class="_Container" >@*data-bind="pageScoll: { rowHeight: 64, headerHeight: 30, heightDelta: 290 }">*@
+                <div class="results _ScrollArea">
                     <table class="Sortable">
                         <colgroup>
                             <col style="width:35%;" />
@@ -53,7 +53,7 @@
                             <col style="width:17%;" />
                         </colgroup>
                         <thead>
-                            <tr class='Fixable'>
+                            <tr class='_Fixable sortable-head'>
                                 <th><span class='fix sort' sort-exp="FirstName:LastName" data-bind="
     css: { down: isSortColumn($element), up: sortDir() == 'desc' }, click: sortClick">
                                     Name<span class="ui-icon" /></span></th>
