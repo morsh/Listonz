@@ -95,6 +95,7 @@ $(function () {
             });
         };
         checkInputValues();
+        window.setTimeout(checkInputValues, 1000);
 
         // User name existance check
         var firstCall = true;
